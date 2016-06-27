@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>org.webjars</groupId>
+    <artifactId>patternfly</artifactId>
+    <version>3.5.0</version>
+    <packaging>jar</packaging>
+
+    <name>PatternFly</name>
+    <description>WebJar for WEBJAR_NAME</description>
+    <url>http://webjars.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <upstream.version>3.5.0</upstream.version>
+        <destination.directory>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${project.version}</destination.directory>
+        <requirejs>{ "paths": { "patternfly": "patternfly" }</requirejs>
+    </properties>
+
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${destination.directory}</targetPath>
+            </resource>
+        </resources>
+    </build>
+
+</project>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components.proxy</groupId>
+        <artifactId>proctor-proxy-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.proxy</groupId>
+    <artifactId>proctor-littleproxy-proxy</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Proctor LittleProxy Proxy Component</name>
+
+    <dependencies>
+
+        <!-- Proctor dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.proxy</groupId>
+            <artifactId>proctor-proxy-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Proxy dependencies -->
+        <dependency>
+            <groupId>org.littleshoot</groupId>
+            <artifactId>littleproxy</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

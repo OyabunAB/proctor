@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import se.oyabun.proctor.handlers.Handler;
-import se.oyabun.proctor.proxy.ProctorProxy;
-
-import java.util.List;
+package se.oyabun.proctor.exceptions;
 
 /**
- * Proctor LittleProxy implementation
+ * Thrown when URI parsing fails horribly.
  */
-@Component
-public class ProctorLittleProxy
-        implements ProctorProxy {
+public class URIParseException
+        extends RuntimeException {
 
-    @Autowired
-    private List<Handler> proctorHandlers;
+    public URIParseException(String message) {
 
+        super(message);
+
+    }
 
 }

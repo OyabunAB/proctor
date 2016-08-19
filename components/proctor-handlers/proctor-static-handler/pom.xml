@@ -12,17 +12,29 @@
     </parent>
 
     <groupId>se.oyabun.proctor.components.handlers</groupId>
-    <artifactId>proctor-filesystem-handler</artifactId>
+    <artifactId>proctor-static-handler</artifactId>
     <packaging>jar</packaging>
 
     <name>Proctor Filesystem Handler</name>
 
     <dependencies>
+
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

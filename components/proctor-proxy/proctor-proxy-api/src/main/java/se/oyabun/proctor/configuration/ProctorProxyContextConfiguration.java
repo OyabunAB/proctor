@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.proxy;
+package se.oyabun.proctor.configuration;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.io.IOException;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * Proctor proxy interface
+ * Generic configuration for Proctor proxy implementations
  */
-public interface ProctorProxy {
-
-
-    /**
-     * Initiates the proxy after startup
-     */
-    @PostConstruct
-    void initHandler() throws IOException;
-
-    /**
-     * Stops the proxy before shutdown
-     */
-    @PreDestroy
-    void stopProxy();
+@Configuration
+@ComponentScan("se.oyabun.proctor.proxy")
+public class ProctorProxyContextConfiguration {
 
 }

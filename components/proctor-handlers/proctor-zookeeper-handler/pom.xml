@@ -15,14 +15,43 @@
     <artifactId>proctor-zookeeper-handler</artifactId>
     <packaging>jar</packaging>
 
-    <name>Proctor Zookeper Handler</name>
+    <name>Proctor Zookeeper Handler</name>
+
+    <properties>
+        <curator.version>2.8.0</curator.version>
+    </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <exclusions>
+                <!-- Begone you filthy beast! -->
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>${curator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

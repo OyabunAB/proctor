@@ -20,21 +20,15 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 
 /**
- * Proctor proxy interface
+ * Abstract Proctor Proxy class, enabling lifecycle handling
  */
-public interface ProctorProxy {
+public abstract class AbstractProctorProxy
+        implements ProctorProxy {
 
-
-    /**
-     * Initiates the proxy after startup
-     */
     @PostConstruct
-    void initHandler() throws IOException;
+    public abstract void initHandler() throws IOException;
 
-    /**
-     * Stops the proxy before shutdown
-     */
     @PreDestroy
-    void stopProxy();
+    public abstract void stopProxy();
 
 }

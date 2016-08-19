@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.handlers;
-
-import java.net.URI;
+package se.oyabun.proctor.exceptions;
 
 /**
- * Handler interface.
- * All proctor handlers must implement this marker interface.
+ * Exception thrown when matching is not valid
  */
-public interface Handler {
+public class InputNotMatchedException
+        extends Exception {
 
+    public InputNotMatchedException(String message) {
 
+        super(message);
 
-    /**
-     * Does given URI match this handler?
-     * @param uri to verify
-     * @return true if the handler can handle the given URI
-     */
-    boolean matches(URI uri);
+    }
+
+    public InputNotMatchedException(String message, Throwable e) {
+
+        super(message, e);
+
+    }
 
 }

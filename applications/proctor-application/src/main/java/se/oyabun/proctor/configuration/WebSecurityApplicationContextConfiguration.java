@@ -18,10 +18,10 @@ package se.oyabun.proctor.configuration;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Web security configuration
+ * Web security context configuration
  */
 @Configuration
-public class WebSecurityApplicationConfiguration {
+public class WebSecurityApplicationContextConfiguration {
 
 
 

@@ -5,7 +5,13 @@
         <title>Proctor Administration</title>
         <link rel='stylesheet' href='/webjars/patternfly/css/patternfly.min.css'>
     </head>
-    <body>
-        Herro worrd.
+    <body ng-app="administrationApplication">
+        <div ng-view></div>
+        <script src="/webjars/angularjs/angular.min.js"></script>
+        <script src="/webjars/angularjs/angular-route.min.js"></script>
+        <script src="/administration/module.js"></script>
+        <script src="/administration/routes.js"></script>
+        <script src="/administration/components/login/loginController.js"></script>
+        <script src="/administration/components/dashboard/dashboardController.js"></script>
     </body>
 </html>

@@ -16,9 +16,8 @@
     <version>3.5.0</version>
     <packaging>jar</packaging>
 
-    <name>PatternFly</name>
-    <description>WebJar for WEBJAR_NAME</description>
-    <url>http://webjars.org</url>
+    <name>PatternFly WebJar</name>
+    <description>WebJar for PatternFly</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

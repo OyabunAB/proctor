@@ -15,20 +15,18 @@
  */
 package se.oyabun.proctor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.FileNotFoundException;
 
 /**
- * Proctor application bootstrap class.
+ * Proctor application bootstrap class
  */
 @Configuration
 @EnableAutoConfiguration
@@ -36,11 +34,12 @@ import java.io.FileNotFoundException;
 public class Proctor {
 
     public static final String DEFAULT_PROCTOR_PROPERTIES_FILE = "./proctor.properties";
+
     public static final String PROCTOR_PROPERTY_FILE_PROPERTY = "proctor.properties";
 
     /**
      * Set up external properties file, checking for system properties override, then default.
-     * @return properties placeholder configurer
+     * @return configured property placeholderconfigurer
      * @throws FileNotFoundException if no properties file can be found.
      */
     @Bean
@@ -71,6 +70,11 @@ public class Proctor {
 
     }
 
+    /**
+     * Main startup method
+     * @param args
+     * @throws Exception on application error
+     */
     public static void main(String[] args) throws Exception {
 
         SpringApplication.run(Proctor.class, args);

@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.proxy;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.io.IOException;
+package se.oyabun.proctor.exceptions;
 
 /**
- * Proctor proxy interface
+ * Thrown if no handle for given handle name can be found
  */
-public interface ProctorProxy {
+public class NoHandleForNameException
+        extends Exception {
 
+    public NoHandleForNameException(String message) {
 
-    /**
-     * Initiates the proxy after startup
-     */
-    @PostConstruct
-    void initHandler() throws IOException;
+        super(message);
 
-    /**
-     * Stops the proxy before shutdown
-     */
-    @PreDestroy
-    void stopProxy();
+    }
 
 }

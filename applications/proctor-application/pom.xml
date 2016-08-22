@@ -22,19 +22,28 @@
         <!-- Proctor dependencies -->
         <dependency>
             <groupId>se.oyabun.proctor.components.proxy</groupId>
-            <artifactId>proctor-littleproxy-proxy</artifactId>
+            <artifactId>proctor-grizzly-proxy</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+        <!--
+        <dependency>
+            <groupId>se.oyabun.proctor.components.httpclient</groupId>
+            <artifactId>proctor-ning-httpclient</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.httpclient</groupId>
+            <artifactId>proctor-apache-httpclient</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-static-handler</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>se.oyabun.proctor.components.handlers</groupId>
-            <artifactId>proctor-zookeeper-handler</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

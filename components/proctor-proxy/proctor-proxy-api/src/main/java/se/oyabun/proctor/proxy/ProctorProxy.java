@@ -29,7 +29,7 @@ public interface ProctorProxy {
      * Initiates the proxy after startup
      */
     @PostConstruct
-    void initHandler() throws IOException;
+    void startProxy() throws IOException;
 
     /**
      * Stops the proxy before shutdown

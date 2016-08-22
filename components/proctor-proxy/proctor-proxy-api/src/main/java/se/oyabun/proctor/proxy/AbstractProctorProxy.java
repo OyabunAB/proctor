@@ -26,7 +26,7 @@ public abstract class AbstractProctorProxy
         implements ProctorProxy {
 
     @PostConstruct
-    public abstract void initHandler() throws IOException;
+    public abstract void startProxy() throws IOException;
 
     @PreDestroy
     public abstract void stopProxy();

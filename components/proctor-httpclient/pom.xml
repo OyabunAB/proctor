@@ -6,23 +6,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>se.oyabun.proctor</groupId>
-        <artifactId>proctor-reactor</artifactId>
+        <groupId>se.oyabun.proctor.components</groupId>
+        <artifactId>proctor-components-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>se.oyabun.proctor.components</groupId>
-    <artifactId>proctor-components-reactor</artifactId>
+    <groupId>se.oyabun.proctor.components.httpclient</groupId>
+    <artifactId>proctor-httpclient-reactor</artifactId>
     <packaging>pom</packaging>
 
-    <name>Proctor Components Reactor</name>
+    <name>Proctor HTTP Client Components Reactor</name>
 
     <modules>
-        <module>proctor-util</module>
-        <module>proctor-admin</module>
-        <module>proctor-proxy</module>
-        <module>proctor-httpclient</module>
-        <module>proctor-handler</module>
+        <module>proctor-httpclient-api</module>
+        <module>proctor-ning-httpclient</module>
+        <module>proctor-apache-httpclient</module>
     </modules>
 
 </project>

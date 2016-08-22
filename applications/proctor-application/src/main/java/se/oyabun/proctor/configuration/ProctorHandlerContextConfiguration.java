@@ -32,7 +32,7 @@ public class ProctorHandlerContextConfiguration {
     @Bean
     public ProctorStaticRouteProctorRouteHandler getProctorStaticRouteHandler() throws MalformedURLException {
 
-        return new ProctorStaticRouteProctorRouteHandler(".*", "Static route handler", new URL("http://www.bredbandskollen.se/"));
+        return new ProctorStaticRouteProctorRouteHandler(".*", "Static route handler", new URL("https://www.oyabun.se/"));
 
     }
 

@@ -11,7 +11,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>se.oyabun.proctor.components.www</groupId>
+    <groupId>se.oyabun.proctor.web</groupId>
     <artifactId>proctor-admin-web</artifactId>
     <packaging>jar</packaging>
 

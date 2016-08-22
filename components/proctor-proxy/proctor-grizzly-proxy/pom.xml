@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>se.oyabun.proctor.components.proxy</groupId>
-    <artifactId>proctor-littleproxy-proxy</artifactId>
+    <artifactId>proctor-grizzly-proxy</artifactId>
     <packaging>jar</packaging>
 
-    <name>Proctor LittleProxy Proxy Component</name>
+    <name>Proctor Grizzle Proxy Component</name>
 
     <dependencies>
 
@@ -40,9 +40,9 @@
 
         <!-- Proxy dependencies -->
         <dependency>
-            <groupId>org.littleshoot</groupId>
-            <artifactId>littleproxy</artifactId>
-            <version>1.1.0</version>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-http-all</artifactId>
+            <version>2.3.25</version>
         </dependency>
 
         <!-- General dependencies -->

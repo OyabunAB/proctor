@@ -104,7 +104,8 @@ public class ProctorHandlersHTTPFilter
                 Optional<ProctorRouteHandler> optionalHandler =
                         registeredProctorProctorRouteHandlers
                                 .stream()
-                                .filter(proctorProctorRouteHandler -> proctorProctorRouteHandler.matches(clientRequestURI))
+                                .filter(proctorProctorRouteHandler ->
+                                        proctorProctorRouteHandler.matches(clientRequestURI))
                                 .findFirst();
 
                 if (optionalHandler.isPresent()) {
@@ -124,9 +125,10 @@ public class ProctorHandlersHTTPFilter
                     if (logger.isDebugEnabled()) {
 
                         logger.debug(
-                                "Proxying request for URI '{}' to '{}'.",
+                                "Proxying request for URI '{}' to '{}' with {}.",
                                 clientRequestURI,
-                                proxyURLExternalForm);
+                                proxyURLExternalForm,
+                                matchingProctorRouteHandler.getHandleNameFor(clientRequestURI));
 
                     }
 

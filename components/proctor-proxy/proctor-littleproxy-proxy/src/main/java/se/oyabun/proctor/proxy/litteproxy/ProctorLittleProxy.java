@@ -51,12 +51,12 @@ public class ProctorLittleProxy
     private ProctorHandlersFilterSource proctorHandlersFilterSource;
 
     /**
-     * Init handlers, starting loadbalancer after injections
+     * Init handlers, starting little proxy after injections
      * @throws IOException when trying to create proxy server
      */
-    public void initHandler() throws IOException {
+    public void startProxy() throws IOException {
 
-        logger.info("Initializing Proctor LitteProxy instance on {}:{}.", proxyListenAddress, proxyListenPort);
+        logger.info("Initializing Proctor LittleProxy instance on {}:{}.", proxyListenAddress, proxyListenPort);
 
         httpProxyServer =
                 DefaultHttpProxyServer
@@ -71,7 +71,7 @@ public class ProctorLittleProxy
 
     public void stopProxy() {
 
-        logger.info("Shutting down Proctor LitteProxy instance.");
+        logger.info("Shutting down Proctor LittleProxy instance.");
 
         this.httpProxyServer.stop();
 

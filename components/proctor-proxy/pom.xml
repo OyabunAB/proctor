@@ -17,11 +17,10 @@
 
     <name>Proctor Proxy Components Reactor</name>
 
-
     <modules>
         <module>proctor-proxy-api</module>
         <module>proctor-littleproxy-proxy</module>
+        <module>proctor-grizzly-proxy</module>
     </modules>
-
 
 </project>

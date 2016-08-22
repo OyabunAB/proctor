@@ -68,7 +68,7 @@ public class AsciiUtil {
 
             final String row = StringUtils.stripEnd(rowBuilder.toString(), null);
 
-            if(StringUtils.trim(row).length() > 0) {
+            if(!StringUtils.containsOnly(EMPTY_CHARACTER)) {
 
                 asciiContent.append(row + "\n");
 

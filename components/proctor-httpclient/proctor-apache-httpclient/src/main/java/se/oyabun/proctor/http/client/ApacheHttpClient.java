@@ -32,7 +32,7 @@ public class ApacheHttpClient
         extends AbstractProctorHttpClient
         implements ProctorHttpClient {
 
-    private static final Logger log = LoggerFactory.getLogger(ApacheHttpClient.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private static final int DEFAULT_CONNECT_TIMEOUT = 10000;
     private static final int DEFAULT_READ_TIMEOUT = 10000;

@@ -41,6 +41,8 @@ public class WebApplicationContextConfiguration
     @Override
     public void customize(ConfigurableEmbeddedServletContainer servletContainer) {
 
+        servletContainer.setContextPath("/proctoradmin");
+
     }
 
 }

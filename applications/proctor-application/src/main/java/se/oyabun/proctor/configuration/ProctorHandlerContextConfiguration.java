@@ -15,9 +15,13 @@
  */
 package se.oyabun.proctor.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.oyabun.proctor.handlers.staticroute.ProctorStaticRouteProctorRouteHandler;
+import se.oyabun.proctor.exceptions.DuplicateRouteHandlerException;
+import se.oyabun.proctor.handler.ProctorRouteHandler;
+import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
+import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteProctorRouteHandler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,11 +32,21 @@ import java.net.URL;
 @Configuration
 public class ProctorHandlerContextConfiguration {
 
+    @Autowired @Bean(name="adminWebStaticRoute")
+    public ProctorRouteHandler getProctorStaticRouteHandler(
+            ProctorRouteHandlerManager proctorRouteHandlerManager)
+            throws MalformedURLException, DuplicateRouteHandlerException {
 
-    @Bean
-    public ProctorStaticRouteProctorRouteHandler getProctorStaticRouteHandler() throws MalformedURLException {
 
-        return new ProctorStaticRouteProctorRouteHandler(".*", "Static route handler", new URL("https://www.oyabun.se/"));
+        ProctorRouteHandler staticRouteHandler =
+                new ProctorStaticRouteProctorRouteHandler(
+                        ".*/proctoradmin/.*",
+                        "Proctor Admin Web Static Route",
+                        new URL("http://localhost:8080/"));
+
+        proctorRouteHandlerManager.registerRouteHandler(staticRouteHandler);
+
+        return staticRouteHandler;
 
     }
 

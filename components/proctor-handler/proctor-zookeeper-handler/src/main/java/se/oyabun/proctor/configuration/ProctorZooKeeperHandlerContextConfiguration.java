@@ -21,13 +21,13 @@ public class ProctorZooKeeperHandlerContextConfiguration {
 
     private static final int MAXIMUM_RETRIES = 20;
 
-    @Value("${se.oyabun.proctor.handlers.zookeeper.nodes}")
+    @Value("${se.oyabun.proctor.handler.zookeeper.nodes}")
     private String registryNodesProperty;
 
-    @Value("${se.oyabun.proctor.handlers.zookeeper.basepath}")
+    @Value("${se.oyabun.proctor.handler.zookeeper.basepath}")
     private String basePathProperty;
 
-    @Value("${se.oyabun.proctor.handlers.zookeeper.watch.instances}")
+    @Value("${se.oyabun.proctor.handler.zookeeper.watch.instances}")
     private boolean whatchInstancesProperty;
 
     /**

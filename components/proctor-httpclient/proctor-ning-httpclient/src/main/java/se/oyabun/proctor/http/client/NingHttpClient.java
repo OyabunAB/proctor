@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +25,7 @@ public class NingHttpClient
         extends AbstractProctorHttpClient
         implements ProctorHttpClient {
 
-    private static final Logger log = LoggerFactory.getLogger(NingHttpClient.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private static final String HTTPS = "https";
     private static final String HTTP = "http";

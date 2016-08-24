@@ -48,6 +48,12 @@
         </dependency>
 
         <dependency>
+            <groupId>se.oyabun.proctor.web</groupId>
+            <artifactId>proctor-admin-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>se.oyabun.proctor.components.www</groupId>
             <artifactId>proctor-admin-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>

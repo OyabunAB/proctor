@@ -6,16 +6,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>se.oyabun.proctor.components.handlers</groupId>
-        <artifactId>proctor-handlers-reactor</artifactId>
+        <groupId>se.oyabun.proctor.components.proxy</groupId>
+        <artifactId>proctor-admin-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>se.oyabun.proctor.components.handlers</groupId>
-    <artifactId>proctor-static-handler</artifactId>
+    <groupId>se.oyabun.proctor.web</groupId>
+    <artifactId>proctor-admin-service</artifactId>
     <packaging>jar</packaging>
 
-    <name>Proctor Filesystem Handler</name>
+    <name>Proctor Administration Service</name>
 
     <dependencies>
 
@@ -25,6 +25,15 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
+
+
+
+

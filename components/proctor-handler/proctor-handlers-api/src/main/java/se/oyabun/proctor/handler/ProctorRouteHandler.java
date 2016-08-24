@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.handlers;
+package se.oyabun.proctor.handler;
 
 import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
@@ -24,14 +24,14 @@ import java.util.Set;
 
 /**
  * ProctorRouteHandler interface.
- * All proctor handlers must implement this marker interface.
+ * All proctor handler must implement this marker interface.
  */
 public interface ProctorRouteHandler {
 
     /**
-     * Does given input match this handlers?
+     * Does given input match this handler?
      * @param uri to verify
-     * @return true if the handlers can handle the given URI
+     * @return true if the handler can handle the given URI
      */
     boolean matches(final String uri);
 

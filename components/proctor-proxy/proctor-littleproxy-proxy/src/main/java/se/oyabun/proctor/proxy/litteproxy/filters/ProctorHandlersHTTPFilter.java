@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.oyabun.proctor.handlers.ProctorRouteHandler;
+import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.util.lang.AsciiUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -40,7 +40,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Proctor handlers enabled HTTP Filter for Litte Proxy
+ * Proctor handler enabled HTTP Filter for Litte Proxy
  * @author Daniel Sundberg
  * @author Johan Maasing
  */
@@ -53,7 +53,7 @@ public class ProctorHandlersHTTPFilter
      */
     private static final Pattern URL_PATTERN = Pattern.compile("(^[^#]*?://)[^/]*(/.*)");
 
-    private static final Logger logger = LoggerFactory.getLogger(ProctorHandlersHTTPFilter.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private List<ProctorRouteHandler> registeredProctorProctorRouteHandlers;
@@ -87,9 +87,9 @@ public class ProctorHandlersHTTPFilter
 
             final HttpRequest httpRequest = (HttpRequest) httpObject;
 
-            if (logger.isTraceEnabled()) {
+            if (log.isTraceEnabled()) {
 
-                logger.trace(
+                log.trace(
                         "Client to proxy {} request received for '{} {}'.",
                         httpRequest.getProtocolVersion(),
                         httpRequest.getMethod(),
@@ -122,9 +122,9 @@ public class ProctorHandlersHTTPFilter
                     //
                     final String proxyURLExternalForm = proxyURL.toExternalForm();
 
-                    if (logger.isDebugEnabled()) {
+                    if (log.isDebugEnabled()) {
 
-                        logger.debug(
+                        log.debug(
                                 "Proxying request for URI '{}' to '{}' with {}.",
                                 clientRequestURI,
                                 proxyURLExternalForm,
@@ -152,7 +152,7 @@ public class ProctorHandlersHTTPFilter
 
             } catch (Exception e) {
 
-                logger.error("Problems during handler processing.", e);
+                log.error("Problems during handler processing.", e);
 
                 return createTextResponse(
                         HttpResponseStatus.SERVICE_UNAVAILABLE,
@@ -162,9 +162,9 @@ public class ProctorHandlersHTTPFilter
 
         } else {
 
-            if(logger.isTraceEnabled()) {
+            if(log.isTraceEnabled()) {
 
-                logger.trace("Client to proxy object ignored for {}.",
+                log.trace("Client to proxy object ignored for {}.",
                         httpObject.getClass().getSimpleName());
 
             }
@@ -208,7 +208,7 @@ public class ProctorHandlersHTTPFilter
             //
             // JVM is required to support UTF-8
             //
-            logger.error("UTF-8 encoding not supported by JVM");
+            log.error("UTF-8 encoding not supported by JVM");
 
         }
 
@@ -233,9 +233,9 @@ public class ProctorHandlersHTTPFilter
      */
     public HttpResponse proxyToServerRequest(final HttpObject httpObject) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server request prepared.");
+            log.trace("Proxy to server request prepared.");
 
         }
 
@@ -249,9 +249,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerRequestSending() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server request is being sent.");
+            log.trace("Proxy to server request is being sent.");
 
         }
 
@@ -278,17 +278,17 @@ public class ProctorHandlersHTTPFilter
 
             HttpResponse httpResponse = (HttpResponse) httpObject;
 
-            if(logger.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
 
-                logger.debug("Original " + parseHeaders(httpResponse));
+                log.debug("Original " + parseHeaders(httpResponse));
 
             }
 
             filterHeaders(httpResponse);
 
-            if(logger.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
 
-                logger.debug("Filtered " + parseHeaders(httpResponse));
+                log.debug("Filtered " + parseHeaders(httpResponse));
 
             }
 
@@ -308,9 +308,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void serverToProxyResponseTimedOut() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Server to proxy response timed out.");
+            log.trace("Server to proxy response timed out.");
 
         }
 
@@ -322,9 +322,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void serverToProxyResponseReceiving() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Server to proxy response is being received.");
+            log.trace("Server to proxy response is being received.");
 
         }
 
@@ -336,9 +336,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void serverToProxyResponseReceived() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Server to proxy response has been received.");
+            log.trace("Server to proxy response has been received.");
 
         }
 
@@ -354,9 +354,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public HttpObject proxyToClientResponse(final HttpObject httpObject) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to client response is being sent.");
+            log.trace("Proxy to client response is being sent.");
 
         }
 
@@ -370,9 +370,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerConnectionQueued() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server connection is queued.");
+            log.trace("Proxy to server connection is queued.");
 
         }
 
@@ -388,9 +388,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public InetSocketAddress proxyToServerResolutionStarted(final String resolvingServerHostAndPort) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server resolution for '{}' has started.", resolvingServerHostAndPort);
+            log.trace("Proxy to server resolution for '{}' has started.", resolvingServerHostAndPort);
 
         }
 
@@ -406,9 +406,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerResolutionFailed(final String hostAndPort) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server resolution for '{}' has failed.", hostAndPort);
+            log.trace("Proxy to server resolution for '{}' has failed.", hostAndPort);
 
         }
 
@@ -424,9 +424,9 @@ public class ProctorHandlersHTTPFilter
     public void proxyToServerResolutionSucceeded(final String serverHostAndPort,
                                                  final InetSocketAddress resolvedRemoteAddress) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace(
+            log.trace(
                     "Proxy to server resolution of '{}' has succeded, resolved '{}:{}'.",
                     serverHostAndPort,
                     resolvedRemoteAddress.getAddress(),
@@ -442,9 +442,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerConnectionStarted() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server connection started.");
+            log.trace("Proxy to server connection started.");
 
         }
 
@@ -456,9 +456,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerConnectionSSLHandshakeStarted() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server SSL handshake started.");
+            log.trace("Proxy to server SSL handshake started.");
 
         }
 
@@ -470,9 +470,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerConnectionFailed() {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server connection failed.");
+            log.trace("Proxy to server connection failed.");
 
         }
 
@@ -486,9 +486,9 @@ public class ProctorHandlersHTTPFilter
     @Override
     public void proxyToServerConnectionSucceeded(final ChannelHandlerContext serverCtx) {
 
-        if(logger.isTraceEnabled()) {
+        if(log.isTraceEnabled()) {
 
-            logger.trace("Proxy to server connection succeded, context '{}' created.", serverCtx.name());
+            log.trace("Proxy to server connection succeded, context '{}' created.", serverCtx.name());
 
         }
 

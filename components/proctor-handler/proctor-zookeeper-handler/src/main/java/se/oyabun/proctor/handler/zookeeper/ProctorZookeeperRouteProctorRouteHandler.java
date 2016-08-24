@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.handlers.zookeeper;
+package se.oyabun.proctor.handler.zookeeper;
 
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceProvider;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.exceptions.URIParseException;
-import se.oyabun.proctor.handlers.ProctorRouteHandler;
+import se.oyabun.proctor.handler.ProctorRouteHandler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class ProctorZookeeperRouteProctorRouteHandler
         implements ProctorRouteHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProctorRouteHandler.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private static final Pattern SERVICE_LOCATOR_PATTERN = Pattern.compile("^/([^/]+)/(.*)");
 
@@ -73,9 +73,9 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
         } catch (URIParseException e) {
 
-            if(logger.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
 
-                logger.debug("Failed to parse given URI.");
+                log.debug("Failed to parse given URI.");
 
             }
 
@@ -109,9 +109,9 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
         } catch (URIParseException e) {
 
-            if(logger.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
 
-                logger.debug("Failed to parse given URI.");
+                log.debug("Failed to parse given URI.");
 
             }
 
@@ -163,9 +163,9 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
         } catch (Exception e) {
 
-            if(logger.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
 
-                logger.debug("Failed to parse given URI.");
+                log.debug("Failed to parse given URI.");
 
             }
 
@@ -199,7 +199,7 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
             } catch (Exception e) {
 
-                logger.error("Failed to start found service provider for '{}', ignoring.", serviceName);
+                log.error("Failed to start found service provider for '{}', ignoring.", serviceName);
 
                 return Optional.empty();
 

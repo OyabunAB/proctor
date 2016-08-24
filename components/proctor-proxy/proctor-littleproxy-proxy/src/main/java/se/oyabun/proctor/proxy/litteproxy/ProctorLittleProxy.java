@@ -37,7 +37,7 @@ public class ProctorLittleProxy
     extends AbstractProctorProxy
         implements ProctorProxy {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProctorProxy.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private HttpProxyServer httpProxyServer;
 
@@ -51,12 +51,16 @@ public class ProctorLittleProxy
     private ProctorHandlersFilterSource proctorHandlersFilterSource;
 
     /**
-     * Init handlers, starting little proxy after injections
+     * Init handler, starting little proxy after injections
      * @throws IOException when trying to create proxy server
      */
     public void startProxy() throws IOException {
 
-        logger.info("Initializing Proctor LittleProxy instance on {}:{}.", proxyListenAddress, proxyListenPort);
+        if(log.isInfoEnabled()) {
+
+            log.info("Initializing Proctor LittleProxy instance on {}:{}.", proxyListenAddress, proxyListenPort);
+
+        }
 
         httpProxyServer =
                 DefaultHttpProxyServer
@@ -71,7 +75,11 @@ public class ProctorLittleProxy
 
     public void stopProxy() {
 
-        logger.info("Shutting down Proctor LittleProxy instance.");
+        if(log.isInfoEnabled()) {
+
+            log.info("Shutting down Proctor LittleProxy instance.");
+
+        }
 
         this.httpProxyServer.stop();
 

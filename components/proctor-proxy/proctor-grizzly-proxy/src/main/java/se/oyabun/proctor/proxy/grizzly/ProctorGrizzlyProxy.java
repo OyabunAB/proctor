@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.oyabun.proctor.handlers.ProctorRouteHandler;
+import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
@@ -31,7 +31,7 @@ public class ProctorGrizzlyProxy
         extends AbstractProctorProxy
         implements ProctorProxy {
 
-    private static final Logger log = LoggerFactory.getLogger(ProctorGrizzlyProxy.class);
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Value("${se.oyabun.proctor.proxy.listen.port}")
     private int proxyListenPort;

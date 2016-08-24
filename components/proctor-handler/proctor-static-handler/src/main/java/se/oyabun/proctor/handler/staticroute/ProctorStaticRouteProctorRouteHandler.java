@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.handlers.staticroute;
+package se.oyabun.proctor.handler.staticroute;
 
-import org.springframework.stereotype.Component;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
-import se.oyabun.proctor.handlers.AbstractDefaultProctorRouteHandler;
-import se.oyabun.proctor.handlers.ProctorRouteHandler;
+import se.oyabun.proctor.handler.AbstractDefaultProctorRouteHandler;
+import se.oyabun.proctor.handler.ProctorRouteHandler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Proctor Filesystem handlers
+ * Proctor Filesystem handler
  */
-@Component
 public class ProctorStaticRouteProctorRouteHandler
     extends AbstractDefaultProctorRouteHandler
         implements ProctorRouteHandler {

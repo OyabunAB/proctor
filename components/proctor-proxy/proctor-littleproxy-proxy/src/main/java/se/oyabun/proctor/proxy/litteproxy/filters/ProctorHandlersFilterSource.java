@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Proctor handlers enabled filter source for LittleProxy
+ * Proctor handler enabled filter source for LittleProxy
  */
 @Component
 public class ProctorHandlersFilterSource

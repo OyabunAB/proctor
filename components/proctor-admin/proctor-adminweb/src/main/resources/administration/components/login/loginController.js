@@ -1,4 +1,7 @@
 administrationApplication.controller('LoginController',
-    function($scope, $routeParams) {
 
-    });
+    function($scope) {
+
+    }
+
+);

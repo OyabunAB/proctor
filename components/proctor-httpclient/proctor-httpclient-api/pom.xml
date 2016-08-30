@@ -19,6 +19,13 @@
 
     <dependencies>
 
+        <!-- Proctor dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.core</groupId>
+            <artifactId>proctor-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>

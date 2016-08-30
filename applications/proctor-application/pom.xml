@@ -14,32 +14,42 @@
     <groupId>se.oyabun.proctor.applications</groupId>
     <artifactId>proctor-application</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Proxy Application</name>
 
     <dependencies>
 
         <!-- Proctor dependencies -->
+
+        <!--
         <dependency>
             <groupId>se.oyabun.proctor.components.proxy</groupId>
             <artifactId>proctor-grizzly-proxy</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        -->
 
-        <!--
+        <dependency>
+            <groupId>se.oyabun.proctor.components.proxy</groupId>
+            <artifactId>proctor-netty-proxy</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
             <artifactId>proctor-ning-httpclient</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        -->
 
+
+        <!--
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
             <artifactId>proctor-apache-httpclient</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
+-->
 
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
@@ -48,13 +58,13 @@
         </dependency>
 
         <dependency>
-            <groupId>se.oyabun.proctor.web</groupId>
+            <groupId>se.oyabun.proctor.components.admin</groupId>
             <artifactId>proctor-admin-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>se.oyabun.proctor.components.www</groupId>
+            <groupId>se.oyabun.proctor.components.admin</groupId>
             <artifactId>proctor-admin-web</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -79,6 +89,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
         </dependency>
 
         <!-- General dependencies -->

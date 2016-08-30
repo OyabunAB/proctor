@@ -1,17 +1,61 @@
+<!--
+
+ Copyright 2016 Oyabun AB
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+-->
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Proctor Administration</title>
-        <link rel='stylesheet' href='/webjars/patternfly/css/patternfly.min.css'>
+        <title>Proctor Administration Console</title>
+        <link href="webjars/patternfly/css/patternfly.min.css" rel="stylesheet" media="screen, print">
+        <link href="webjars/patternfly/css/patternfly-additions.min.css" rel="stylesheet" media="screen, print">
+        <link href="assets/css/proctor.css" rel="stylesheet" media="screen, print">
+        <link rel="apple-touch-icon" sizes="57x57" href="assets/img/icon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="assets/img/icon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="assets/img/icon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="assets/img/icon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="assets/img/icon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="assets/img/icon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="assets/img/icon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="assets/img/icon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="assets/img/icon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/img/icon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="assets/img/icon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/img/icon/favicon-16x16.png">
+        <link rel="manifest" href="assets/img/icon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="assets/img/icon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
     </head>
-    <body ng-app="administrationApplication">
-        <div ng-view></div>
-        <script src="/webjars/angularjs/angular.min.js"></script>
-        <script src="/webjars/angularjs/angular-route.min.js"></script>
-        <script src="/administration/module.js"></script>
-        <script src="/administration/routes.js"></script>
-        <script src="/administration/components/login/loginController.js"></script>
-        <script src="/administration/components/dashboard/dashboardController.js"></script>
+    <body ng-app="administrationApplication" class="proctorbody">
+        <div id="proctor-content" ui-view/>
+        <!-- Framework dependencies  -->
+        <script src="webjars/jquery/jquery.min.js"></script>
+        <script src="webjars/angularjs/angular.min.js"></script>
+        <script src="webjars/angular-ui-router/angular-ui-router.min.js"></script>
+        <script src="webjars/bootstrap/js/bootstrap.min.js"></script>
+        <script src="webjars/patternfly/js/patternfly.min.js"></script>
+        <!-- Proctor Administration application -->
+        <script src="administration/module.js"></script>
+        <script src="administration/components/login/loginController.js"></script>
+        <script src="administration/components/dashboard/dashboardController.js"></script>
+        <script src="administration/components/dashboard/handlers/handlersController.js"></script>
+        <script src="administration/components/dashboard/statistics/statisticsController.js"></script>
+        <script src="administration/components/dashboard/cluster/clusterController.js"></script>
+        <script src="administration/routes.js"></script>
     </body>
 </html>

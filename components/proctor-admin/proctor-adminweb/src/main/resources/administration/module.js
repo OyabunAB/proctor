@@ -1,1 +1,1 @@
-var administrationApplication = angular.module('administrationApplication', ['ngRoute']);
+var administrationApplication = angular.module('administrationApplication', ['ui.router']);

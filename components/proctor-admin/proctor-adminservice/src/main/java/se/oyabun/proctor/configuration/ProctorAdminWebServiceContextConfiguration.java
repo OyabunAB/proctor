@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan("se.oyabun.proctor.web.admin")
 public class ProctorAdminWebServiceContextConfiguration {
+
 }

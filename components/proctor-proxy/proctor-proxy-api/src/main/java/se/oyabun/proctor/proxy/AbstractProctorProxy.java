@@ -15,9 +15,14 @@
  */
 package se.oyabun.proctor.proxy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
+import se.oyabun.proctor.events.ProxyReplySentEvent;
+import se.oyabun.proctor.events.ProxyRequestReceivedEvent;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.IOException;
 
 /**
  * Abstract Proctor Proxy class, enabling lifecycle handling
@@ -25,8 +30,32 @@ import java.io.IOException;
 public abstract class AbstractProctorProxy
         implements ProctorProxy {
 
+    private static final Logger logger = LoggerFactory.getLogger(AbstractProctorProxy.class);
+
+    @EventListener
+    final void trackRequestEvent(ProxyRequestReceivedEvent proxyRequestReceivedEvent) {
+
+        if(logger.isDebugEnabled()) {
+
+            logger.debug("Proxy received '{}'.", proxyRequestReceivedEvent);
+
+        }
+
+    }
+
+    @EventListener
+    final void trackReplyEvent(ProxyReplySentEvent proxyReplySentEvent) {
+
+        if(logger.isDebugEnabled()) {
+
+            logger.debug("Proxy returned '{}'.", proxyReplySentEvent);
+
+        }
+
+    }
+
     @PostConstruct
-    public abstract void startProxy() throws IOException;
+    public abstract void startProxy() throws Exception;
 
     @PreDestroy
     public abstract void stopProxy();

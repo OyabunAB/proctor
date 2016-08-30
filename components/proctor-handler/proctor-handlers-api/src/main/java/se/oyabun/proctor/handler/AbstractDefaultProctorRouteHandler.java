@@ -35,9 +35,9 @@ public abstract class AbstractDefaultProctorRouteHandler
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private static Pattern matcherPattern;
+    private final Pattern matcherPattern;
 
-    private static String matcherHandle;
+    private final String matcherHandle;
 
     public AbstractDefaultProctorRouteHandler(final String regex,
                                               final String matcherHandle) {

@@ -22,12 +22,11 @@ import se.oyabun.proctor.exceptions.DuplicateRouteHandlerException;
 import se.oyabun.proctor.exceptions.NoSuchHandlerException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
  * Default proctor route handler manager
@@ -133,14 +132,11 @@ public class DefaultProctorRouteHandlerManager
     /**
      * ${@inheritDoc}
      */
-    public Set<ProctorRouteHandler> getRegisteredRouteHandlers() {
+    public Collection<ProctorRouteHandler> getRegisteredRouteHandlers() {
 
         synchronized (syncronizationLock) {
 
-            return routeHandlerMap
-                    .values()
-                    .stream()
-                    .collect(Collectors.toSet());
+            return routeHandlerMap.values();
 
         }
 

@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * ProctorRouteHandler interface.
- * All proctor handler must implement this marker interface.
+ * All proctor handler must implement this.
  */
 public interface ProctorRouteHandler {
 

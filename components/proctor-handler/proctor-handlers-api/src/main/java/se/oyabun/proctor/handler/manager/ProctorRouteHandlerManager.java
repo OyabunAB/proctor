@@ -19,7 +19,7 @@ import se.oyabun.proctor.exceptions.DuplicateRouteHandlerException;
 import se.oyabun.proctor.exceptions.NoSuchHandlerException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Proctor route handler manager, for managing route handler on the fly
@@ -46,6 +46,6 @@ public interface ProctorRouteHandlerManager {
      * Return all registered handler
      * @return set of route handler
      */
-    Set<ProctorRouteHandler> getRegisteredRouteHandlers();
+    Collection<ProctorRouteHandler> getRegisteredRouteHandlers();
 
 }

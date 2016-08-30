@@ -5,7 +5,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -53,7 +53,7 @@ public class ApacheHttpClient
         RequestBuilder requestBuilder =
                 RequestBuilder
                         .create(request.getMethod())
-                        .setEntity(new StringEntity(request.getBody()))
+                        .setEntity(new ByteArrayEntity(request.getBody()))
                         .setUri(requestUrl);
 
         final HttpUriRequest httpRequest = requestBuilder.build();
@@ -71,7 +71,9 @@ public class ApacheHttpClient
                 response.getStatusLine().getStatusCode(),
                 response.getStatusLine().getReasonPhrase(),
                 responseHeaders,
-                EntityUtils.toString(response.getEntity()));
+                response.getEntity().getContentType().getValue(),
+                response.getEntity().getContentLength(),
+                EntityUtils.toByteArray(response.getEntity()));
 
     }
 

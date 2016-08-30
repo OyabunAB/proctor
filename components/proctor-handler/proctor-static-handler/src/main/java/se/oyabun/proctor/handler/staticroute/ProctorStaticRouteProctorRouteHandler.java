@@ -15,6 +15,7 @@
  */
 package se.oyabun.proctor.handler.staticroute;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.AbstractDefaultProctorRouteHandler;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
@@ -29,15 +30,19 @@ public class ProctorStaticRouteProctorRouteHandler
     extends AbstractDefaultProctorRouteHandler
         implements ProctorRouteHandler {
 
-    private static URL staticURL;
+    private final URL staticURL;
+
+    private final boolean appendOriginalPath;
 
     public ProctorStaticRouteProctorRouteHandler(final String regex,
                                                  final String matcherHandle,
-                                                 final URL staticURL) {
+                                                 final URL staticURL,
+                                                 final boolean appendOriginalPath) {
 
         super(regex, matcherHandle);
 
         this.staticURL = staticURL;
+        this.appendOriginalPath = appendOriginalPath;
 
     }
 
@@ -61,7 +66,9 @@ public class ProctorStaticRouteProctorRouteHandler
 
         if(singleHandleName.equals(handleName)) {
 
-            return new URL(getRootURLForHandleName(singleHandleName), uri);
+            return appendOriginalPath ?
+                    new URL(getRootURLForHandleName(singleHandleName), uri) :
+                    getRootURLForHandleName(singleHandleName);
 
         } else {
 
@@ -83,4 +90,25 @@ public class ProctorStaticRouteProctorRouteHandler
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof ProctorStaticRouteProctorRouteHandler)) return false;
+
+        ProctorStaticRouteProctorRouteHandler that = (ProctorStaticRouteProctorRouteHandler) o;
+
+        return new org.apache.commons.lang3.builder.EqualsBuilder()
+                .append(getHandleNames(), that.getHandleNames())
+                .append(appendOriginalPath, that.appendOriginalPath)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getHandleNames())
+                .append(appendOriginalPath)
+                .toHashCode();
+    }
 }

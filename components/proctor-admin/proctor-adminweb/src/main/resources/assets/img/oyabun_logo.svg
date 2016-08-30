@@ -1,0 +1,11 @@
+<svg width="210" height="200" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <title>Layer 1</title>
+    <path stroke="#000" id="svg_1" d="m56.75,191.00002l47,-82.25002l47,82.25002l-94,0z" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+    <path transform="rotate(-180 103.75,49.8750114440918) " stroke="#000" id="svg_2" d="m56.75,91.00002l47,-82.25002l47,82.25002l-94,0z" stroke-opacity="null" stroke-width="1.5" fill="#ff0000"/>
+    <path transform="rotate(-180 50.75,144.87501525878906) " stroke="#000" id="svg_3" d="m3.75,186.00002l47,-82.25002l47,82.25002l-94,0z" stroke-opacity="null" stroke-width="1.5" fill="#ff0000"/>
+    <path transform="rotate(-180 156.75,144.87501525878906) " stroke="#000" id="svg_4" d="m109.75,186.00002l47,-82.25002l47,82.25002l-94,0z" stroke-opacity="null" stroke-width="1.5" fill="#ff0000"/>
+    <path stroke="#000" id="svg_5" d="m3.75,96.00002l47,-82.25002l47,82.25002l-94,0z" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+    <path stroke="#000" id="svg_6" d="m109.75,96.00002l47,-82.25002l47,82.25002l-94,0z" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" fill="#fff"/>
+  </g>
+</svg>

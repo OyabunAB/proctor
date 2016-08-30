@@ -18,11 +18,12 @@
     <name>Proctor Components Reactor</name>
 
     <modules>
-        <module>proctor-util</module>
+        <module>proctor-core</module>
         <module>proctor-admin</module>
         <module>proctor-proxy</module>
         <module>proctor-httpclient</module>
         <module>proctor-handler</module>
+        <module>proctor-util</module>
     </modules>
 
 </project>

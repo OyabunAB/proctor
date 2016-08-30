@@ -40,13 +40,32 @@ public class ProctorHandlerContextConfiguration {
 
         ProctorRouteHandler staticRouteHandler =
                 new ProctorStaticRouteProctorRouteHandler(
-                        ".*/proctoradmin/.*",
+                        "/proctoradmin/.*",
                         "Proctor Admin Web Static Route",
-                        new URL("http://localhost:8080/"));
+                        new URL("http://localhost:8080/"),
+                        true);
 
         proctorRouteHandlerManager.registerRouteHandler(staticRouteHandler);
 
         return staticRouteHandler;
+
+    }
+
+    @Autowired @Bean(name = "oyabunWebStaticRoute")
+    public ProctorRouteHandler getOyabunStaticRouteHandler(ProctorRouteHandlerManager proctorRouteHandlerManager)
+        throws MalformedURLException, DuplicateRouteHandlerException {
+
+
+        ProctorRouteHandler staticRouteHandlerOyabun =
+                new ProctorStaticRouteProctorRouteHandler(
+                        "^/((?!proctoradmin).)*$",
+                        "Oyabun Route",
+                        new URL("https://www.oyabun.se/"),
+                        false);
+
+        proctorRouteHandlerManager.registerRouteHandler(staticRouteHandlerOyabun);
+
+        return staticRouteHandlerOyabun;
 
     }
 

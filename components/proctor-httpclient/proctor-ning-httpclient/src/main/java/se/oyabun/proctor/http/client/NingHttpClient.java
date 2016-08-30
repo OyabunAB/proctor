@@ -55,9 +55,9 @@ public class NingHttpClient
 
         final ListenableFuture<Response> asyncResponse = asyncHttpClient.executeRequest(httpRequest);
 
-        Response response = asyncResponse.get(DEFAULT_REQUEST_TIMEOUT + 100, TimeUnit.MILLISECONDS);
+        final Response response = asyncResponse.get(DEFAULT_REQUEST_TIMEOUT + 100, TimeUnit.MILLISECONDS);
 
-        Map<String, List<String>> responseHeaders = new HashMap<>();
+        final Map<String, List<String>> responseHeaders = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : response.getHeaders().entrySet()) {
 
             final String headerName = entry.getKey();
@@ -71,7 +71,9 @@ public class NingHttpClient
                         response.getStatusCode(),
                         response.getStatusText(),
                         responseHeaders,
-                        response.getResponseBody());
+                        response.getContentType(),
+                        response.getResponseBodyAsBytes().length,
+                        response.getResponseBodyAsBytes());
 
         return responseData;
 
@@ -83,21 +85,23 @@ public class NingHttpClient
      */
     public void initHttpClient() throws Exception {
 
-        log.debug("Initializing NING HTTP Client.");
+        if(log.isDebugEnabled()) {
 
-        AsyncHttpClientConfig.Builder config = new AsyncHttpClientConfig.Builder();
+            log.debug("Initializing NING HTTP Client.");
 
-        config.setAcceptAnyCertificate(true);
+        }
 
-        config.setAllowPoolingConnections(true);
+        AsyncHttpClientConfig config =
+                new AsyncHttpClientConfig.Builder()
+                        .setAcceptAnyCertificate(true)
+                        .setAllowPoolingConnections(true)
+                        .setUserAgent("Proctor (0.0.1-SNAPSHOT)")
+                        .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
+                        .setReadTimeout(DEFAULT_READ_TIMEOUT)
+                        .setRequestTimeout(DEFAULT_REQUEST_TIMEOUT)
+                        .build();
 
-        config.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT);
-
-        config.setReadTimeout(DEFAULT_READ_TIMEOUT);
-
-        config.setRequestTimeout(DEFAULT_REQUEST_TIMEOUT);
-
-        this.asyncHttpClient = new AsyncHttpClient(config.build());
+        this.asyncHttpClient = new AsyncHttpClient(config);
 
     }
 
@@ -107,7 +111,11 @@ public class NingHttpClient
      */
     public void shutDownHttpClient() throws Exception {
 
-        log.debug("Stopping NING HTTP Client.");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Stopping NING HTTP Client.");
+
+        }
 
         this.asyncHttpClient.close();
 

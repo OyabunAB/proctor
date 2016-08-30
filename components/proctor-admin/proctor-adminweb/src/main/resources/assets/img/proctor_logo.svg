@@ -1,0 +1,33 @@
+<svg width="100" height="70" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <title>Proctor Logo</title>
+        <rect id="backfill1"
+              height="70.00005"
+              width="51.99996"
+              y="1.71734"
+              x="-1.38655"
+              stroke="#000"
+              stroke-width="0"
+              fill="#207cd8"/>
+        <rect id="backfill2"
+              height="70"
+              width="50.24954"
+              y="1.71737"
+              x="49.61302"
+              stroke="#000"
+              stroke-width="0"
+              fill="#65abf2"/>
+        <path id="front1"
+              d="m90.06975,36.71737l-18.49983,-18.49984l0,9.24992l-19.85701,0l0,-27.74975l53.2884,0l0,73.99934l-53.2884,0l0,-27.74975l19.85701,0l0,9.24991l18.49983,-18.49983z"
+              stroke-opacity="null"
+              stroke-width="0"
+              stroke="#000"
+              fill="#207cd8"/>
+        <path id="front2"
+              d="m36.82025,36.71737l-18.49983,-18.49983l0,9.24992l-19.85701,0l0,-27.74975l53.2884,0l0,73.99934l-53.2884,0l0,-27.74975l19.85701,0l0,9.24992l18.49983,-18.49983z"
+              stroke-opacity="null"
+              stroke-width="0"
+              stroke="#000"
+              fill="#65abf2"/>
+    </g>
+</svg>

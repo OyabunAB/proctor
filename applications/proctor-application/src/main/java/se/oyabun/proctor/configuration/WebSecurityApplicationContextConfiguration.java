@@ -15,14 +15,34 @@
  */
 package se.oyabun.proctor.configuration;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+
+import java.util.Arrays;
 
 /**
  * Web security context configuration
  */
 @Configuration
+@EnableAuthorizationServer
+@EnableResourceServer
 public class WebSecurityApplicationContextConfiguration {
 
+    @Bean
+    public static SecurityProperties securityProperties() {
+        SecurityProperties securityProperties = new SecurityProperties();
+        securityProperties.setIgnored(
+                Arrays.asList(
+                        "/assets/**",
+                        "/administration/**",
+                        "/webjars/**",
+                        "/index.html",
+                        "/"));
+        return securityProperties;
+    }
 
 
 }

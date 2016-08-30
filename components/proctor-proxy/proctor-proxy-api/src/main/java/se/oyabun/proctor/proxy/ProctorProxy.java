@@ -17,7 +17,6 @@ package se.oyabun.proctor.proxy;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.io.IOException;
 
 /**
  * Proctor proxy interface
@@ -29,7 +28,7 @@ public interface ProctorProxy {
      * Initiates the proxy after startup
      */
     @PostConstruct
-    void startProxy() throws IOException;
+    void startProxy() throws Exception;
 
     /**
      * Stops the proxy before shutdown

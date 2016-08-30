@@ -1,4 +1,7 @@
 administrationApplication.controller('DashboardController',
-    function($scope, $routeParams) {
 
-    });
+    function($scope) {
+
+    }
+
+);

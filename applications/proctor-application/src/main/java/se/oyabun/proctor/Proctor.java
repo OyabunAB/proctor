@@ -18,9 +18,10 @@ package se.oyabun.proctor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.boot.SpringApplication;
-
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.FileNotFoundException;
@@ -29,7 +30,7 @@ import java.io.FileNotFoundException;
  * Proctor application bootstrap class
  */
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration()
 @ComponentScan("se.oyabun.proctor.configuration")
 public class Proctor {
 

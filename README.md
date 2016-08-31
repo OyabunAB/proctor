@@ -1,4 +1,3 @@
-[![Build Status](http://jenkins.danielsundberg.nu/buildStatus/icon?job=Proctor development)](http://jenkins.danielsundberg.nu/job/Proctor%20development/)
 
     =============================================================================
      88888888ba
@@ -11,7 +10,11 @@
      88          88          `"YbbdP"'   `"Ybbd8"'   "Y888 `"YbbdP"'  88
     =============================================================================
 
-# Project structure
+# Proctor Proxy Framework [![Build Status](http://jenkins.danielsundberg.nu/buildStatus/icon?job=Proctor development)](http://jenkins.danielsundberg.nu/job/Proctor development)
+
+
+
+## Project structure
 A high level project overview and roadmap.
 
     ╔═════════════════════╗ 

@@ -40,7 +40,11 @@ public class DefaultProctorStatisticsManager
 
                 return new ProctorStatisticsReport(
                         proctorStatistic,
-                        proctorStatisticsGatherer.getMeanFor(proctorStatistic));
+                        proctorStatisticsGatherer.getMeanFor(proctorStatistic),
+                        proctorStatisticsGatherer.getCountFor(proctorStatistic),
+                        proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
+                        proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
+                        proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
 
             } catch (NonGatheredStatisticRequestException e) {
 
@@ -88,7 +92,11 @@ public class DefaultProctorStatisticsManager
 
                                                 return new ProctorStatisticsReport(
                                                         proctorStatistic,
-                                                        proctorStatisticsGatherer.getMeanFor(proctorStatistic));
+                                                        proctorStatisticsGatherer.getMeanFor(proctorStatistic),
+                                                        proctorStatisticsGatherer.getCountFor(proctorStatistic),
+                                                        proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
+                                                        proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
+                                                        proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
 
                                             } catch (NonGatheredStatisticRequestException e) {
 

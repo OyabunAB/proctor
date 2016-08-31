@@ -1,4 +1,4 @@
-[![Build Status](http://jenkins.danielsundberg.nu/job/Proctor%20development/badge/icon?style=plastic)](http://jenkins.danielsundberg.nu/job/Proctor%20development/)
+[![Build Status](http://jenkins.danielsundberg.nu/buildStatus/icon?job=Proctor development)](http://jenkins.danielsundberg.nu/job/Proctor%20development/)
 
     =============================================================================
      88888888ba

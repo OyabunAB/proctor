@@ -14,8 +14,19 @@
     <groupId>se.oyabun.proctor.components.proxy</groupId>
     <artifactId>proctor-grizzly-proxy</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Grizzle Proxy Component</name>
+    <name>Proctor Grizzly Proxy Component</name>
+    <description>Proctor Grizzly framework proxy server implementation module.</description>
+
+    <properties>
+
+        <proctor-proxy-api.version>0.0.1-SNAPSHOT</proctor-proxy-api.version>
+        <proctor-httpclient-api.version>0.0.1-SNAPSHOT</proctor-httpclient-api.version>
+
+        <grizzly-http-all.version>2.3.25</grizzly-http-all.version>
+
+    </properties>
 
     <dependencies>
 
@@ -42,13 +53,7 @@
         <dependency>
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-http-all</artifactId>
-            <version>2.3.25</version>
-        </dependency>
-
-        <!-- General dependencies -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <version>${grizzly-http-all.version}</version>
         </dependency>
 
     </dependencies>

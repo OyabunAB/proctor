@@ -16,6 +16,7 @@
     <packaging>jar</packaging>
 
     <name>Proctor Utils Component</name>
+    <description>Proctor general util component.</description>
 
     <dependencies>
 

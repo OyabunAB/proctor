@@ -14,8 +14,10 @@
     <groupId>se.oyabun.proctor.components.httpclient</groupId>
     <artifactId>proctor-httpclient-reactor</artifactId>
     <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor HTTP Client Components Reactor</name>
+    <description>Proctor HTTP client comomponents reactor pom.</description>
 
     <modules>
         <module>proctor-httpclient-api</module>

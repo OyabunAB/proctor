@@ -14,15 +14,24 @@
     <groupId>se.oyabun.proctor.components.handlers</groupId>
     <artifactId>proctor-static-handler</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Filesystem Handler</name>
+    <name>Proctor Static Route Handler</name>
+    <description>Proctor static route proxy handler implementation module.</description>
+
+    <properties>
+
+        <proctor-handlers-api.version>0.0.1-SNAPSHOT</proctor-handlers-api.version>
+
+    </properties>
 
     <dependencies>
 
+        <!-- Proctor Depencencies -->
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-handlers-api.version}</version>
         </dependency>
 
     </dependencies>

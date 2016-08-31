@@ -14,8 +14,10 @@
     <groupId>se.oyabun.proctor.applications</groupId>
     <artifactId>proctor-applications-reactor</artifactId>
     <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Applications Reactor</name>
+    <description>Proctor applications reactor pom.</description>
 
     <modules>
         <module>proctor-application</module>

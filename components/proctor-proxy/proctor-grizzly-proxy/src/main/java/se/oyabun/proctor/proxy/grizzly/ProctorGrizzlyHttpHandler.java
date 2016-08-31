@@ -23,8 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import se.oyabun.proctor.events.ProxyReplySentEvent;
-import se.oyabun.proctor.events.ProxyRequestReceivedEvent;
+import se.oyabun.proctor.events.http.ProxyReplySentEvent;
+import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
 import se.oyabun.proctor.http.HttpRequestData;
@@ -100,7 +100,10 @@ public class ProctorGrizzlyHttpHandler
 
             final String protocol = proxyURL.getProtocol();
             final String method = request.getMethod().getMethodString();
-            final String queryString = request.getQueryString();
+            final Map<String, List<String>> queryParameters = new HashMap<>();
+            for (String parameterName : request.getParameterNames()) {
+                queryParameters.put(parameterName, Arrays.asList(request.getParameterValues(parameterName)));
+            }
 
             final HttpRequestData httpRequestData =
                     new HttpRequestData(
@@ -110,7 +113,7 @@ public class ProctorGrizzlyHttpHandler
                             method,
                             headers,
                             requestBodyAsString.getBytes(),
-                            queryString,
+                            queryParameters,
                             clientRequestPath);
 
             applicationEventPublisher.publishEvent(new ProxyRequestReceivedEvent(httpRequestData));

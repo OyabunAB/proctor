@@ -13,7 +13,7 @@ public class HttpRequestData
 
     private final String protocol;
     private final String method;
-    private final String query;
+    private final Map<String, List<String>> queryParameters;
     private final String path;
     private final Integer port;
     private final InetAddress host;
@@ -24,7 +24,7 @@ public class HttpRequestData
                            final String method,
                            final Map<String, List<String>> headers,
                            final byte[] body,
-                           final String query,
+                           final Map<String, List<String>> queryParameters,
                            final String path) {
 
         super(headers, body);
@@ -32,7 +32,7 @@ public class HttpRequestData
         this.host = host;
         this.protocol = protocol;
         this.method = method;
-        this.query = query;
+        this.queryParameters = queryParameters;
         this.path = path;
 
     }
@@ -47,9 +47,9 @@ public class HttpRequestData
 
     }
 
-    public String getQuery() {
+    public Map<String, List<String>> getQueryParameters() {
 
-        return query;
+        return queryParameters;
 
     }
 
@@ -72,7 +72,7 @@ public class HttpRequestData
 
         int hash = 7 * super.hashCode();
         hash = 67 * hash + Objects.hashCode(this.method);
-        hash = 67 * hash + Objects.hashCode(this.query);
+        hash = 67 * hash + Objects.hashCode(this.queryParameters);
         hash = 67 * hash + Objects.hashCode(this.path);
         return hash;
 
@@ -107,7 +107,7 @@ public class HttpRequestData
 
         }
 
-        if (!Objects.equals(this.query, other.query)) {
+        if (!Objects.equals(this.queryParameters, other.queryParameters)) {
 
             return false;
 
@@ -129,7 +129,7 @@ public class HttpRequestData
         return "HttpRequestData{" +
                 "method=" + method + ", " +
                 "path=" + path + ", " +
-                "query=" + query + "} + " +
+                "query=" + queryParameters + "} + " +
                 super.toString();
 
     }

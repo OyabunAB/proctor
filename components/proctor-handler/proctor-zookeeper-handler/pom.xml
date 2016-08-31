@@ -14,26 +14,30 @@
     <groupId>se.oyabun.proctor.components.handlers</groupId>
     <artifactId>proctor-zookeeper-handler</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Zookeeper Handler</name>
+    <name>Proctor ZooKeeper Handler</name>
+    <description>Proctor ZooKeeper handler implementation module.</description>
 
     <properties>
-        <curator.version>2.8.0</curator.version>
+
+        <proctor-handlers-api>0.0.1-SNAPSHOT</proctor-handlers-api>
+
+        <curator-x-discovery.version>2.8.0</curator-x-discovery.version>
+
     </properties>
+
 
     <dependencies>
 
+        <!-- Proctor dependencies -->
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-handlers-api}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
+        <!-- ZooKeeper/Curator dependencies -->
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-x-discovery</artifactId>
@@ -44,12 +48,7 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
-            <version>${curator.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <version>${curator-x-discovery.version}</version>
         </dependency>
 
     </dependencies>

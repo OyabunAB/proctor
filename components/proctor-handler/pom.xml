@@ -14,8 +14,10 @@
     <groupId>se.oyabun.proctor.components.handlers</groupId>
     <artifactId>proctor-handlers-reactor</artifactId>
     <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Handlers Reactor</name>
+    <description>Proctor proxy handlers reactor pom.</description>
 
     <modules>
         <module>proctor-handlers-api</module>

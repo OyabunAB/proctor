@@ -14,31 +14,26 @@
     <groupId>se.oyabun.proctor.components.httpclient</groupId>
     <artifactId>proctor-httpclient-api</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor HTTP Client API</name>
+    <description>Proctor HTTP client API provides basic interface for HTTP client components.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+
+    </properties>
+
 
     <dependencies>
 
-        <!-- Proctor dependencies -->
+        <!-- Proctor Dependencies -->
         <dependency>
             <groupId>se.oyabun.proctor.components.core</groupId>
             <artifactId>proctor-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-core.version}</version>
         </dependency>
-
-        <!-- Spring dependencies -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.2.3.RELEASE</version>
-        </dependency>
-
-        <!-- Logging dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
 
     </dependencies>
 

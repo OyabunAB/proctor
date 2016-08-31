@@ -24,6 +24,7 @@ import javax.annotation.PreDestroy;
 public interface ProctorProxy {
 
 
+
     /**
      * Initiates the proxy after startup
      */

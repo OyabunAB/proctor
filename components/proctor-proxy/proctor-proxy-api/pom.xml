@@ -14,30 +14,30 @@
     <groupId>se.oyabun.proctor.components.proxy</groupId>
     <artifactId>proctor-proxy-api</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Proxy Component API</name>
+    <description>Proctor proxy API provides the basic interface for proxy server components.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+        <proctor-handlers-api.version>0.0.1-SNAPSHOT</proctor-handlers-api.version>
+    </properties>
 
     <dependencies>
 
         <!-- Proctor dependencies -->
-
         <dependency>
             <groupId>se.oyabun.proctor.components.core</groupId>
             <artifactId>proctor-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-core.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Spring dependencies -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.2.3.RELEASE</version>
+            <version>${proctor-handlers-api.version}</version>
         </dependency>
 
     </dependencies>

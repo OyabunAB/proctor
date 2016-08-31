@@ -17,11 +17,19 @@ package se.oyabun.proctor.proxy.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.proxy.AbstractProctorProxy;
 import se.oyabun.proctor.proxy.ProctorProxy;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 /**
  * Proctor Netty Proxy Server Implementation
@@ -46,9 +64,16 @@ public class ProctorNettyProxy
     @Value("${se.oyabun.proctor.proxy.listen.address}")
     private String proxyListenAddress;
 
-    @Autowired
-    private ProctorChannelInitializer proctorChannelInitializer;
+    @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
+    private String keystorePath;
 
+    @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
+    private String keyStorePassword;
+
+    @Autowired
+    private ProctorHttpHandler proctorHttpHandler;
+
+        private SslContext sslContext = null;
 
     private Channel channel;
 
@@ -66,21 +91,84 @@ public class ProctorNettyProxy
 
         }
 
-        ServerBootstrap b = new ServerBootstrap();
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-        b.group(masterGroup, slaveGroup);
+        serverBootstrap.group(masterGroup, slaveGroup);
 
-        b.channel(NioServerSocketChannel.class);
+        serverBootstrap.channel(NioServerSocketChannel.class);
 
-        if(logger.isDebugEnabled()) {
+        serverBootstrap.handler(new LoggingHandler(LogLevel.ERROR));
 
-            b.handler(new LoggingHandler(LogLevel.INFO));
+        serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
 
-        }
+            @Override
+            public void initChannel(SocketChannel channel) {
 
-        b.childHandler(proctorChannelInitializer);
+                try {
 
-        channel = b.bind(proxyListenAddress, proxyListenPort).channel();
+                    if (StringUtils.isNotBlank(keystorePath) && StringUtils.isNotBlank(keyStorePassword)) {
+
+                        KeyStore ks = KeyStore.getInstance("JKS");
+
+                        ks.load(new FileInputStream(keystorePath), keyStorePassword.toCharArray());
+
+                        //
+                        // Set up key manager factory to use our key store
+                        //
+                        KeyManagerFactory keyManagerFactory =
+                                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+
+                        keyManagerFactory.init(ks, keyStorePassword.toCharArray());
+
+                        sslContext = SslContextBuilder.forServer(keyManagerFactory).build();
+
+                    }
+
+                } catch (CertificateException e) {
+
+                    logger.error("Failed to initialize SSL Certificate.", e );
+
+                } catch (SSLException e) {
+
+                    logger.error("Failed to initialize SSL.", e );
+
+                } catch (NoSuchAlgorithmException e) {
+
+                    logger.error("Failed to initialize SSL.", e );
+
+                } catch (KeyStoreException e) {
+
+                    logger.error("Failed to initialize SSL.", e );
+
+                } catch (IOException e) {
+
+                    logger.error("Failed to initialize SSL.", e );
+
+                } catch (UnrecoverableKeyException e) {
+
+                    logger.error("Failed to initialize SSL.", e );
+
+                }
+
+                ChannelPipeline pipeline = channel.pipeline();
+
+                if (sslContext != null) {
+
+                    pipeline.addLast(sslContext.newHandler(channel.alloc()));
+
+                }
+
+                pipeline.addLast("codec-http", new HttpServerCodec());
+
+                pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
+
+                pipeline.addLast("proctor", proctorHttpHandler);
+
+            }
+
+        });
+
+        channel = serverBootstrap.bind(proxyListenAddress, proxyListenPort).channel();
 
     }
 

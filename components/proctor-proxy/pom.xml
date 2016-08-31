@@ -14,8 +14,10 @@
     <groupId>se.oyabun.proctor.components.proxy</groupId>
     <artifactId>proctor-proxy-reactor</artifactId>
     <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Proxy Components Reactor</name>
+    <description>Proctor proxy components reactor pom.</description>
 
     <modules>
         <module>proctor-proxy-api</module>

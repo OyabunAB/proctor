@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components.admin</groupId>
+        <artifactId>proctor-admin-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.admin</groupId>
+    <artifactId>proctor-admin-web</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor Administration WebJar</name>
+    <description>Proctor administration web gui WebJar.</description>
+
+    <properties>
+
+        <destination.directory>${project.build.outputDirectory}/META-INF/resources</destination.directory>
+
+        <patternfly.version>3.5.0</patternfly.version>
+        <bootstrap.version>3.3.0</bootstrap.version>
+        <angularjs.version>1.5.7</angularjs.version>
+        <angular-ui-router.version>1.0.0-beta.1</angular-ui-router.version>
+        <jquery.version>1.11.1</jquery.version>
+
+    </properties>
+
+    <dependencies>
+
+        <!-- WebJar dependencies -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>patternfly</artifactId>
+            <version>${patternfly.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angularjs</artifactId>
+            <version>${angularjs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>angular-ui-router</artifactId>
+            <version>${angular-ui-router.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${destination.directory}</targetPath>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+    </build>
+
+</project>
+
+
+
+

@@ -42,12 +42,34 @@ public class ProctorHttpHandler
 
     }
 
-    @Override
+    /**
+     * Read channel request after we buffered the entire request, and process the request.
+     * @param ctx
+     * @param request
+     * @throws Exception
+     */
     public void channelRead0(final ChannelHandlerContext ctx,
                              final FullHttpRequest request)
             throws Exception {
 
+        request.retain();
+
         ctx.writeAndFlush(proctorHttpResponder.processRequest(request));
+
+    }
+
+    /**
+     * Catch exceptions caused by pipeline and handle here.
+     * @param ctx
+     * @param e
+     * @throws Exception
+     */
+
+    public void exceptionCaught(ChannelHandlerContext ctx,
+                                Throwable e)
+            throws Exception {
+
+        logger.error("Exception occured during handling.", e);
 
     }
 

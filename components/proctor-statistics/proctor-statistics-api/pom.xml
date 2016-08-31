@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components.proxy</groupId>
+        <artifactId>proctor-proxy-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.statistics</groupId>
+    <artifactId>proctor-statistics-api</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor Statistics API Component</name>
+    <description>Proctor statistics API provides the basic interface to statistical components.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+
+    </properties>
+
+    <dependencies>
+
+        <!-- Proctor dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.core</groupId>
+            <artifactId>proctor-core</artifactId>
+            <version>${proctor-core.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

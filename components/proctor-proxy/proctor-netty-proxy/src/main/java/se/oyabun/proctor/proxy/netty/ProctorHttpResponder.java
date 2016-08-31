@@ -24,8 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import se.oyabun.proctor.events.ProxyReplySentEvent;
-import se.oyabun.proctor.events.ProxyRequestReceivedEvent;
+import se.oyabun.proctor.events.handler.ProxyHandlerMatchedEvent;
+import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
+import se.oyabun.proctor.events.http.ProxyReplySentEvent;
+import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
@@ -54,11 +56,11 @@ public class ProctorHttpResponder {
 
     private static final Logger logger = LoggerFactory.getLogger(ProctorHttpResponder.class);
 
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    private ProctorRouteHandlerManager proctorRouteHandlerManager;
+    private final ProctorRouteHandlerManager proctorRouteHandlerManager;
 
-    private ProctorHttpClient proctorHttpClient;
+    private final ProctorHttpClient proctorHttpClient;
 
     @Autowired
     public ProctorHttpResponder(final ApplicationEventPublisher applicationEventPublisher,
@@ -98,9 +100,14 @@ public class ProctorHttpResponder {
 
             final ProctorRouteHandler matchingProctorRouteHandler = optionalHandler.get();
 
+            final String matchingHandlerHandle = matchingProctorRouteHandler.getHandleNameFor(clientRequestPath);
+
+            applicationEventPublisher.publishEvent(
+                    new ProxyHandlerMatchedEvent(clientRequestPath));
+
             final URL proxyURL =
                     matchingProctorRouteHandler.resolveURLFor(
-                            matchingProctorRouteHandler.getHandleNameFor(clientRequestPath),
+                            matchingHandlerHandle,
                             clientRequestPath);
 
             //
@@ -127,8 +134,8 @@ public class ProctorHttpResponder {
                             request.getMethod().name(),
                             headers,
                             request.content().array(),
-                            queryStringDecoder.toString(),
-                            queryStringDecoder.path());
+                            queryStringDecoder.parameters(),
+                            queryStringDecoder.uri());
 
             applicationEventPublisher.publishEvent(new ProxyRequestReceivedEvent(proxyRequest));
 
@@ -145,12 +152,8 @@ public class ProctorHttpResponder {
 
         } else {
 
-            if(logger.isTraceEnabled()) {
-
-                logger.trace("No matching handler found for request for URI '{}'.",
-                        clientRequestPath);
-
-            }
+            applicationEventPublisher.publishEvent(
+                    new ProxyHandlerNotMatchedEvent(clientRequestPath));
 
             response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
 

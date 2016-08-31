@@ -14,27 +14,24 @@
     <groupId>se.oyabun.proctor.components.handlers</groupId>
     <artifactId>proctor-handlers-api</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Handler API</name>
+    <description>Proctor handler API provides basic interface for proxy handling modules.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+
+    </properties>
 
     <dependencies>
 
-        <!-- Spring dependencies -->
+        <!-- Proctor dependencies -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
-        <!-- Logging dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <!-- General dependencies -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>se.oyabun.proctor.components.core</groupId>
+            <artifactId>proctor-core</artifactId>
+            <version>${proctor-core.version}</version>
         </dependency>
 
     </dependencies>

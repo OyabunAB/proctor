@@ -17,64 +17,61 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Proxy Application</name>
+    <description>Proctor standalone proxy application</description>
+
+    <properties>
+
+        <proctor-netty-proxy.version>0.0.1-SNAPSHOT</proctor-netty-proxy.version>
+        <proctor-ning-httpclient.version>0.0.1-SNAPSHOT</proctor-ning-httpclient.version>
+        <proctor-static-handler.version>0.0.1-SNAPSHOT</proctor-static-handler.version>
+        <proctor-metrics-statistics.version>0.0.1-SNAPSHOT</proctor-metrics-statistics.version>
+        <proctor-admin-service.version>0.0.1-SNAPSHOT</proctor-admin-service.version>
+        <proctor-admin-web.version>0.0.1-SNAPSHOT</proctor-admin-web.version>
+
+        <webjars-locator.version>0.30</webjars-locator.version>
+
+    </properties>
 
     <dependencies>
 
         <!-- Proctor dependencies -->
-
-        <!--
-        <dependency>
-            <groupId>se.oyabun.proctor.components.proxy</groupId>
-            <artifactId>proctor-grizzly-proxy</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        -->
-
         <dependency>
             <groupId>se.oyabun.proctor.components.proxy</groupId>
             <artifactId>proctor-netty-proxy</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-netty-proxy.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
             <artifactId>proctor-ning-httpclient</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-ning-httpclient.version}</version>
         </dependency>
-
-
-        <!--
-        <dependency>
-            <groupId>se.oyabun.proctor.components.httpclient</groupId>
-            <artifactId>proctor-apache-httpclient</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
--->
 
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-static-handler</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-static-handler.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.statistics</groupId>
+            <artifactId>proctor-metrics-statistics</artifactId>
+            <version>${proctor-metrics-statistics.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.admin</groupId>
             <artifactId>proctor-admin-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-admin-service.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.admin</groupId>
             <artifactId>proctor-admin-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-admin-web.version}</version>
         </dependency>
 
         <!-- Spring dependencies -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -91,22 +88,19 @@
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-        </dependency>
-
         <!-- General dependencies -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
-            <version>0.30</version>
+            <version>${webjars-locator.version}</version>
         </dependency>
 
     </dependencies>
 
     <build>
+
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -115,8 +109,11 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
+
         </plugins>
+
         <resources>
+
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
@@ -124,6 +121,7 @@
                 </excludes>
                 <filtering>true</filtering>
             </resource>
+
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -131,7 +129,9 @@
                 </includes>
                 <filtering>false</filtering>
             </resource>
+
         </resources>
+
     </build>
 
 </project>

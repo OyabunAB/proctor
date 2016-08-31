@@ -14,27 +14,34 @@
     <groupId>se.oyabun.proctor.components.httpclient</groupId>
     <artifactId>proctor-apache-httpclient</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Apache HTTP Client</name>
+    <description>Proctor Apache HTTP Client implementation module.</description>
+
+    <properties>
+
+        <proctor-httpclient-api.version>0.0.1-SNAPSHOT</proctor-httpclient-api.version>
+
+        <httpasyncclient.version>4.1.2</httpasyncclient.version>
+
+    </properties>
 
     <dependencies>
 
-        <!-- Proctor dependencies -->
+        <!-- Proctor Dependencies -->
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
             <artifactId>proctor-httpclient-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-httpclient-api.version}</version>
         </dependency>
 
-        <!-- HTTP Client dependencies -->
+        <!-- HTTP Client Dependencies -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-            <version>4.1.2</version>
+            <version>${httpasyncclient.version}</version>
         </dependency>
-
-        <!-- General dependencies -->
-
 
     </dependencies>
 

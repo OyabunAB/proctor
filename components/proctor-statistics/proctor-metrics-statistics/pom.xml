@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components.proxy</groupId>
+        <artifactId>proctor-proxy-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.statistics</groupId>
+    <artifactId>proctor-metrics-statistics</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor DropWizard Metrics Statistics Component</name>
+    <description>Proctor DropWizard Metrics statistics implementation module.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+        <proctor-statistics-api.version>0.0.1-SNAPSHOT</proctor-statistics-api.version>
+
+        <metrics-core.version>3.1.2</metrics-core.version>
+
+    </properties>
+
+    <dependencies>
+
+        <!-- Proctor Dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.core</groupId>
+            <artifactId>proctor-core</artifactId>
+            <version>${proctor-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.statistics</groupId>
+            <artifactId>proctor-statistics-api</artifactId>
+            <version>${proctor-statistics-api.version}</version>
+        </dependency>
+
+        <!-- DropWizard Metrics Dependencies -->
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>${metrics-core.version}</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

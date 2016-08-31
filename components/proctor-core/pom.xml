@@ -14,10 +14,38 @@
     <groupId>se.oyabun.proctor.components.core</groupId>
     <artifactId>proctor-core</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Core Component</name>
+    <description>Proctor core module containing shared resources and classes.</description>
+
+    <properties>
+
+        <spring-context.version>4.2.6.RELEASE</spring-context.version>
+
+    </properties>
 
     <dependencies>
+
+        <!-- Spring dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-context.version}</version>
+        </dependency>
+
+        <!-- Logging dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- General dependencies -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
     </dependencies>
 
 

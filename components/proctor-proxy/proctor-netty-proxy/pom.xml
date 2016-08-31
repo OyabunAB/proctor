@@ -14,42 +14,47 @@
     <groupId>se.oyabun.proctor.components.proxy</groupId>
     <artifactId>proctor-netty-proxy</artifactId>
     <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Netty Proxy Component</name>
+    <description>Proctor Netty Proxy implementation module.</description>
+
+    <properties>
+
+        <proctor-proxy-api.version>0.0.1-SNAPSHOT</proctor-proxy-api.version>
+        <proctor-httpclient-api.version>0.0.1-SNAPSHOT</proctor-httpclient-api.version>
+        <proctor-utils.version>0.0.1-SNAPSHOT</proctor-utils.version>
+
+        <netty-all.version>4.0.36.Final</netty-all.version>
+
+    </properties>
 
     <dependencies>
 
         <!-- Proctor dependencies -->
-
         <dependency>
             <groupId>se.oyabun.proctor.components.proxy</groupId>
             <artifactId>proctor-proxy-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-proxy-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
             <artifactId>proctor-httpclient-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-httpclient-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.util</groupId>
             <artifactId>proctor-utils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${proctor-utils.version}</version>
         </dependency>
 
         <!-- Proxy dependencies -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.36.Final</version>
-        </dependency>
-
-        <!-- General dependencies -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <version>${netty-all.version}</version>
         </dependency>
 
     </dependencies>

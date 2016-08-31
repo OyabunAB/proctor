@@ -16,6 +16,7 @@
     <packaging>pom</packaging>
 
     <name>Proctor Components Reactor</name>
+    <description>Proctor components reactor pom.</description>
 
     <modules>
         <module>proctor-core</module>
@@ -23,6 +24,7 @@
         <module>proctor-proxy</module>
         <module>proctor-httpclient</module>
         <module>proctor-handler</module>
+        <module>proctor-statistics</module>
         <module>proctor-util</module>
     </modules>
 

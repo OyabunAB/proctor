@@ -43,8 +43,8 @@ public interface ProctorRouteHandlerManager {
         throws NoSuchHandlerException;
 
     /**
-     * Return all registered handler
-     * @return set of route handler
+     * Return all registered handlers
+     * @return set of route handlers
      */
     Collection<ProctorRouteHandler> getRegisteredRouteHandlers();
 

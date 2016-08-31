@@ -18,8 +18,8 @@ package se.oyabun.proctor.proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
-import se.oyabun.proctor.events.ProxyReplySentEvent;
-import se.oyabun.proctor.events.ProxyRequestReceivedEvent;
+import se.oyabun.proctor.events.http.ProxyReplySentEvent;
+import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

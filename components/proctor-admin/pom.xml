@@ -14,13 +14,15 @@
     <groupId>se.oyabun.proctor.components.admin</groupId>
     <artifactId>proctor-admin-reactor</artifactId>
     <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Proctor Administration Components Reactor</name>
+    <description>Proctor administration components reactor pom.</description>
 
     <modules>
         <module>patternfly-webjar</module>
-        <module>proctor-adminweb</module>
-        <module>proctor-adminservice</module>
+        <module>proctor-admin-web</module>
+        <module>proctor-admin-service</module>
     </modules>
 
 </project>

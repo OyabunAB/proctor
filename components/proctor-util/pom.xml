@@ -9,6 +9,7 @@
         <groupId>se.oyabun.proctor.components</groupId>
         <artifactId>proctor-components-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>se.oyabun.proctor.components.util</groupId>

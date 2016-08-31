@@ -1,2 +1,3 @@
-# proctor
-Integrated service registry aware proxy
+# Proctor Open Proxy Framework
+Will be full of awesome-sause.
+

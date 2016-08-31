@@ -10,7 +10,7 @@
     =============================================================================
 
 # Project structure
-
+A high level project overview and roadmap.
 
     ╔═════════════════════╗ 
     ║ Proctor Core Module ║

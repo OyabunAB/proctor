@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Proxy Application</name>
+    <name>Proctor Open Proxy Framework Application</name>
     <description>Proctor standalone proxy application</description>
 
     <properties>

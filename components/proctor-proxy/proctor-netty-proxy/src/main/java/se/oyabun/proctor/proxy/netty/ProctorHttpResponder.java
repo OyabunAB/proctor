@@ -15,13 +15,13 @@
  */
 package se.oyabun.proctor.proxy.netty;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.handler.ProxyHandlerMatchedEvent;
@@ -37,10 +37,10 @@ import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
 import se.oyabun.proctor.util.lang.AsciiUtil;
 
-import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -55,6 +55,18 @@ import static io.netty.buffer.Unpooled.copiedBuffer;
 public class ProctorHttpResponder {
 
     private static final Logger logger = LoggerFactory.getLogger(ProctorHttpResponder.class);
+
+    @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
+    private String keystorePath;
+
+    @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
+    private String keyStorePassword;
+
+    @Value("${se.oyabun.proctor.proxy.listen.port}")
+    private int proxyListenPort;
+
+    @Value("${se.oyabun.proctor.proxy.listen.address}")
+    private String proxyListenAddress;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -128,7 +140,7 @@ public class ProctorHttpResponder {
 
             final HttpRequestData proxyRequest =
                     new HttpRequestData(
-                            request.getProtocolVersion().protocolName(),
+                            proxyURL.getProtocol(),
                             InetAddress.getByName(proxyURL.getHost()),
                             proxyURL.getPort(),
                             request.getMethod().name(),
@@ -148,7 +160,7 @@ public class ProctorHttpResponder {
                     HttpResponseStatus.valueOf(httpResponseData.getStatusCode()),
                     copiedBuffer(httpResponseData.getBody()));
 
-            handleResponseHeaders(httpResponseData, response);
+            handleResponseHeaders(httpResponseData, response, proxyURL);
 
         } else {
 
@@ -164,7 +176,17 @@ public class ProctorHttpResponder {
     }
 
     void handleResponseHeaders(final HttpResponseData responseData,
-                               final HttpResponse response) {
+                               final HttpResponse response,
+                               final URL proxyUrl)
+            throws MalformedURLException {
+
+        URL originURL =
+                new URL(
+                        ((StringUtils.isNotBlank(keyStorePassword) &&
+                                StringUtils.isNotBlank(keystorePath)) ?
+                                "https" :
+                                "http") +
+                                "://" + proxyListenAddress + ":" + proxyListenPort + "/");
 
         response.setStatus(new HttpResponseStatus(responseData.getStatusCode(), responseData.getStatusMessage()));
 
@@ -181,6 +203,13 @@ public class ProctorHttpResponder {
         for (final Map.Entry<String, List<String>> responseHeader : responseHeaders.entrySet()) {
 
             final List<String> responseHeaderValues = responseHeader.getValue();
+            final List<String> rewrittenHeaderValues = new ArrayList<>();
+
+            for(String responseHeaderValue : responseHeaderValues) {
+
+                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(), originURL.toString()));
+
+            }
 
             response.headers().set(responseHeader.getKey(), responseHeaderValues);
 
@@ -206,25 +235,6 @@ public class ProctorHttpResponder {
             headers.put(headername, headerValuesCopy);
 
         }
-
-    }
-
-    CharArrayWriter getRequestBody(final FullHttpRequest request)
-            throws IOException {
-
-        //
-        // Use char array to read chunks instead
-        //
-        CharArrayWriter requestBuffer = new CharArrayWriter();
-        final ByteBuf requestReader = request.content();
-
-        for (int charRead = requestReader.readInt(); charRead >= 0; charRead = requestReader.readChar()) {
-
-            requestBuffer.write(charRead);
-
-        }
-
-        return requestBuffer;
 
     }
 

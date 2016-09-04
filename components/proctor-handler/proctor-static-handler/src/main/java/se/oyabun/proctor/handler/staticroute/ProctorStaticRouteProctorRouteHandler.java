@@ -24,7 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Proctor Filesystem handler
+ * Proctor Static Route handler implementation
  */
 public class ProctorStaticRouteProctorRouteHandler
     extends AbstractDefaultProctorRouteHandler

@@ -7,7 +7,5 @@ import org.springframework.context.annotation.Configuration;
  * Proctor admin service context configuration
  */
 @Configuration
-@ComponentScan("se.oyabun.proctor.web.admin")
-public class ProctorAdminWebServiceContextConfiguration {
-
-}
+@ComponentScan("se.oyabun.proctor.web")
+public class ProctorAdminWebServiceContextConfiguration {}

@@ -27,9 +27,9 @@ public class StatisticsRestController1 {
     public ResponseEntity<ProctorStatisticsReport[]> getProctorStatisticReportFor(@RequestParam(required = false)
                                                                                       final String proctorStatistic) {
         return ResponseEntity.ok(
-                ProctorStatistic.matchesAny(proctorStatistic) ?
+                ProctorStatistic.matchesAny(proctorStatistic.toUpperCase()) ?
                         new ProctorStatisticsReport[]{
-                            proctorStatisticsManager.getStatisticsFor(ProctorStatistic.valueOf(proctorStatistic))
+                            proctorStatisticsManager.getStatisticsFor(ProctorStatistic.valueOf(proctorStatistic.toUpperCase()))
                         } :
                         proctorStatisticsManager.getAllStatistics().toArray(new ProctorStatisticsReport[]{}));
 

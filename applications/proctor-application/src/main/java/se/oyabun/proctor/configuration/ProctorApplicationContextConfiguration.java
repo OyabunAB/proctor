@@ -59,6 +59,9 @@ public class ProctorApplicationContextConfiguration {
     private String keyStorePassword;
 
 
+    /**
+     * Takes care of possible random local ports, so we can skip detecting it on container init callback.
+     */
     @PostConstruct
     public void init() throws IOException {
 
@@ -77,14 +80,12 @@ public class ProctorApplicationContextConfiguration {
     @Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
 
+        JettyEmbeddedServletContainerFactory jetty = new JettyEmbeddedServletContainerFactory(configuredLocalPort);
+
         Ssl ssl = new Ssl();
         ssl.setEnabled(true);
         ssl.setKeyStorePassword(keyStorePassword);
         ssl.setKeyStore(keystorePath);
-
-
-        JettyEmbeddedServletContainerFactory jetty = new JettyEmbeddedServletContainerFactory(configuredLocalPort);
-
         jetty.setSsl(ssl);
 
         jetty.setContextPath("/proctoradmin");
@@ -93,6 +94,9 @@ public class ProctorApplicationContextConfiguration {
 
     }
 
+    /**
+     * Set up configured ignored uris, will change when auth is completed.
+     */
     @Bean
     public static SecurityProperties securityProperties() {
         SecurityProperties securityProperties = new SecurityProperties();
@@ -106,6 +110,9 @@ public class ProctorApplicationContextConfiguration {
         return securityProperties;
     }
 
+    /**
+     * Set up the static route to the administration GUI
+     */
     @Autowired @Bean(name="adminWebStaticRoute")
     public ProctorRouteHandler getProctorStaticRouteHandler(
             final ProctorRouteHandlerManager proctorRouteHandlerManager)
@@ -129,6 +136,9 @@ public class ProctorApplicationContextConfiguration {
 
     }
 
+    /**
+     * Set up a route for everything else just for fun.
+     */
     @Autowired @Bean(name = "oyabunWebStaticRoute")
     public ProctorRouteHandler getOyabunStaticRouteHandler(ProctorRouteHandlerManager proctorRouteHandlerManager)
             throws MalformedURLException, DuplicateRouteHandlerException {

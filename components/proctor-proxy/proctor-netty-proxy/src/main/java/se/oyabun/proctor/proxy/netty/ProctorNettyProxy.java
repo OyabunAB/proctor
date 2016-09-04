@@ -154,7 +154,7 @@ public class ProctorNettyProxy
 
                 if (sslContext != null) {
 
-                    pipeline.addLast(sslContext.newHandler(channel.alloc()));
+                    pipeline.addLast("tls", sslContext.newHandler(channel.alloc()));
 
                 }
 
@@ -162,7 +162,7 @@ public class ProctorNettyProxy
 
                 pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
 
-                pipeline.addLast("proctor", proctorHttpHandler);
+                pipeline.addLast("proxy", proctorHttpHandler);
 
             }
 

@@ -51,7 +51,7 @@ public class ProctorZookeeperRouteProctorRouteHandler
     private static final ConcurrentHashMap<String, ServiceProvider<Void>> PROVIDER_CACHE = new ConcurrentHashMap<>();
 
     @Autowired
-    private ServiceDiscovery serviceDiscovery;
+    private ServiceDiscovery<Void> serviceDiscovery;
 
     /**
      * ${@inheritDoc}
@@ -240,6 +240,7 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
         }
 
+        // FIXME: can't happen if uri matches the current pattern
         if (matcher.groupCount() != 2) {
 
             throw new URIParseException("URI: '" + uri + "'" +
@@ -251,13 +252,15 @@ public class ProctorZookeeperRouteProctorRouteHandler
                         "/" + matcher.group(1),
                         "/" + matcher.group(2));
 
+        // FIXME: can't happen if uri matches the current pattern
         if (result.getServiceName() == null || result.getServiceName().length() < 1) {
 
             throw new URIParseException("Parsed service name is empty or null.");
 
         }
 
-        if (uri == "/") {
+        // FIXME: can't happen if uri matches (previous check) the current pattern
+        if (uri.equals("/")) {
 
             throw new URIParseException("Parsed URI is empty or null.");
 
@@ -299,4 +302,9 @@ public class ProctorZookeeperRouteProctorRouteHandler
 
     }
 
+    public void setServiceDiscovery(ServiceDiscovery<Void> serviceDiscovery) {
+
+        this.serviceDiscovery = serviceDiscovery;
+
+    }
 }

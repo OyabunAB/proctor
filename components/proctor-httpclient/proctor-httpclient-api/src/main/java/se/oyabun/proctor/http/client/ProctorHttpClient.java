@@ -32,11 +32,11 @@ public interface ProctorHttpClient {
      * Execute given HTTP Request.
      * @param request to execute
      * @return wrapped HTTP Response
-     * @throws IOException
-     * @throws CancellationException
-     * @throws InterruptedException
-     * @throws ExecutionException
-     * @throws TimeoutException
+     * @throws IOException on IO problems
+     * @throws CancellationException on issues with Cancellation
+     * @throws InterruptedException when thread is interrupted
+     * @throws ExecutionException when execution failes due to exception
+     * @throws TimeoutException when timeout occurs
      */
     HttpResponseData execute(final HttpRequestData request)
             throws IOException, CancellationException, InterruptedException, ExecutionException, TimeoutException;
@@ -44,13 +44,13 @@ public interface ProctorHttpClient {
 
     /**
      * Callback for init.
-     * @throws Exception
+     * @throws Exception if init fails for some reason.
      */
     void initHttpClient() throws Exception;
 
     /**
      * Callback for shutdown.
-     * @throws Exception
+     * @throws Exception if shutdown fails for some reason.
      */
     void shutDownHttpClient() throws Exception;
 

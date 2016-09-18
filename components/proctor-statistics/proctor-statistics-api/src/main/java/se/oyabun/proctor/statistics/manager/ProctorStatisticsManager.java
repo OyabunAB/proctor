@@ -18,8 +18,6 @@ package se.oyabun.proctor.statistics.manager;
 import se.oyabun.proctor.statistics.ProctorStatistic;
 import se.oyabun.proctor.statistics.ProctorStatisticsReport;
 
-import java.util.Collection;
-
 /**
  * Proctor Statistics Manager interface
  */
@@ -30,12 +28,12 @@ public interface ProctorStatisticsManager {
      * @param proctorStatistic to generate report for
      * @return report
      */
-    ProctorStatisticsReport getStatisticsFor(ProctorStatistic proctorStatistic);
+    ProctorStatisticsReport[] getStatisticsFor(ProctorStatistic proctorStatistic);
 
     /**
      * Return all proctor average statistics reports
      * @return list of all collected statistics as reports
      */
-    Collection<ProctorStatisticsReport> getAllStatistics();
+    ProctorStatisticsReport[] getAllStatistics();
 
 }

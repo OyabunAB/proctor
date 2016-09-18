@@ -96,7 +96,7 @@ public class NingHttpClient
 
     /**
      * Init callback implementation.
-     * @throws Exception
+     * @throws Exception when something goes horribly woring with initing the client
      */
     public void initHttpClient() throws Exception {
 
@@ -122,7 +122,7 @@ public class NingHttpClient
 
     /**
      * Shutdown callback implementation.
-     * @throws Exception
+     * @throws Exception when something goes horribly wrong when shutting down the client
      */
     public void shutDownHttpClient() throws Exception {
 

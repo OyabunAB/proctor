@@ -25,8 +25,6 @@ import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Proctor Proxy Request Meter
  */
@@ -35,21 +33,24 @@ public class ProctorProxyRequestMeter
         extends AbstractProctorMeter
         implements ProctorStatisticsGatherer {
 
-    @Autowired
-    private ProctorMetricsRegistry proctorMetricsRegistry;
-
     private Meter requests;
 
-    @PostConstruct
-    public void initMetricMeter() {
+    @Autowired
+    public ProctorProxyRequestMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-         requests = proctorMetricsRegistry.getMetricsRegistry()
-                         .meter(ProctorStatistic.PROXY_REQUEST_RECEIVED.name());
+        this.requests =
+                proctorMetricsRegistry
+                        .getMetricsRegistry()
+                        .meter(ProctorStatistic.PROXY_REQUEST_RECEIVED.name());
 
     }
 
+    /**
+     * Listener method, feeds the meter
+     * @param proxyRequestReceivedEvent published by the system
+     */
     @EventListener
-    public void incomingRequest(ProxyRequestReceivedEvent proxyRequestReceivedEvent) {
+    public void incomingRequest(final ProxyRequestReceivedEvent proxyRequestReceivedEvent) {
 
         requests.mark();
 

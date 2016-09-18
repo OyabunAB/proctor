@@ -51,7 +51,7 @@ public class ProctorStaticRouteProctorRouteHandler
      * @param handleName to find URL for
      * @param uri to request on base URL
      * @return static configured url
-     * @throws NoHandleForNameException
+     * @throws NoHandleForNameException when no handle can be found for given name
      */
     public URL resolveURLFor(final String handleName,
                              final String uri)
@@ -111,4 +111,5 @@ public class ProctorStaticRouteProctorRouteHandler
                 .append(appendOriginalPath)
                 .toHashCode();
     }
+
 }

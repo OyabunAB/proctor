@@ -25,8 +25,6 @@ import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Proctor Proxy Response Meter
  */
@@ -35,27 +33,32 @@ public class ProctorProxyResponseMeter
         extends AbstractProctorMeter
         implements ProctorStatisticsGatherer {
 
-    @Autowired
-    private ProctorMetricsRegistry proctorMetricsRegistry;
-
     private Meter replies;
 
-    @PostConstruct
-    public void initMetricMeter() {
+    @Autowired
+    public ProctorProxyResponseMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-        replies = proctorMetricsRegistry.getMetricsRegistry()
-                .meter(ProctorStatistic.PROXY_REPLY_SENT.name());
+        this.replies =
+                proctorMetricsRegistry
+                        .getMetricsRegistry()
+                        .meter(ProctorStatistic.PROXY_REPLY_SENT.name());
 
     }
 
+    /**
+     * Listener method, feeds the meter
+     * @param proxyReplySentEvent published by the system
+     */
     @EventListener
-    public void incomingRequest(ProxyReplySentEvent proxyReplySentEvent) {
+    public void incomingRequest(final ProxyReplySentEvent proxyReplySentEvent) {
 
         replies.mark();
 
     }
 
-    @Override
+    /**
+     * ${@inheritDoc}
+     */
     public boolean gathers(ProctorStatistic proctorStatistic) {
 
         return ProctorStatistic.PROXY_REPLY_SENT.equals(proctorStatistic);

@@ -27,7 +27,7 @@ public class ProctorStatisticsReport {
 
     private BigDecimal meanValue;
 
-    private BigInteger countValueValue;
+    private BigInteger countValue;
 
     private BigDecimal fifteenMinuteRateValue;
 
@@ -44,7 +44,10 @@ public class ProctorStatisticsReport {
 
         this.proctorStatistic = proctorStatistic;
         this.meanValue = meanValue;
-
+        this.countValue = countValue;
+        this.fifteenMinuteRateValue = fifteenMinuteRateValue;
+        this.fiveMinuteRateValue = fiveMinuteRateValue;
+        this.oneMinuteRateValue = oneMinuteRateValue;
 
     }
 
@@ -60,9 +63,9 @@ public class ProctorStatisticsReport {
 
     }
 
-    public BigInteger getCountValueValue() {
+    public BigInteger getCountValue() {
 
-        return countValueValue;
+        return countValue;
 
     }
 

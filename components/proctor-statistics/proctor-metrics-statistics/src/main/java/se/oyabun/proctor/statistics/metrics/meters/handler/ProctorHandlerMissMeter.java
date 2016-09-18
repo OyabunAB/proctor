@@ -20,30 +20,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
 import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
-
-import javax.annotation.PostConstruct;
+import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
 
 /**
  * Proctor Proxy Handler Misses Meter
  */
-public class ProctorHandlerMissMeter {
+public class ProctorHandlerMissMeter
+        extends AbstractProctorMeter
+        implements ProctorStatisticsGatherer {
+
+    private final Meter misses;
 
     @Autowired
-    private ProctorMetricsRegistry proctorMetricsRegistry;
+    public ProctorHandlerMissMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-    private Meter misses;
-
-    @PostConstruct
-    public void initMetricMeter() {
-
-        misses = proctorMetricsRegistry.getMetricsRegistry()
-                .meter(ProctorStatistic.PROXY_HANDLER_MISS.name());
+        misses =
+                proctorMetricsRegistry
+                        .getMetricsRegistry()
+                        .meter(ProctorStatistic.PROXY_HANDLER_MISS.name());
 
     }
 
+    /**
+     * Listener method, feeds the meter
+     * @param proxyHandlerNotMatchedEvent published by the system
+     */
     @EventListener
-    public void incomingRequest(ProxyHandlerNotMatchedEvent proxyHandlerNotMatchedEvent) {
+    public void incomingRequest(final ProxyHandlerNotMatchedEvent proxyHandlerNotMatchedEvent) {
 
         misses.mark();
 
@@ -54,7 +59,7 @@ public class ProctorHandlerMissMeter {
      */
     public boolean gathers(final ProctorStatistic proctorStatistic) {
 
-        return ProctorStatistic.PROXY_HANDLER_MATCH.equals(proctorStatistic);
+        return ProctorStatistic.PROXY_HANDLER_MISS.equals(proctorStatistic);
 
     }
 

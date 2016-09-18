@@ -54,6 +54,7 @@ public class AsciiUtil {
 
         final Graphics g = image.getGraphics();
 
+
         String[] fontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         g.setFont(new Font(fontFamilyNames[new Random().nextInt(fontFamilyNames.length-1)], Font.BOLD, FONT_SIZE));
 

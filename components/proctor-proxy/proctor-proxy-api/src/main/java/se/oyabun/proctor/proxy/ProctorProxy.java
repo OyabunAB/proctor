@@ -27,6 +27,7 @@ public interface ProctorProxy {
 
     /**
      * Initiates the proxy after startup
+     * @throws Exception on problems starting the proxy
      */
     @PostConstruct
     void startProxy() throws Exception;

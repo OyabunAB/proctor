@@ -25,8 +25,6 @@ import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
 
-import javax.annotation.PostConstruct;
-
 /**
  * Proctor Proxy Handler Match Meter
  */
@@ -35,21 +33,22 @@ public class ProctorHandlerMatchMeter
         extends AbstractProctorMeter
         implements ProctorStatisticsGatherer {
 
+    private final Meter hits;
+
     @Autowired
-    private ProctorMetricsRegistry proctorMetricsRegistry;
-
-    private Meter hits;
-
-    @PostConstruct
-    public void initMetricMeter() {
+    public ProctorHandlerMatchMeter(ProctorMetricsRegistry proctorMetricsRegistry) {
 
         hits = proctorMetricsRegistry.getMetricsRegistry()
                 .meter(ProctorStatistic.PROXY_HANDLER_MATCH.name());
 
     }
 
+    /**
+     * Listener method, feeds the meter
+     * @param proxyHandlerMatchedEvent published by the system
+     */
     @EventListener
-    public void incomingRequest(ProxyHandlerMatchedEvent proxyHandlerMatchedEvent) {
+    public void incomingRequest(final ProxyHandlerMatchedEvent proxyHandlerMatchedEvent) {
 
         hits.mark();
 

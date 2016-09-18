@@ -24,120 +24,79 @@ import se.oyabun.proctor.statistics.ProctorStatistic;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.ProctorStatisticsReport;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Default Proctor Statistics Manager
  */
 @Component
 public class DefaultProctorStatisticsManager
-        implements ProctorStatisticsManager{
+        implements ProctorStatisticsManager {
 
     public static final Logger logger = LoggerFactory.getLogger(DefaultProctorStatisticsManager.class);
 
+    private final ProctorStatisticsGatherer[] proctorStatisticsGatherers;
+
     @Autowired
-    private List<ProctorStatisticsGatherer> proctorStatisticsGatherers;
+    public DefaultProctorStatisticsManager(ProctorStatisticsGatherer ... proctorStatisticsGatherers) {
 
-    @Override
-    public ProctorStatisticsReport getStatisticsFor(final ProctorStatistic proctorStatistic) {
-
-        Optional<ProctorStatisticsGatherer> optionalProctorStatisticsGatherer =
-                proctorStatisticsGatherers
-                        .stream()
-                        .filter(proctorStatisticsGatherer -> proctorStatisticsGatherer.gathers(proctorStatistic))
-                        .findFirst();
-        if(optionalProctorStatisticsGatherer.isPresent()) {
-
-            ProctorStatisticsGatherer proctorStatisticsGatherer = optionalProctorStatisticsGatherer.get();
-
-            try {
-
-                return new ProctorStatisticsReport(
-                        proctorStatistic,
-                        proctorStatisticsGatherer.getMeanFor(proctorStatistic),
-                        proctorStatisticsGatherer.getCountFor(proctorStatistic),
-                        proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
-                        proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
-                        proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
-
-            } catch (NonGatheredStatisticRequestException e) {
-
-                if(logger.isErrorEnabled()) {
-
-                    logger.error("Failed to fetch statistics for '"+proctorStatistic+"'.", e);
-
-                }
-
-            }
-
-        }
-
-        return null;
+        this.proctorStatisticsGatherers = proctorStatisticsGatherers;
 
     }
 
-    @Override
-    public Collection<ProctorStatisticsReport> getAllStatistics() {
+    /**
+     * ${@inheritDoc}
+     */
+    ProctorStatisticsGatherer[] getProctorStatisticsGatherersFor(final ProctorStatistic proctorStatistic) {
 
-        final Map<ProctorStatistic, List<ProctorStatisticsReport>> proctorStatisticListMap = new HashMap<>();
-        for(ProctorStatistic proctorStatistic : ProctorStatistic.values()) {
+        return Arrays.stream(proctorStatisticsGatherers)
+                        .filter(proctorStatisticsGatherer -> proctorStatisticsGatherer.gathers(proctorStatistic))
+                        .toArray(ProctorStatisticsGatherer[]::new);
 
-            final List<ProctorStatisticsGatherer> matchingRroctProctorStatisticsGatherers = new ArrayList<>();
+    }
 
-            for(ProctorStatisticsGatherer proctorStatisticsGatherer : proctorStatisticsGatherers) {
+    /**
+     * ${@inheritDoc}
+     */
+    public ProctorStatisticsReport[] getStatisticsFor(final ProctorStatistic proctorStatistic) {
 
-                if(proctorStatisticsGatherer.gathers(proctorStatistic)) {
+        return Arrays.stream(getProctorStatisticsGatherersFor(proctorStatistic))
+                .map(proctorStatisticsGatherer -> {
+                        try {
+                            return new ProctorStatisticsReport(
+                                    proctorStatistic,
+                                    proctorStatisticsGatherer.getMeanFor(proctorStatistic),
+                                    proctorStatisticsGatherer.getCountFor(proctorStatistic),
+                                    proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
+                                    proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
+                                    proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
+                        } catch (NonGatheredStatisticRequestException e) {
 
-                    matchingRroctProctorStatisticsGatherers.add(proctorStatisticsGatherer);
+                            if(logger.isErrorEnabled()) {
 
-                }
+                                logger.error("Failed to fetch statistics for '"+proctorStatistic+"'.", e);
 
-            }
+                            }
 
+                            return null;
 
+                        }
+                })
+                .filter(proctorStatisticsReport -> proctorStatistic != null)
+                .toArray(ProctorStatisticsReport[]::new);
 
-                proctorStatisticListMap.put(
-                        proctorStatistic,
-                        matchingRroctProctorStatisticsGatherers
-                                .stream()
-                                .map(proctorStatisticsGatherer ->
-                                        {
-                                            try {
+    }
 
-                                                return new ProctorStatisticsReport(
-                                                        proctorStatistic,
-                                                        proctorStatisticsGatherer.getMeanFor(proctorStatistic),
-                                                        proctorStatisticsGatherer.getCountFor(proctorStatistic),
-                                                        proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
-                                                        proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
-                                                        proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
+    /**
+     * ${@inheritDoc}
+     */
+    public ProctorStatisticsReport[] getAllStatistics() {
 
-                                            } catch (NonGatheredStatisticRequestException e) {
-
-                                                if(logger.isErrorEnabled()) {
-
-                                                    logger.error("Failed to fetch statistics for '"+proctorStatistic+"'.", e);
-
-                                                }
-
-                                                return null;
-
-                                            }
-
-                                        })
-                                .collect(Collectors.toList()));
-
-
-
-        }
-
-        final List<ProctorStatisticsReport> allReports = new ArrayList<>();
-        proctorStatisticListMap.values()
-                .forEach(proctorStatisticsReports ->
-                        allReports.addAll(proctorStatisticsReports));
-
-        return allReports;
+        return Arrays.stream(ProctorStatistic.values())
+                .map(proctorStatistic -> getStatisticsFor(proctorStatistic))
+                .flatMap(Stream::of)
+                .toArray(ProctorStatisticsReport[]::new);
 
     }
 

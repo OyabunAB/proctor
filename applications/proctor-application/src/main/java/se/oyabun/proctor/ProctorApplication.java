@@ -24,12 +24,12 @@ public class ProctorApplication {
 
     /**
      * Main startup method
-     * @param args
+     * @param arguments from command line
      * @throws Exception on application error
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] arguments) throws Exception {
 
-        SpringApplication.run(ProctorServer.class, args);
+        SpringApplication.run(ProctorServer.class, arguments);
 
     }
 

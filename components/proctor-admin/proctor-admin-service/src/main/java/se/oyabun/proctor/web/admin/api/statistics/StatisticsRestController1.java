@@ -45,10 +45,9 @@ public class StatisticsRestController1
                                                                                       final String proctorStatistic) {
         return ResponseEntity.ok(
                 ProctorStatistic.matchesAny(proctorStatistic.toUpperCase()) ?
-                        new ProctorStatisticsReport[]{
-                            proctorStatisticsManager.getStatisticsFor(ProctorStatistic.valueOf(proctorStatistic.toUpperCase()))
-                        } :
-                        proctorStatisticsManager.getAllStatistics().toArray(new ProctorStatisticsReport[]{}));
+                        proctorStatisticsManager.getStatisticsFor(
+                                ProctorStatistic.valueOf(proctorStatistic.toUpperCase())) :
+                        proctorStatisticsManager.getAllStatistics());
 
     }
 

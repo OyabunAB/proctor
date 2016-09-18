@@ -57,6 +57,7 @@ public interface ProctorRouteHandler {
      * @param uri of request
      * @return complete url including requested uri for given handle name
      * @throws NoHandleForNameException if handle is not present
+     * @throws MalformedURLException on malformed URLs
      */
     URL resolveURLFor(final String handleName,
                       final String uri)

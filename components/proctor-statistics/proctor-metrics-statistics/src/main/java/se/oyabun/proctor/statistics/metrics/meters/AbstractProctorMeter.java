@@ -103,7 +103,9 @@ public abstract class AbstractProctorMeter
 
     }
 
-    @Override
+    /**
+     * ${@inheritDoc}
+     */
     public BigDecimal getOneMinuteRateFor(final ProctorStatistic proctorStatistic)
             throws NonGatheredStatisticRequestException {
 

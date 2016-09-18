@@ -35,7 +35,7 @@ public interface ProctorStatisticsGatherer {
 
     /**
      * Gets mean value for given proctor statistic
-     * @param proctorStatistic
+     * @param proctorStatistic to get mean value for
      * @return mean value
      * @throws NonGatheredStatisticRequestException
      */
@@ -44,7 +44,7 @@ public interface ProctorStatisticsGatherer {
 
     /**
      * Gets total count for given proctor statistic
-     * @param proctorStatistic
+     * @param proctorStatistic to get count for
      * @return total count
      * @throws NonGatheredStatisticRequestException
      */
@@ -53,7 +53,7 @@ public interface ProctorStatisticsGatherer {
 
     /**
      * Gets rate over fifteen minutes for given proctor statistic
-     * @param proctorStatistic
+     * @param proctorStatistic to get fifteen minute rate for
      * @return rate over fifteen mintues
      * @throws NonGatheredStatisticRequestException
      */
@@ -62,7 +62,7 @@ public interface ProctorStatisticsGatherer {
 
     /**
      * Gets rate over five minutes for given proctor statistic
-     * @param proctorStatistic
+     * @param proctorStatistic to get five minute rate for
      * @return rate over five minutes
      * @throws NonGatheredStatisticRequestException
      */
@@ -71,7 +71,7 @@ public interface ProctorStatisticsGatherer {
 
     /**
      * Gets rate over one minute for given proctor statistic
-     * @param proctorStatistic
+     * @param proctorStatistic tp get one minute rate for
      * @return rate over one minute
      * @throws NonGatheredStatisticRequestException
      */

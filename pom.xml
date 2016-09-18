@@ -18,6 +18,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j-api.version>1.7.21</slf4j-api.version>
+        <logback-version>1.1.7</logback-version>
+
         <spring-context.version>4.2.6.RELEASE</spring-context.version>
         <commons-lang3.version>3.4</commons-lang3.version>
 
@@ -80,6 +82,18 @@
                 <version>${slf4j-api.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-version}</version>
+            </dependency>
+
             <!-- General purpose dependencies -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -115,7 +129,6 @@
         </dependencies>
 
     </dependencyManagement>
-
 
     <build>
 
@@ -176,6 +189,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <executions>
                         <execution>
+                            <id>attach-javadocs</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -188,6 +202,7 @@
                     <artifactId>maven-source-plugin</artifactId>
                     <executions>
                         <execution>
+                            <id>attach-sources</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -198,6 +213,20 @@
             </plugins>
 
         </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+        </plugins>
 
         <resources>
 

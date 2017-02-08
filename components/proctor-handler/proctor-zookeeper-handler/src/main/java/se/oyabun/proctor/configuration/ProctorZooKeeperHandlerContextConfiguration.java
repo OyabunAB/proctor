@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Spring configuration for Proctor Zookeeper Handler
+ * Spring properties for Proctor Zookeeper Handler
  */
 @Configuration
 public class ProctorZooKeeperHandlerContextConfiguration {

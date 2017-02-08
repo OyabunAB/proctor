@@ -15,12 +15,11 @@
  */
 package se.oyabun.proctor.handler;
 
-import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
 /**
  * ProctorRouteHandler interface.
@@ -29,38 +28,15 @@ import java.util.Set;
 public interface ProctorRouteHandler {
 
     /**
-     * Does given input match this handler?
-     * @param uri to verify
-     * @return true if the handler can handle the given URI
-     */
-    boolean matches(final String uri);
-
-
-    /**
-     * Get handle name for given inpu
-     * @param uri to get handle for
-     * @return handle name to use for URL resolving
-     * @throws InputNotMatchedException if input does not match
-     */
-    String getHandleNameFor(String uri)
-            throws InputNotMatchedException;
-
-    /**
-     * Get all handle names in handler.
-     * @return set of unique handle names
-     */
-    Set<String> getHandleNames();
-
-    /**
      * Return URL for given handle name
-     * @param handleName to resolve URL for
-     * @param uri of request
+     * @param input of request
+     * @param properties for handler
      * @return complete url including requested uri for given handle name
      * @throws NoHandleForNameException if handle is not present
      * @throws MalformedURLException on malformed URLs
      */
-    URL resolveURLFor(final String handleName,
-                      final String uri)
+    URL resolveURLFor(final String input,
+                      final ProctorHandlerProperties properties)
             throws NoHandleForNameException, MalformedURLException;
 
 }

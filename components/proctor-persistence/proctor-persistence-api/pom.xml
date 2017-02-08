@@ -6,47 +6,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>se.oyabun.proctor.components.handlers</groupId>
-        <artifactId>proctor-handlers-reactor</artifactId>
+        <groupId>se.oyabun.proctor.components.persistence</groupId>
+        <artifactId>proctor-persistence-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>se.oyabun.proctor.components.handlers</groupId>
-    <artifactId>proctor-handlers-api</artifactId>
+    <groupId>se.oyabun.proctor.components.persistence</groupId>
+    <artifactId>proctor-persistence-api</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Handler API</name>
-    <description>Proctor handler API provides basic interface for proxy handling modules.</description>
+    <name>Proctor Persistence API</name>
+    <description>Proctor persistence API module.</description>
 
     <properties>
 
-        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
-
     </properties>
+
 
     <dependencies>
 
         <!-- Proctor dependencies -->
-        <dependency>
-            <groupId>se.oyabun.proctor.components.core</groupId>
-            <artifactId>proctor-core</artifactId>
-            <version>${proctor-core.version}</version>
-        </dependency>
-
-        <!-- Configuration distribution dependencies -->
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-all</artifactId>
-            <version>3.5.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.javaslang</groupId>
-            <artifactId>javaslang</artifactId>
-            <version>1.2.2</version>
-        </dependency>
 
         <!-- Test dependencies -->
         <dependency>

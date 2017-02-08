@@ -18,7 +18,7 @@ package se.oyabun.proctor.web.admin.api;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Abstract shared security configuration for API Controllers
+ * Abstract shared security properties for API Controllers
  */
 @RestController
 public class AbstractSecuredAPIController {}

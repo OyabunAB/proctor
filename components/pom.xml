@@ -22,6 +22,7 @@
 
     <modules>
         <module>proctor-core</module>
+        <module>proctor-persistence</module>
         <module>proctor-admin</module>
         <module>proctor-proxy</module>
         <module>proctor-httpclient</module>

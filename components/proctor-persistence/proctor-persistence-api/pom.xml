@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>se.oyabun.proctor.components.persistence</groupId>
-        <artifactId>proctor-persistence-reactor</artifactId>
+        <groupId>se.oyabun.proctor.components.persitence</groupId>
+        <artifactId>proctor-persitence-reactor</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>

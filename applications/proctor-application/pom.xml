@@ -23,6 +23,7 @@
     <properties>
 
         <proctor-netty-proxy.version>0.0.1-SNAPSHOT</proctor-netty-proxy.version>
+        <proctor-grizzly-proxy.version>0.0.1-SNAPSHOT</proctor-grizzly-proxy.version>
         <proctor-ning-httpclient.version>0.0.1-SNAPSHOT</proctor-ning-httpclient.version>
         <proctor-static-handler.version>0.0.1-SNAPSHOT</proctor-static-handler.version>
         <proctor-metrics-statistics.version>0.0.1-SNAPSHOT</proctor-metrics-statistics.version>
@@ -98,6 +99,16 @@
             <version>${webjars-locator.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -110,16 +121,6 @@
             <artifactId>mockito-all</artifactId>
             <version>${mockito-all.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
         </dependency>
 
     </dependencies>

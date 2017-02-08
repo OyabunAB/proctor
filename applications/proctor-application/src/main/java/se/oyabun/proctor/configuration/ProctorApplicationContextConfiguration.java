@@ -15,6 +15,7 @@
  */
 package se.oyabun.proctor.configuration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -23,6 +24,7 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import se.oyabun.proctor.ProctorServerConfiguration;
 import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteProperties;
 
@@ -40,11 +42,20 @@ public class ProctorApplicationContextConfiguration {
 
     private int configuredLocalPort;
 
+    @Value("${se.oyabun.proctor.proxy.local.context:/proctoradmin}")
+    private String contextPath;
+
     @Value("${se.oyabun.proctor.proxy.local.port}")
     private int localPort;
 
+    @Value("${se.oyabun.proctor.proxy.listen.port}")
+    private int proxyListenPort;
+
     @Value("${se.oyabun.proctor.proxy.listen.address}")
     private String proxyListenAddress;
+
+    @Value("${se.oyabun.proctor.proxy.local.address}")
+    private String localAddress;
 
     @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
     private String keystorePath;
@@ -74,15 +85,20 @@ public class ProctorApplicationContextConfiguration {
     @Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
 
-        JettyEmbeddedServletContainerFactory jetty = new JettyEmbeddedServletContainerFactory(configuredLocalPort);
+        JettyEmbeddedServletContainerFactory jetty =
+                new JettyEmbeddedServletContainerFactory(configuredLocalPort);
 
-        Ssl ssl = new Ssl();
-        ssl.setEnabled(true);
-        ssl.setKeyStorePassword(keyStorePassword);
-        ssl.setKeyStore(keystorePath);
-        jetty.setSsl(ssl);
+        if(configureSSL()) {
 
-        jetty.setContextPath("/proctoradmin");
+            Ssl ssl = new Ssl();
+            ssl.setEnabled(true);
+            ssl.setKeyStorePassword(keyStorePassword);
+            ssl.setKeyStore(keystorePath);
+            jetty.setSsl(ssl);
+
+        }
+
+        jetty.setContextPath(contextPath);
 
         return jetty;
 
@@ -113,9 +129,30 @@ public class ProctorApplicationContextConfiguration {
         return new ProctorStaticRouteProperties(
                 "adminrouteID",
                 0,
-                "/proctoradmin/*",
+                contextPath + "/.*",
                 "true",
-                "https://"+proxyListenAddress+":"+configuredLocalPort+"/");
+                (configureSSL() ? "https" : "http") + "://"
+                    + proxyListenAddress + ":" + configuredLocalPort + "/");
+
+    }
+
+    @Bean
+    public ProctorServerConfiguration serverConfiguration() {
+
+        return new ProctorServerConfiguration(proxyListenAddress,
+                                              localAddress,
+                                              contextPath,
+                                              configuredLocalPort,
+                                              localPort,
+                                              proxyListenPort,
+                                              keystorePath);
+
+    }
+
+    boolean configureSSL() {
+
+        return StringUtils.isNotBlank(keystorePath) &&
+               StringUtils.isNotBlank(keyStorePassword);
 
     }
 

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
 import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
@@ -41,6 +42,7 @@ import java.util.*;
 /**
  * Proctor Grizzly HTTP Handler
  */
+@Component
 public class ProctorGrizzlyHttpHandler
         extends HttpHandler {
 

@@ -32,6 +32,7 @@ import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
@@ -101,26 +102,26 @@ public class ProctorHttpResponder {
 
         final String clientRequestPath = request.getUri();
 
+        Optional<ProctorHandlerProperties> optionalProperties =
+                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
+                .findFirst();
+
         final Optional<ProctorRouteHandler> optionalHandler =
-                proctorRouteHandlerManager.getRegisteredRouteHandlers()
-                        .stream()
-                        .filter(proctorProctorRouteHandler ->
-                                proctorProctorRouteHandler.matches(clientRequestPath))
-                        .findFirst();
+                optionalProperties.isPresent() ?
+                        proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                        Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
             final ProctorRouteHandler matchingProctorRouteHandler = optionalHandler.get();
-
-            final String matchingHandlerHandle = matchingProctorRouteHandler.getHandleNameFor(clientRequestPath);
 
             applicationEventPublisher.publishEvent(
                     new ProxyHandlerMatchedEvent(clientRequestPath));
 
             final URL proxyURL =
                     matchingProctorRouteHandler.resolveURLFor(
-                            matchingHandlerHandle,
-                            clientRequestPath);
+                            clientRequestPath,
+                            optionalProperties.get());
 
             //
             // Redirect request to handler generated URL

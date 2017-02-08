@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Proctor admin service context configuration
+ * Proctor admin service context properties
  */
 @Configuration
 @ComponentScan("se.oyabun.proctor.web")

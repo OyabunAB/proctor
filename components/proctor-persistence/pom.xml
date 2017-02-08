@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components</groupId>
+        <artifactId>proctor-components-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.persitence</groupId>
+    <artifactId>proctor-persitence-reactor</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor Persistence Reactor</name>
+    <description>Proctor proxy persistence reactor pom.</description>
+
+    <modules>
+        <module>proctor-persistence-api</module>
+    </modules>
+
+</project>

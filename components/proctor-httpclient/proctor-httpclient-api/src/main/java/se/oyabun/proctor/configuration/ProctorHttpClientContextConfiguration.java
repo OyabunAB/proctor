@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Proctor HTTP Client context configuration
+ * Proctor HTTP Client context properties
  */
 @Configuration
 @ComponentScan("se.oyabun.proctor.http.client")

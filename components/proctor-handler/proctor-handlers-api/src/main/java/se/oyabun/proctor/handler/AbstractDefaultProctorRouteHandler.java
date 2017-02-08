@@ -15,17 +15,11 @@
  */
 package se.oyabun.proctor.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Default abstract handler implementation
@@ -33,82 +27,22 @@ import java.util.regex.Pattern;
 public abstract class AbstractDefaultProctorRouteHandler
         implements ProctorRouteHandler {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
-    private final Pattern matcherPattern;
-
-    private final String matcherHandle;
-
-    public AbstractDefaultProctorRouteHandler(final String regex,
-                                              final String matcherHandle) {
-
-        log.info("Configuring default Proctor ProctorRouteHandler for '{}' with pattern '{}'.", matcherHandle, regex);
-
-        this.matcherHandle = matcherHandle;
-
-        this.matcherPattern = Pattern.compile(regex);
-
-    }
-
-    /**
-     * Default regex pattern matching for input
-     * @param uri to verify
-     * @return true if constructor pattern matches input
-     */
-    public boolean matches(final String uri) {
-
-        return matcherPattern.matcher(uri).matches();
-
-    }
-
-
-    /**
-     * Default handle aquisition for given input (should be matched first)
-     * @param uri to get handle for
-     * @return handle name for given input
-     * @throws InputNotMatchedException if input does not match
-     */
-    public String getHandleNameFor(final String uri)
-            throws InputNotMatchedException {
-
-        if(matcherPattern.matcher(uri).matches()) {
-
-            return matcherHandle;
-
-        } else {
-
-            throw new InputNotMatchedException("Pattern does not match given input.");
-
-        }
-
-    }
-
     /**
      * Force implementation of URL resolver.
-     * @param handleName to resolve complete URL for
-     * @param uri of request
-     * @return complete URL including requested uri for handle
+     * @param input to match
+     * @return complete URL including requested input
      */
-    public abstract URL resolveURLFor(final String handleName,
-                                      final String uri)
+    public abstract URL resolveURLFor(final String input,
+                                      final ProctorHandlerProperties properties)
             throws NoHandleForNameException, MalformedURLException;
 
     /**
-     * Get matcher handle
-     * @return matcher handle name
-     */
-    public Set<String> getHandleNames() {
-
-        return new HashSet<>(Arrays.asList(matcherHandle));
-
-    }
-
-    /**
      * Return root URL for given handle name
-     * @param handleName to get root url for
-     * @return URL base for handle name
+     * @param properties for handler
+     * @return root for handler URL
+     * @throws MalformedURLException if root url cant be created
      */
-    protected abstract URL getRootURLForHandleName(final String handleName);
-
+    protected abstract URL getRoot(final ProctorHandlerProperties properties)
+            throws MalformedURLException;
 
 }

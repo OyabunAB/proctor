@@ -111,13 +111,13 @@ public class ProctorGrizzlyProxy
     }
 
     /**
-     * Prepare SSLEngine configuration
+     * Prepare SSLEngine properties
      * @return
      */
     SSLEngineConfigurator createSslConfiguration() {
 
         //
-        // Initialize SSLContext configuration
+        // Initialize SSLContext properties
         //
         SSLContextConfigurator sslContextConfig = new SSLContextConfigurator();
         sslContextConfig.setKeyStoreFile(keystorePath);

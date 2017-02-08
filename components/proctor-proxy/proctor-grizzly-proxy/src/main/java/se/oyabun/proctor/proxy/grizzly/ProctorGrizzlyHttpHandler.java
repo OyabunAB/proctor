@@ -27,6 +27,7 @@ import se.oyabun.proctor.events.http.ProxyReplySentEvent;
 import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
@@ -67,12 +68,14 @@ public class ProctorGrizzlyHttpHandler
 
         final String clientRequestPath = request.getHttpHandlerPath();
 
+        Optional<ProctorHandlerProperties> optionalProperties =
+                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
+                .findFirst();
+
         Optional<ProctorRouteHandler> optionalHandler =
-                proctorRouteHandlerManager.getRegisteredRouteHandlers()
-                        .stream()
-                        .filter(proctorProctorRouteHandler ->
-                                proctorProctorRouteHandler.matches(clientRequestPath))
-                        .findFirst();
+                optionalProperties.isPresent() ?
+                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                    Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
@@ -81,8 +84,8 @@ public class ProctorGrizzlyHttpHandler
 
             final URL proxyURL =
                     matchingProctorRouteHandler.resolveURLFor(
-                            matchingProctorRouteHandler.getHandleNameFor(clientRequestPath),
-                            clientRequestPath);
+                            clientRequestPath,
+                            optionalProperties.get());
 
             //
             // Redirect request to handler generated URL

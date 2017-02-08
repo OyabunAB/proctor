@@ -15,8 +15,6 @@
  */
 package se.oyabun.proctor.configuration;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -25,20 +23,16 @@ import org.springframework.boot.context.embedded.Ssl;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.oyabun.proctor.exceptions.DuplicateRouteHandlerException;
-import se.oyabun.proctor.handler.ProctorRouteHandler;
-import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
-import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteProctorRouteHandler;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteProperties;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.URL;
 import java.util.Arrays;
 
 /**
- * Embedded web application context configuration
+ * Embedded web application context properties
  */
 @Configuration
 @EnableAutoConfiguration
@@ -113,47 +107,15 @@ public class ProctorApplicationContextConfiguration {
     /**
      * Set up the static route to the administration GUI
      */
-    @Autowired @Bean(name="adminWebStaticRoute")
-    public ProctorRouteHandler getProctorStaticRouteHandler(
-            final ProctorRouteHandlerManager proctorRouteHandlerManager)
-            throws MalformedURLException, DuplicateRouteHandlerException {
+    @Bean
+    public ProctorHandlerProperties staticAdminRouteConfiguration() {
 
-        ProctorRouteHandler staticRouteHandler =
-                new ProctorStaticRouteProctorRouteHandler(
-                        "/proctoradmin/.*",
-                        "Proctor Admin Web Static Route",
-                        new URL(
-                                ((StringUtils.isNotBlank(keyStorePassword) &&
-                                        StringUtils.isNotBlank(keystorePath)) ?
-                                        "https" :
-                                        "http") +
-                                        "://" + proxyListenAddress + ":" + configuredLocalPort + "/"),
-                        true);
-
-        proctorRouteHandlerManager.registerRouteHandler(staticRouteHandler);
-
-        return staticRouteHandler;
-
-    }
-
-    /**
-     * Set up a route for everything else just for fun.
-     */
-    @Autowired @Bean(name = "oyabunWebStaticRoute")
-    public ProctorRouteHandler getOyabunStaticRouteHandler(ProctorRouteHandlerManager proctorRouteHandlerManager)
-            throws MalformedURLException, DuplicateRouteHandlerException {
-
-
-        ProctorRouteHandler staticRouteHandlerOyabun =
-                new ProctorStaticRouteProctorRouteHandler(
-                        "^/((?!proctoradmin).)*$",
-                        "Oyabun Route",
-                        new URL("https://www.oyabun.se/"),
-                        false);
-
-        proctorRouteHandlerManager.registerRouteHandler(staticRouteHandlerOyabun);
-
-        return staticRouteHandlerOyabun;
+        return new ProctorStaticRouteProperties(
+                "adminrouteID",
+                0,
+                "/proctoradmin/*",
+                "true",
+                "https://"+proxyListenAddress+":"+configuredLocalPort+"/");
 
     }
 

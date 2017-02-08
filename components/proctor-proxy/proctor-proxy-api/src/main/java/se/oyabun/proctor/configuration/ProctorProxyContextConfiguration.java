@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Proctor Proxy API Context configuration
+ * Proctor Proxy API Context properties
  */
 @Configuration
 @ComponentScan("se.oyabun.proctor.proxy")

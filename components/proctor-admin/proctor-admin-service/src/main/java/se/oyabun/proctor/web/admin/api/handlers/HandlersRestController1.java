@@ -22,12 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
+import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
 import se.oyabun.proctor.web.admin.api.AbstractSecuredAPIController;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Proctor Handlers REST API
@@ -44,39 +45,40 @@ public class HandlersRestController1
             value = "/",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProctorRouteHandler[]> getAllRegisteredRouteHandlers() {
+    public ResponseEntity<ProctorHandlerProperties[]> getAll() {
 
-        final Collection<ProctorRouteHandler> registeredProctorRouteHandlers =
-                proctorRouteHandlerManager.getRegisteredRouteHandlers();
+        final List<ProctorHandlerProperties> registeredProctorRouteHandlers =
+                proctorRouteHandlerManager.getRegisteredProperties().collect(Collectors.toList());
 
-        if(proctorRouteHandlerManager.getRegisteredRouteHandlers().isEmpty()) {
+        if(registeredProctorRouteHandlers.isEmpty()) {
 
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
-                    .body(new ProctorRouteHandler[]{});
+                    .body(new ProctorHandlerProperties[]{});
 
         } else {
 
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(registeredProctorRouteHandlers.toArray(
-                            new ProctorRouteHandler[registeredProctorRouteHandlers.size()]));
+                    .body(registeredProctorRouteHandlers
+                            .stream()
+                            .toArray(size -> new ProctorHandlerProperties[size]));
 
         }
 
     }
 
     @RequestMapping(
-            value = "/{handlerName}",
+            value = "/{ID}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProctorRouteHandler> getSpecificRouteHandlerFor(@PathVariable("handlerName")
-                                                                          final String handlerName) {
+    public ResponseEntity<ProctorHandlerProperties> get(@PathVariable("ID")
+                                                        final String ID) {
 
-        final Collection<ProctorRouteHandler> registeredProctorRouteHandlers =
-                proctorRouteHandlerManager.getRegisteredRouteHandlers();
+        final Optional<ProctorHandlerProperties> optionalProperty =
+                proctorRouteHandlerManager.getProperty(ID);
 
-        if(registeredProctorRouteHandlers.isEmpty()) {
+        if(!optionalProperty.isPresent()) {
 
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -84,26 +86,9 @@ public class HandlersRestController1
 
         } else {
 
-            Optional<ProctorRouteHandler> optionalRouteHandler =
-                    registeredProctorRouteHandlers
-                            .stream()
-                            .filter(proctorRouteHandler ->
-                                    proctorRouteHandler.getHandleNames().contains(handlerName))
-                            .findFirst();
-
-            if(optionalRouteHandler.isPresent()) {
-
-                return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(optionalRouteHandler.get());
-
-            } else {
-
-                return ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body(null);
-
-            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(optionalProperty.get());
 
         }
 

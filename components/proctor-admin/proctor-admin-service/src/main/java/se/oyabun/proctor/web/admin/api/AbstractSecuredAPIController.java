@@ -21,4 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Abstract shared security properties for API Controllers
  */
 @RestController
-public class AbstractSecuredAPIController {}
+public class AbstractSecuredAPIController {
+
+}

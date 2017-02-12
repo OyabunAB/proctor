@@ -37,11 +37,14 @@ public class ProctorServer {
 
     /**
      * Set up external properties file, checking for system properties override, then default.
+     *
      * @return configured property placeholderconfigurer
      * @throws FileNotFoundException if no properties file can be found.
      */
     @Bean
-    public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() throws FileNotFoundException {
+    public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer()
+            throws
+            FileNotFoundException {
 
         final String propertiesFileOverride = System.getProperty(PROCTOR_PROPERTY_FILE_PROPERTY);
 
@@ -49,11 +52,11 @@ public class ProctorServer {
 
         PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
 
-        if(StringUtils.isNotBlank(propertiesFileOverride)) {
+        if (StringUtils.isNotBlank(propertiesFileOverride)) {
 
             propertyPlaceholderConfigurer.setLocation(new FileSystemResource(propertiesFileOverride));
 
-        } else if(defaultPropertiesFile.exists()) {
+        } else if (defaultPropertiesFile.exists()) {
 
             propertyPlaceholderConfigurer.setLocation(defaultPropertiesFile);
 
@@ -67,7 +70,6 @@ public class ProctorServer {
         return propertyPlaceholderConfigurer;
 
     }
-
 
 
 }

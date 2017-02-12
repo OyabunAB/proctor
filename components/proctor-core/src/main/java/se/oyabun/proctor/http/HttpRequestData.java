@@ -42,8 +42,11 @@ public class HttpRequestData
                            final Map<String, List<String>> queryParameters,
                            final String path) {
 
-        super(headers, body);
-        this.port = port != -1 ? port : null;
+        super(headers,
+              body);
+        this.port = port != -1 ?
+                    port :
+                    null;
         this.host = host;
         this.protocol = protocol;
         this.method = method;
@@ -53,6 +56,7 @@ public class HttpRequestData
     }
 
     public String getProtocol() {
+
         return protocol;
     }
 
@@ -75,10 +79,12 @@ public class HttpRequestData
     }
 
     public Integer getPort() {
+
         return port;
     }
 
     public InetAddress getHost() {
+
         return host;
     }
 
@@ -116,19 +122,22 @@ public class HttpRequestData
 
         final HttpRequestData other = (HttpRequestData) obj;
 
-        if (!Objects.equals(this.method, other.method)) {
+        if (!Objects.equals(this.method,
+                            other.method)) {
 
             return false;
 
         }
 
-        if (!Objects.equals(this.queryParameters, other.queryParameters)) {
+        if (!Objects.equals(this.queryParameters,
+                            other.queryParameters)) {
 
             return false;
 
         }
 
-        if (!Objects.equals(this.path, other.path)) {
+        if (!Objects.equals(this.path,
+                            other.path)) {
 
             return false;
 
@@ -142,10 +151,16 @@ public class HttpRequestData
     public String toString() {
 
         return "HttpRequestData{" +
-                "method=" + method + ", " +
-                "path=" + path + ", " +
-                "query=" + queryParameters + "} + " +
-                super.toString();
+               "method=" +
+               method +
+               ", " +
+               "path=" +
+               path +
+               ", " +
+               "query=" +
+               queryParameters +
+               "} + " +
+               super.toString();
 
     }
 

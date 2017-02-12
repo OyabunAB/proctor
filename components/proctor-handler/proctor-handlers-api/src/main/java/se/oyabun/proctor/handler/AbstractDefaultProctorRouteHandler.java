@@ -29,20 +29,25 @@ public abstract class AbstractDefaultProctorRouteHandler
 
     /**
      * Force implementation of URL resolver.
+     *
      * @param input to match
      * @return complete URL including requested input
      */
     public abstract URL resolveURLFor(final String input,
                                       final ProctorHandlerProperties properties)
-            throws NoHandleForNameException, MalformedURLException;
+            throws
+            NoHandleForNameException,
+            MalformedURLException;
 
     /**
      * Return root URL for given handle name
+     *
      * @param properties for handler
      * @return root for handler URL
      * @throws MalformedURLException if root url cant be created
      */
     protected abstract URL getRoot(final ProctorHandlerProperties properties)
-            throws MalformedURLException;
+            throws
+            MalformedURLException;
 
 }

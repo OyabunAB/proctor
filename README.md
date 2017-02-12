@@ -14,7 +14,7 @@ Is slowly filling  up with that awsome-sause.
 
 
 ## Project structure
-A high level project overview and roadmap.
+A high level project overview and road map.
 
     ╔═════════════════════╗ 
     ║ Proctor Core Module ║
@@ -31,12 +31,12 @@ A high level project overview and roadmap.
       │   ╔════════════════════╗
       ├───╢ Proctor Client API ║
       │   ╚═╤══════════════════╝
-      │     │   ╔═════════════════════╗
-      │     ├───╢ Proctor NING Module ║
-      │     │   ╚═════════════════════╝
-      │     │   ╔═══════════════════════════╗
-      │     └───╢ Proctor HTTPClient Module ║
-      │         ╚═══════════════════════════╝
+      │     │   ╔═════════════════════════════════╗
+      │     ├───╢ Proctor NING HTTP Client Module ║
+      │     │   ╚═════════════════════════════════╝
+      │     │   ╔═══════════════════════════════════╗
+      │     └───╢ Proctor Apache HTTP Client Module ║
+      │         ╚═══════════════════════════════════╝
       │   ╔═════════════════════╗
       ├───╢ Proctor Handler API ║
       │   ╚═╤═══════════════════╝
@@ -46,6 +46,21 @@ A high level project overview and roadmap.
       │     │   ╔══════════════════════════════════╗
       │     └───╢ Proctor ZooKeeper Handler Module ║
       │         ╚══════════════════════════════════╝
+      │   ╔═══════════════════╗
+      ├───╢ Proctor Cache API ║
+      │   ╚═╤═════════════════╝
+      │     │   ╔════════════════════════════════╗
+      │     └───╢ Proctor Hazelcast Cache Module ║
+      │         ╚════════════════════════════════╝
+      │   ╔════════════════════════╗
+      ├───╢ Proctor Repository API ║
+      │   ╚═╤══════════════════════╝
+      │     │   ╔═════════════════════════════════════╗
+      │     ├───╢ Proctor Filestore Repository Module ║
+      │     │   ╚═════════════════════════════════════╝
+      │     │   ╔═════════════════════════════════╗
+      │     └───╢ Proctor Neo4J Repository Module ║
+      │         ╚═════════════════════════════════╝
       │   ╔════════════════════════╗
       ├───╢ Proctor Statistics API ║
       │   ╚═╤══════════════════════╝
@@ -131,6 +146,32 @@ through Curator when queried for matches on URIs.
 
 https://zookeeper.apache.org/
 https://curator.apache.org/
+
+## Proctor Cache API
+The cache API provides the handler configurations with a caching layer and 
+has been introduced to enhance performance and enable distribution of configuration
+for scalability.
+
+#### Proctor Hazelcast Cache Module
+A cache implementation using a Hazelcast embedded node, enabling distributed caching 
+and other features from the framework.
+
+https://hazelcast.com/
+
+## Proctor Repository API
+The repository API is introduced to enable persistent configuration between 
+application restarts. Indirectly dependant on caching components though the
+_Spring Cache API_.
+
+#### Proctor Filestore Repository Module
+The file store module is a simple serialization/deserialization of the proctor 
+handler configuration objects to a file structure.
+
+#### Proctor Neo4j Repository Module
+The Neo4j repository module enables the framework to have a scalable distributed
+persistence layer through a embedded Neo4j graph database. 
+
+https://neo4j.com/
 
 ## Proctor Statistics API 
 The statistics API provides a structured way to access and provide

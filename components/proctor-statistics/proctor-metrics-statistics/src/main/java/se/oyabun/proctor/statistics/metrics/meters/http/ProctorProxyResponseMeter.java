@@ -38,15 +38,14 @@ public class ProctorProxyResponseMeter
     @Autowired
     public ProctorProxyResponseMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-        this.replies =
-                proctorMetricsRegistry
-                        .getMetricsRegistry()
-                        .meter(ProctorStatistic.PROXY_REPLY_SENT.name());
+        this.replies = proctorMetricsRegistry.getMetricsRegistry()
+                                             .meter(ProctorStatistic.PROXY_REPLY_SENT.name());
 
     }
 
     /**
      * Listener method, feeds the meter
+     *
      * @param proxyReplySentEvent published by the system
      */
     @EventListener

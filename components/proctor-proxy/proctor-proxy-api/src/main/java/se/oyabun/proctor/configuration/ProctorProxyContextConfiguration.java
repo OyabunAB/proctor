@@ -23,4 +23,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("se.oyabun.proctor.proxy")
-public class ProctorProxyContextConfiguration {}
+public class ProctorProxyContextConfiguration {
+
+}

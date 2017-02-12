@@ -15,16 +15,17 @@
  */
 package se.oyabun.proctor.events.handler;
 
-import org.springframework.context.ApplicationEvent;
+import se.oyabun.proctor.events.ProctorApplicationEvent;
 
 /**
  * Proctor Handler Match Event
  */
 public class ProxyHandlerMatchedEvent
-        extends ApplicationEvent {
+        extends ProctorApplicationEvent {
 
     /**
      * Used to represent a handler match
+     *
      * @param requestedUri requested resource uri
      */
     public ProxyHandlerMatchedEvent(String requestedUri) {

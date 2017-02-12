@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,6 +23,7 @@
     <properties>
 
         <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+        <proctor-persistence-api.version>0.0.1-SNAPSHOT</proctor-persistence-api.version>
 
     </properties>
 
@@ -35,12 +36,13 @@
             <version>${proctor-core.version}</version>
         </dependency>
 
-        <!-- Configuration distribution dependencies -->
         <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-all</artifactId>
-            <version>3.5.4</version>
+            <groupId>se.oyabun.proctor.components.persistence</groupId>
+            <artifactId>proctor-repository-api</artifactId>
+            <version>${proctor-persistence-api.version}</version>
         </dependency>
+
+        <!-- Configuration distribution dependencies -->
 
         <dependency>
             <groupId>com.javaslang</groupId>

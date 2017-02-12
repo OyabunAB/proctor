@@ -23,4 +23,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("se.oyabun.proctor.http.client")
-public class ProctorHttpClientContextConfiguration {}
+public class ProctorHttpClientContextConfiguration {
+
+}

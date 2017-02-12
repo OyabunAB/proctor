@@ -29,39 +29,41 @@ import java.math.BigInteger;
 public abstract class AbstractProctorMeter
         implements ProctorStatisticsGatherer {
 
-    protected abstract Meter getMeter();
-
     /**
      * ${@inheritDoc}
      */
     public BigDecimal getMeanFor(final ProctorStatistic proctorStatistic)
-            throws NonGatheredStatisticRequestException {
+            throws
+            NonGatheredStatisticRequestException {
 
-        if(this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatistic)) {
 
             return BigDecimal.valueOf(getMeter().getMeanRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '"+proctorStatistic+"'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
 
         }
 
     }
 
+    protected abstract Meter getMeter();
+
     /**
      * ${@inheritDoc}
      */
     public BigInteger getCountFor(final ProctorStatistic proctorStatistic)
-            throws NonGatheredStatisticRequestException {
+            throws
+            NonGatheredStatisticRequestException {
 
-        if(this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatistic)) {
 
             return BigInteger.valueOf(getMeter().getCount());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '"+proctorStatistic+"'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
 
         }
 
@@ -71,15 +73,16 @@ public abstract class AbstractProctorMeter
      * ${@inheritDoc}
      */
     public BigDecimal getFifteenMinuteRateFor(final ProctorStatistic proctorStatistic)
-            throws NonGatheredStatisticRequestException {
+            throws
+            NonGatheredStatisticRequestException {
 
-        if(this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatistic)) {
 
             return BigDecimal.valueOf(getMeter().getFifteenMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '"+proctorStatistic+"'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
 
         }
 
@@ -89,15 +92,16 @@ public abstract class AbstractProctorMeter
      * ${@inheritDoc}
      */
     public BigDecimal getFiveMinuteRateFor(final ProctorStatistic proctorStatistic)
-            throws NonGatheredStatisticRequestException {
+            throws
+            NonGatheredStatisticRequestException {
 
-        if(this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatistic)) {
 
             return BigDecimal.valueOf(getMeter().getFiveMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '"+proctorStatistic+"'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
 
         }
 
@@ -107,15 +111,16 @@ public abstract class AbstractProctorMeter
      * ${@inheritDoc}
      */
     public BigDecimal getOneMinuteRateFor(final ProctorStatistic proctorStatistic)
-            throws NonGatheredStatisticRequestException {
+            throws
+            NonGatheredStatisticRequestException {
 
-        if(this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatistic)) {
 
             return BigDecimal.valueOf(getMeter().getOneMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '"+proctorStatistic+"'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
 
         }
 

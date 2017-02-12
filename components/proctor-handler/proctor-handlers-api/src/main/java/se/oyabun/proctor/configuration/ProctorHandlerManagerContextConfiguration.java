@@ -15,8 +15,6 @@
  */
 package se.oyabun.proctor.configuration;
 
-import com.hazelcast.config.Config;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,12 +24,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan("se.oyabun.proctor.handler")
 public class ProctorHandlerManagerContextConfiguration {
-
-    @Bean
-    public Config hazelcastConfiguration() {
-
-        return new Config();
-
-    }
 
 }

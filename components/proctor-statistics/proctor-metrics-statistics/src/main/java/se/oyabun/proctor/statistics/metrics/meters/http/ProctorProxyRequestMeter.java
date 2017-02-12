@@ -38,15 +38,14 @@ public class ProctorProxyRequestMeter
     @Autowired
     public ProctorProxyRequestMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-        this.requests =
-                proctorMetricsRegistry
-                        .getMetricsRegistry()
-                        .meter(ProctorStatistic.PROXY_REQUEST_RECEIVED.name());
+        this.requests = proctorMetricsRegistry.getMetricsRegistry()
+                                              .meter(ProctorStatistic.PROXY_REQUEST_RECEIVED.name());
 
     }
 
     /**
      * Listener method, feeds the meter
+     *
      * @param proxyRequestReceivedEvent published by the system
      */
     @EventListener

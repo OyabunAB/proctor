@@ -21,10 +21,12 @@ import se.oyabun.proctor.web.admin.api.AbstractSecuredAPIController;
 
 /**
  * Proctor Cluster REST API
+ *
  * @version 1
  */
 @RestController
 @RequestMapping(value = "/api/1/clusters")
 public class ClusterRestController1
         extends AbstractSecuredAPIController {
+
 }

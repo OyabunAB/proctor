@@ -30,7 +30,6 @@ public class HttpResponseData
     private final long contentLength;
 
 
-
     public HttpResponseData(final int statusCode,
                             final String statusMessage,
                             final Map<String, List<String>> headers,
@@ -38,7 +37,8 @@ public class HttpResponseData
                             final long contentLength,
                             final byte[] body) {
 
-        super(headers, body);
+        super(headers,
+              body);
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.contentType = contentType;
@@ -74,9 +74,13 @@ public class HttpResponseData
     public String toString() {
 
         return "HttpResponseData{" +
-                "statusCode=" + statusCode + ", " +
-                "statusMessage=" + statusMessage + "} + " +
-                super.toString();
+               "statusCode=" +
+               statusCode +
+               ", " +
+               "statusMessage=" +
+               statusMessage +
+               "} + " +
+               super.toString();
 
     }
 

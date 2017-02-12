@@ -27,9 +27,11 @@ public class NoSuchHandlerException
 
     }
 
-    public NoSuchHandlerException(String message, Throwable e) {
+    public NoSuchHandlerException(String message,
+                                  Throwable e) {
 
-        super(message, e);
+        super(message,
+              e);
 
     }
 

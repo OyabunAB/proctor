@@ -15,15 +15,17 @@
  */
 package se.oyabun.proctor.proxy.grizzly;
 
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.grizzly.http.io.NIOReader;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
 import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
@@ -36,6 +38,7 @@ import se.oyabun.proctor.http.client.ProctorHttpClient;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -48,46 +51,64 @@ public class ProctorGrizzlyHttpHandler
 
     private static final Logger logger = LoggerFactory.getLogger(ProctorGrizzlyHttpHandler.class);
 
-    @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
-
-    @Autowired
     private ProctorRouteHandlerManager proctorRouteHandlerManager;
-
-    @Autowired
     private ProctorHttpClient httpClient;
+
+    @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
+    private String keystorePath;
+
+    @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
+    private String keyStorePassword;
+
+    @Value("${se.oyabun.proctor.proxy.listen.port}")
+    private int proxyListenPort;
+
+    @Value("${se.oyabun.proctor.proxy.listen.address}")
+    private String proxyListenAddress;
+
+    public ProctorGrizzlyHttpHandler(final ApplicationEventPublisher applicationEventPublisher,
+                                     final ProctorRouteHandlerManager proctorRouteHandlerManager,
+                                     final ProctorHttpClient httpClient) {
+
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.proctorRouteHandlerManager = proctorRouteHandlerManager;
+        this.httpClient = httpClient;
+
+    }
+
 
     @Override
     public void service(final Request request,
                         final Response response)
-            throws Exception {
+            throws
+            Exception {
 
         CharArrayWriter requestBuffer = getRequestBody(request);
         final String requestBodyAsString = requestBuffer.toString();
 
         final Map<String, List<String>> headers = new HashMap<>();
-        extractHeaders(request, headers);
+        extractHeaders(request,
+                       headers);
 
         final String clientRequestPath = request.getHttpHandlerPath();
 
-        Optional<ProctorHandlerProperties> optionalProperties =
-                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
-                .findFirst();
+        Optional<ProctorHandlerProperties> optionalProperties = proctorRouteHandlerManager.getMatchingPropertiesFor
+                (clientRequestPath)
+                                                                                          .findFirst();
 
-        Optional<ProctorRouteHandler> optionalHandler =
-                optionalProperties.isPresent() ?
-                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
-                    Optional.empty();
+        Optional<ProctorRouteHandler> optionalHandler = optionalProperties.isPresent() ?
+                                                        proctorRouteHandlerManager.getHandler(optionalProperties.get
+                                                                ()) :
+                                                        Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
 
             final ProctorRouteHandler matchingProctorRouteHandler = optionalHandler.get();
 
-            final URL proxyURL =
-                    matchingProctorRouteHandler.resolveURLFor(
-                            clientRequestPath,
-                            optionalProperties.get());
+            final URL proxyURL = matchingProctorRouteHandler.resolveURLFor(clientRequestPath,
+                                                                           optionalProperties.get());
 
             //
             // Redirect request to handler generated URL
@@ -96,30 +117,29 @@ public class ProctorGrizzlyHttpHandler
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace(
-                        "Proxying request for URI '{}' to '{}'.",
-                        clientRequestPath,
-                        proxyURLExternalForm);
+                logger.trace("Proxying request for URI '{}' to '{}'.",
+                             clientRequestPath,
+                             proxyURLExternalForm);
 
             }
 
             final String protocol = proxyURL.getProtocol();
-            final String method = request.getMethod().getMethodString();
+            final String method = request.getMethod()
+                                         .getMethodString();
             final Map<String, List<String>> queryParameters = new HashMap<>();
             for (String parameterName : request.getParameterNames()) {
-                queryParameters.put(parameterName, Arrays.asList(request.getParameterValues(parameterName)));
+                queryParameters.put(parameterName,
+                                    Arrays.asList(request.getParameterValues(parameterName)));
             }
 
-            final HttpRequestData httpRequestData =
-                    new HttpRequestData(
-                            protocol,
-                            InetAddress.getByName(proxyURL.getHost()),
-                            proxyURL.getPort(),
-                            method,
-                            headers,
-                            requestBodyAsString.getBytes(),
-                            queryParameters,
-                            clientRequestPath);
+            final HttpRequestData httpRequestData = new HttpRequestData(protocol,
+                                                                        InetAddress.getByName(proxyURL.getHost()),
+                                                                        proxyURL.getPort(),
+                                                                        method,
+                                                                        headers,
+                                                                        requestBodyAsString.getBytes(),
+                                                                        queryParameters,
+                                                                        clientRequestPath);
 
             applicationEventPublisher.publishEvent(new ProxyRequestReceivedEvent(httpRequestData));
 
@@ -127,15 +147,17 @@ public class ProctorGrizzlyHttpHandler
 
             applicationEventPublisher.publishEvent(new ProxyReplySentEvent(httpResponseData));
 
-            copyResponseHeaders(httpResponseData, response);
+            handleResponseHeaders(httpResponseData,
+                                  response,
+                                  proxyURL);
 
-            writeResponseData(httpResponseData, response);
+            writeResponseData(httpResponseData,
+                              response);
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace(
-                        "Returning response for URI '{}'.",
-                        clientRequestPath);
+                logger.trace("Returning response for URI '{}'.",
+                             clientRequestPath);
 
             }
 
@@ -144,7 +166,85 @@ public class ProctorGrizzlyHttpHandler
             if (logger.isTraceEnabled()) {
 
                 logger.trace("No matching handler found for request for URI '{}'.",
-                        clientRequestPath);
+                             clientRequestPath);
+
+            }
+
+            applicationEventPublisher.publishEvent(new ProxyHandlerNotMatchedEvent(clientRequestPath));
+
+        }
+
+    }
+
+    private CharArrayWriter getRequestBody(final Request request)
+            throws
+            IOException {
+
+        //
+        // Use char array to read chunks instead
+        //
+        CharArrayWriter requestBuffer = new CharArrayWriter();
+        final NIOReader requestReader = request.getNIOReader();
+
+        for (int charRead = requestReader.read(); charRead >= 0; charRead = requestReader.read()) {
+
+            requestBuffer.write(charRead);
+
+        }
+
+        return requestBuffer;
+
+    }
+
+    private void extractHeaders(final Request request,
+                                final Map<String, List<String>> headers) {
+
+        for (String headername : request.getHeaderNames()) {
+
+            Iterable<String> headerValues = request.getHeaders(headername);
+            ArrayList<String> headerValuesCopy = new ArrayList<>();
+
+            for (String headerValue : headerValues) {
+
+                headerValuesCopy.add(headerValue);
+
+            }
+
+            headers.put(headername,
+                        headerValuesCopy);
+
+        }
+
+    }
+
+    private void handleResponseHeaders(final HttpResponseData responseData,
+                                       final Response response,
+                                       final URL proxyUrl)
+            throws MalformedURLException {
+
+        URL originURL = new URL(((StringUtils.isNotBlank(keyStorePassword) && StringUtils.isNotBlank(keystorePath)) ?
+                                 "https" :
+                                 "http") + "://" + proxyListenAddress + ":" + proxyListenPort + "/");
+
+
+
+        response.setStatus(responseData.getStatusCode(),
+                           responseData.getStatusMessage());
+
+        final Map<String, List<String>> responseHeaders = responseData.getHeaders();
+
+        for (final Map.Entry<String, List<String>> responseHeader : responseHeaders.entrySet()) {
+
+            final List<String> responseHeaderValues = responseHeader.getValue();
+            final List<String> rewrittenHeaderValues = new ArrayList<>();
+
+            for (final String responseHeaderValue : responseHeaderValues) {
+
+                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(),
+                                                                         originURL.toString()));
+
+                response.addHeader(responseHeader.getKey(),
+                                   responseHeaderValue);
 
             }
 
@@ -168,73 +268,17 @@ public class ProctorGrizzlyHttpHandler
             //
             // Write bytes to response
             //
-            response.getNIOOutputStream().write(responseDataBody, 0, responseDataBody.length);
+            response.getNIOOutputStream()
+                    .write(responseDataBody,
+                           0,
+                           responseDataBody.length);
 
         } catch (IOException e) {
 
-            logger.error("Failed to write response body.", e);
+            logger.error("Failed to write response body.",
+                         e);
 
         }
-
-    }
-
-    private void copyResponseHeaders(final HttpResponseData responseData,
-                                     final Response response) {
-
-        response.setStatus(responseData.getStatusCode(), responseData.getStatusMessage());
-
-        final Map<String, List<String>> responseHeaders = responseData.getHeaders();
-
-        for (final Map.Entry<String, List<String>> responseHeader : responseHeaders.entrySet()) {
-
-            final List<String> responseHeaderValues = responseHeader.getValue();
-
-            for (final String responseHeaderValue : responseHeaderValues) {
-
-                response.addHeader(responseHeader.getKey(), responseHeaderValue);
-
-            }
-
-        }
-
-    }
-
-    private void extractHeaders(final Request request,
-                                final Map<String, List<String>> headers) {
-
-        for (String headername : request.getHeaderNames()) {
-
-            Iterable<String> headerValues = request.getHeaders(headername);
-            ArrayList<String> headerValuesCopy = new ArrayList<>();
-
-            for (String headerValue : headerValues) {
-
-                headerValuesCopy.add(headerValue);
-
-            }
-
-            headers.put(headername, headerValuesCopy);
-
-        }
-
-    }
-
-    private CharArrayWriter getRequestBody(final Request request)
-            throws IOException {
-
-        //
-        // Use char array to read chunks instead
-        //
-        CharArrayWriter requestBuffer = new CharArrayWriter();
-        final NIOReader requestReader = request.getNIOReader();
-
-        for (int charRead = requestReader.read(); charRead >= 0; charRead = requestReader.read()) {
-
-            requestBuffer.write(charRead);
-
-        }
-
-        return requestBuffer;
 
     }
 

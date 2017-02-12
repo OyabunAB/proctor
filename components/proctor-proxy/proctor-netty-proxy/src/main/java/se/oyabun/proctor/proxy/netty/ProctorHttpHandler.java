@@ -27,7 +27,8 @@ import org.springframework.stereotype.Component;
 /**
  * Proctor Netty Http Handler
  */
-@Component @ChannelHandler.Sharable
+@Component
+@ChannelHandler.Sharable
 public class ProctorHttpHandler
         extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -44,13 +45,15 @@ public class ProctorHttpHandler
 
     /**
      * Read channel request after we buffered the entire request, and process the request.
+     *
      * @param channelHandlerContext of the handled request
-     * @param fullHttpRequest that is handled
+     * @param fullHttpRequest       that is handled
      * @throws Exception when something goes horribly wrong
      */
     public void channelRead0(final ChannelHandlerContext channelHandlerContext,
                              final FullHttpRequest fullHttpRequest)
-            throws Exception {
+            throws
+            Exception {
 
         fullHttpRequest.retain();
 
@@ -60,15 +63,18 @@ public class ProctorHttpHandler
 
     /**
      * Catch exceptions caused by pipeline and handle here.
+     *
      * @param channelHandlerContext
-     * @param throwable exception that occured during handling
+     * @param throwable             exception that occured during handling
      * @throws Exception rethrown after logging
      */
     public void exceptionCaught(ChannelHandlerContext channelHandlerContext,
                                 Throwable throwable)
-            throws Exception {
+            throws
+            Exception {
 
-        logger.error("Exception occurred during handling.", throwable);
+        logger.error("Exception occurred during handling.",
+                     throwable);
 
     }
 

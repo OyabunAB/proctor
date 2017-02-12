@@ -36,15 +36,14 @@ public class ProctorHandlerMissMeter
     @Autowired
     public ProctorHandlerMissMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
-        misses =
-                proctorMetricsRegistry
-                        .getMetricsRegistry()
-                        .meter(ProctorStatistic.PROXY_HANDLER_MISS.name());
+        misses = proctorMetricsRegistry.getMetricsRegistry()
+                                       .meter(ProctorStatistic.PROXY_HANDLER_MISS.name());
 
     }
 
     /**
      * Listener method, feeds the meter
+     *
      * @param proxyHandlerNotMatchedEvent published by the system
      */
     @EventListener

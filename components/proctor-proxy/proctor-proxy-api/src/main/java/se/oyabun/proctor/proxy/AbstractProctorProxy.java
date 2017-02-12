@@ -35,9 +35,10 @@ public abstract class AbstractProctorProxy
     @EventListener
     final void trackRequestEvent(ProxyRequestReceivedEvent proxyRequestReceivedEvent) {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
 
-            logger.debug("Proxy received '{}'.", proxyRequestReceivedEvent);
+            logger.trace("Proxy received '{}'.",
+                         proxyRequestReceivedEvent);
 
         }
 
@@ -46,16 +47,19 @@ public abstract class AbstractProctorProxy
     @EventListener
     final void trackReplyEvent(ProxyReplySentEvent proxyReplySentEvent) {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
 
-            logger.debug("Proxy returned '{}'.", proxyReplySentEvent);
+            logger.trace("Proxy returned '{}'.",
+                         proxyReplySentEvent);
 
         }
 
     }
 
     @PostConstruct
-    public abstract void startProxy() throws Exception;
+    public abstract void startProxy()
+            throws
+            Exception;
 
     @PreDestroy
     public abstract void stopProxy();

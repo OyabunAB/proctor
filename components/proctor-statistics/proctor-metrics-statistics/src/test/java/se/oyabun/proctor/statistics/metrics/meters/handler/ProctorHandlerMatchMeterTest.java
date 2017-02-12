@@ -74,21 +74,27 @@ public class ProctorHandlerMatchMeterTest {
 
         proctorHandlerMatchMeter.incomingRequest(new ProxyHandlerMatchedEvent(MATCHED_URL));
 
-        verify(mockedMeter, times(1)).mark();
+        verify(mockedMeter,
+               times(1)).mark();
 
     }
 
     @Test
-    public void returningCountFor() throws NonGatheredStatisticRequestException {
+    public void returningCountFor()
+            throws
+            NonGatheredStatisticRequestException {
 
         when(mockedMeter.getCount()).thenReturn(BigInteger.ONE.longValue());
 
-        assertThat(proctorHandlerMatchMeter.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH), is(BigInteger.ONE));
+        assertThat(proctorHandlerMatchMeter.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH),
+                   is(BigInteger.ONE));
 
     }
 
     @Test(expected = NonGatheredStatisticRequestException.class)
-    public void notReturningOnOtherStatistic() throws NonGatheredStatisticRequestException {
+    public void notReturningOnOtherStatistic()
+            throws
+            NonGatheredStatisticRequestException {
 
         proctorHandlerMatchMeter.getCountFor(ProctorStatistic.PROXY_HANDLER_MISS);
 

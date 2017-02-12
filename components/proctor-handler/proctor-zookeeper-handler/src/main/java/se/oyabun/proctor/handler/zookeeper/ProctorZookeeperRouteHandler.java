@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 /**
  * Proctor Zookeeper enabled route handler
+ *
  * @author Daniel Sundberg
  * @author Johan Maasing
  */
@@ -47,10 +48,8 @@ import java.util.regex.Pattern;
 public class ProctorZookeeperRouteHandler
         implements ProctorRouteHandler {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
     private static final Pattern SERVICE_LOCATOR_PATTERN = Pattern.compile("^/([^/]+)/(.*)");
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private final Map<String, CuratorFramework> curatorCache = new HashMap<>();
     private final Map<String, ServiceDiscovery<Void>> serviceDiscoveryCache = new HashMap<>();
     private final Map<String, ServiceProvider<Void>> serviceProviderCache = new HashMap<>();
@@ -61,22 +60,24 @@ public class ProctorZookeeperRouteHandler
     @Override
     public URL resolveURLFor(final String uri,
                              final ProctorHandlerProperties properties)
-            throws NoHandleForNameException, MalformedURLException {
+            throws
+            NoHandleForNameException,
+            MalformedURLException {
 
         try {
 
             final ParseResult parseURI = parseURI(uri);
 
-            final Optional<ServiceProvider<Void>> optionalServiceProvider =
-                    cacheLoadServiceProvider(parseURI.getServiceName(), properties);
+            final Optional<ServiceProvider<Void>> optionalServiceProvider = cacheLoadServiceProvider(parseURI.getServiceName(),
+                                                                                                     properties);
 
-            if(optionalServiceProvider.isPresent()) {
+            if (optionalServiceProvider.isPresent()) {
 
                 final ServiceProvider<Void> serviceProvider = optionalServiceProvider.get();
 
-                return new URL(
-                        new URL(serviceProvider.getInstance().buildUriSpec()),
-                        parseURI.getUri());
+                return new URL(new URL(serviceProvider.getInstance()
+                                                      .buildUriSpec()),
+                               parseURI.getUri());
 
             } else {
 
@@ -86,7 +87,7 @@ public class ProctorZookeeperRouteHandler
 
         } catch (Exception e) {
 
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
 
                 log.debug("Failed to parse given URI.");
 
@@ -98,87 +99,75 @@ public class ProctorZookeeperRouteHandler
 
     }
 
-    private Optional<CuratorFramework> cacheLoadCuratorFramework(final ProctorHandlerProperties properties) {
+    /**
+     * Parse a given URI for service name and request uri
+     *
+     * @param uri to parse
+     * @return wrapped parsed result
+     * @throws URIParseException if parsing fails or does not conform to pattern
+     */
+    public static ParseResult parseURI(final String uri)
+            throws
+            URIParseException {
 
-        CuratorFramework curatorFramework =
-                Optional.ofNullable(curatorCache.get(properties))
-                        .orElseGet(() -> CuratorFrameworkFactory.newClient(
-                                properties.getProperties().getOrDefault("connectstring", ""),
-                                new ExponentialBackoffRetry(
-                                        Integer.parseInt(properties.getProperties().getOrDefault("backbasesleeptime", "10")),
-                                        Integer.parseInt(properties.getProperties().getOrDefault("maxretries", "10")))));
+        if (uri == null) {
 
-        if(!curatorFramework.getState().equals(CuratorFrameworkState.STARTED)) {
-
-            curatorFramework.start();
-
-        }
-
-        return Optional.of(curatorFramework);
-
-    }
-
-    private Optional<ServiceDiscovery<Void>> cacheLoadServiceDiscovery(final ProctorHandlerProperties properties) {
-
-        Optional<ServiceDiscovery<Void>> optionalServiceDiscovery =
-                Optional.ofNullable(serviceDiscoveryCache.get(properties));
-
-        ServiceDiscovery<Void> serviceDiscovery =
-                optionalServiceDiscovery.isPresent() ?
-                        optionalServiceDiscovery.get() :
-                        ServiceDiscoveryBuilder.builder(Void.class)
-                                .client(cacheLoadCuratorFramework(properties)
-                                        .orElseThrow(IllegalStateException::new))
-                                .watchInstances(
-                                        Boolean.valueOf(
-                                                properties.getProperties()
-                                                        .getOrDefault("watchinstances", "true")))
-                                .basePath(
-                                        properties.getProperties()
-                                                .getOrDefault("basepath", "/"))
-                                .build();
-
-        if(optionalServiceDiscovery.isPresent()) {
-
-            return optionalServiceDiscovery;
-
-        } else {
-
-            try {
-
-                serviceDiscovery.start();
-
-            } catch (Exception e) {
-
-                return Optional.empty();
-
-            }
-
-            serviceDiscoveryCache.put(properties.getConfigurationID(), serviceDiscovery);
-
-            return Optional.of(serviceDiscovery);
+            throw new URIParseException("URI may not be null.");
 
         }
 
+        final Matcher matcher = SERVICE_LOCATOR_PATTERN.matcher(uri);
+
+        if (!matcher.matches()) {
+
+            throw new URIParseException("URI: '" + uri + "'" + " does not match service locator pattern.");
+
+        }
+
+        // FIXME: can't happen if uri matches the current pattern
+        if (matcher.groupCount() != 2) {
+
+            throw new URIParseException("URI: '" + uri + "'" + " has the wrong number of capturing groups.");
+        }
+
+        final ParseResult result = new ParseResult("/" + matcher.group(1),
+                                                   "/" + matcher.group(2));
+
+        // FIXME: can't happen if uri matches the current pattern
+        if (result.getServiceName() == null ||
+            result.getServiceName()
+                  .length() < 1) {
+
+            throw new URIParseException("Parsed service name is empty or null.");
+
+        }
+
+        // FIXME: can't happen if uri matches (previous check) the current pattern
+        if (uri.equals("/")) {
+
+            throw new URIParseException("Parsed URI is empty or null.");
+
+        }
+
+        return result;
 
     }
 
     private Optional<ServiceProvider<Void>> cacheLoadServiceProvider(final String serviceName,
                                                                      final ProctorHandlerProperties properties) {
 
-        Optional<ServiceProvider<Void>> optionalServiceProvider =
-                Optional.ofNullable(serviceProviderCache.get(properties.getConfigurationID()));
+        Optional<ServiceProvider<Void>> optionalServiceProvider = Optional.ofNullable(serviceProviderCache.get
+                (properties.getConfigurationID()));
 
-        ServiceProvider<Void> serviceProvider =
-                optionalServiceProvider.isPresent() ?
-                        optionalServiceProvider.get() :
-                        cacheLoadServiceDiscovery(properties)
-                                .orElseThrow(IllegalStateException::new)
-                                .serviceProviderBuilder()
-                                .serviceName(serviceName)
-                                .build();
+        ServiceProvider<Void> serviceProvider = optionalServiceProvider.isPresent() ?
+                                                optionalServiceProvider.get() :
+                                                cacheLoadServiceDiscovery(properties).orElseThrow
+                                                        (IllegalStateException::new)
+                                                                                     .serviceProviderBuilder()
+                                                                                     .serviceName(serviceName)
+                                                                                     .build();
 
-        if(optionalServiceProvider.isPresent()) {
+        if (optionalServiceProvider.isPresent()) {
 
             return optionalServiceProvider;
 
@@ -194,7 +183,8 @@ public class ProctorZookeeperRouteHandler
 
             }
 
-            serviceProviderCache.put(properties.getConfigurationID(), serviceProvider);
+            serviceProviderCache.put(properties.getConfigurationID(),
+                                     serviceProvider);
 
             return Optional.of(serviceProvider);
 
@@ -202,57 +192,74 @@ public class ProctorZookeeperRouteHandler
 
     }
 
-    /**
-     * Parse a given URI for service name and request uri
-     * @param uri to parse
-     * @return wrapped parsed result
-     * @throws URIParseException if parsing fails or does not conform to pattern
-     */
-    public static ParseResult parseURI(final String uri)
-            throws URIParseException {
+    private Optional<ServiceDiscovery<Void>> cacheLoadServiceDiscovery(final ProctorHandlerProperties properties) {
 
-        if (uri == null) {
+        Optional<ServiceDiscovery<Void>> optionalServiceDiscovery = Optional.ofNullable(serviceDiscoveryCache.get
+                (properties));
 
-            throw new URIParseException("URI may not be null.") ;
+        ServiceDiscovery<Void> serviceDiscovery = optionalServiceDiscovery.isPresent() ?
+                                                  optionalServiceDiscovery.get() :
+                                                  ServiceDiscoveryBuilder.builder(Void.class)
+                                                                         .client(cacheLoadCuratorFramework
+                                                                                         (properties).orElseThrow
+                                                                                 (IllegalStateException::new))
+                                                                         .watchInstances(Boolean.valueOf(properties
+                                                                                                                 .getProperties()
+                                                                                                                   .getOrDefault("watchinstances",
+                                                                                                                                 "true")))
+                                                                         .basePath(properties.getProperties()
+                                                                                             .getOrDefault("basepath",
+                                                                                                           "/"))
+                                                                         .build();
 
-        }
+        if (optionalServiceDiscovery.isPresent()) {
 
-        final Matcher matcher = SERVICE_LOCATOR_PATTERN.matcher(uri);
+            return optionalServiceDiscovery;
 
-        if (!matcher.matches()) {
+        } else {
 
-            throw new URIParseException("URI: '" + uri + "'" +
-                    " does not match service locator pattern.");
+            try {
 
-        }
+                serviceDiscovery.start();
 
-        // FIXME: can't happen if uri matches the current pattern
-        if (matcher.groupCount() != 2) {
+            } catch (Exception e) {
 
-            throw new URIParseException("URI: '" + uri + "'" +
-                    " has the wrong number of capturing groups.");
-        }
+                return Optional.empty();
 
-        final ParseResult result =
-                new ParseResult(
-                        "/" + matcher.group(1),
-                        "/" + matcher.group(2));
+            }
 
-        // FIXME: can't happen if uri matches the current pattern
-        if (result.getServiceName() == null || result.getServiceName().length() < 1) {
+            serviceDiscoveryCache.put(properties.getConfigurationID(),
+                                      serviceDiscovery);
 
-            throw new URIParseException("Parsed service name is empty or null.");
-
-        }
-
-        // FIXME: can't happen if uri matches (previous check) the current pattern
-        if (uri.equals("/")) {
-
-            throw new URIParseException("Parsed URI is empty or null.");
+            return Optional.of(serviceDiscovery);
 
         }
 
-        return result;
+
+    }
+
+    private Optional<CuratorFramework> cacheLoadCuratorFramework(final ProctorHandlerProperties properties) {
+
+        CuratorFramework curatorFramework = Optional.ofNullable(curatorCache.get(properties))
+                                                    .orElseGet(() -> CuratorFrameworkFactory.newClient(properties
+                                                                                                               .getProperties()
+                                                                                                                 .getOrDefault("connectstring",
+                                                                                                                               ""),
+                                                                                                       new ExponentialBackoffRetry(Integer.parseInt(properties.getProperties()
+                                                                                                                                                              .getOrDefault("backbasesleeptime",
+                                                                                                                                                                            "10")),
+                                                                                                                                   Integer.parseInt(properties.getProperties()
+                                                                                                                                                              .getOrDefault("maxretries",
+                                                                                                                                                                            "10")))));
+
+        if (!curatorFramework.getState()
+                             .equals(CuratorFrameworkState.STARTED)) {
+
+            curatorFramework.start();
+
+        }
+
+        return Optional.of(curatorFramework);
 
     }
 

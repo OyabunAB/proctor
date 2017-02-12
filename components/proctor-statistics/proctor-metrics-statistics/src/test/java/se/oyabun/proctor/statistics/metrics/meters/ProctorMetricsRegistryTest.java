@@ -21,8 +21,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Proctor Metrics Registry Tests
@@ -40,9 +40,12 @@ public class ProctorMetricsRegistryTest {
     }
 
     @Test
-    public void verifySupportingRegistry() throws Exception {
+    public void verifySupportingRegistry()
+            throws
+            Exception {
 
-        assertThat(proctorMetricsRegistry.getMetricsRegistry(), notNullValue());
+        assertThat(proctorMetricsRegistry.getMetricsRegistry(),
+                   notNullValue());
 
     }
 

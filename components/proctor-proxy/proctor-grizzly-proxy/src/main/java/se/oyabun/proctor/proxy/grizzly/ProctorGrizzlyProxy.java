@@ -63,15 +63,18 @@ public class ProctorGrizzlyProxy
     /**
      * ${@inheritDoc}
      */
-    public void startProxy() throws IOException {
+    public void startProxy()
+            throws
+            IOException {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
 
             logger.debug("Starting Proctor Grizzly HTTP Server.");
 
         }
 
-        this.httpServer = HttpServer.createSimpleServer(null, proxyListenPort);
+        this.httpServer = HttpServer.createSimpleServer(null,
+                                                        proxyListenPort);
 
         if (StringUtils.isNotBlank(keystorePath) && StringUtils.isNotBlank(keyStorePassword)) {
 
@@ -79,7 +82,7 @@ public class ProctorGrizzlyProxy
             listener.setSecure(true);
             listener.setSSLEngineConfig(createSslConfiguration());
 
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
 
                 logger.debug("Listener: " + listener.getName());
 
@@ -87,9 +90,11 @@ public class ProctorGrizzlyProxy
 
         }
 
-        this.httpServer.getServerConfiguration().addHttpHandler(proctorGrizzlyHttpHandler);
+        this.httpServer.getServerConfiguration()
+                       .addHttpHandler(proctorGrizzlyHttpHandler);
 
-        this.httpServer.getServerConfiguration().setJmxEnabled(true);
+        this.httpServer.getServerConfiguration()
+                       .setJmxEnabled(true);
 
         this.httpServer.start();
 
@@ -100,7 +105,7 @@ public class ProctorGrizzlyProxy
      */
     public void stopProxy() {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
 
             logger.debug("Shutting down Proctor Grizzly HTTP Server.");
 
@@ -112,6 +117,7 @@ public class ProctorGrizzlyProxy
 
     /**
      * Prepare SSLEngine properties
+     *
      * @return
      */
     SSLEngineConfigurator createSslConfiguration() {
@@ -126,7 +132,10 @@ public class ProctorGrizzlyProxy
         //
         // Create SSLEngine configurator
         //
-        return new SSLEngineConfigurator(sslContextConfig.createSSLContext(), false, false, false);
+        return new SSLEngineConfigurator(sslContextConfig.createSSLContext(),
+                                         false,
+                                         false,
+                                         false);
 
     }
 

@@ -63,12 +63,28 @@ public class ProctorApplicationContextConfiguration {
     @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
     private String keyStorePassword;
 
+    /**
+     * Set up configured ignored uris, will change when auth is completed.
+     */
+    @Bean
+    public static SecurityProperties securityProperties() {
+
+        SecurityProperties securityProperties = new SecurityProperties();
+        securityProperties.setIgnored(Arrays.asList("/assets/**",
+                                                    "/administration/**",
+                                                    "/webjars/**",
+                                                    "/index.html",
+                                                    "/**"));
+        return securityProperties;
+    }
 
     /**
      * Takes care of possible random local ports, so we can skip detecting it on container init callback.
      */
     @PostConstruct
-    public void init() throws IOException {
+    public void init()
+            throws
+            IOException {
 
         ServerSocket serverSocket = new ServerSocket(localPort);
 
@@ -80,15 +96,15 @@ public class ProctorApplicationContextConfiguration {
 
     /**
      * Produce your servlet container factory
+     *
      * @return jetty embedded servlet container factory
      */
     @Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
 
-        JettyEmbeddedServletContainerFactory jetty =
-                new JettyEmbeddedServletContainerFactory(configuredLocalPort);
+        JettyEmbeddedServletContainerFactory jetty = new JettyEmbeddedServletContainerFactory(configuredLocalPort);
 
-        if(configureSSL()) {
+        if (configureSSL()) {
 
             Ssl ssl = new Ssl();
             ssl.setEnabled(true);
@@ -104,20 +120,10 @@ public class ProctorApplicationContextConfiguration {
 
     }
 
-    /**
-     * Set up configured ignored uris, will change when auth is completed.
-     */
-    @Bean
-    public static SecurityProperties securityProperties() {
-        SecurityProperties securityProperties = new SecurityProperties();
-        securityProperties.setIgnored(
-                Arrays.asList(
-                        "/assets/**",
-                        "/administration/**",
-                        "/webjars/**",
-                        "/index.html",
-                        "/**"));
-        return securityProperties;
+    boolean configureSSL() {
+
+        return StringUtils.isNotBlank(keystorePath) && StringUtils.isNotBlank(keyStorePassword);
+
     }
 
     /**
@@ -126,13 +132,18 @@ public class ProctorApplicationContextConfiguration {
     @Bean
     public ProctorHandlerProperties staticAdminRouteConfiguration() {
 
-        return new ProctorStaticRouteProperties(
-                "adminrouteID",
-                0,
-                contextPath + "/.*",
-                "true",
-                (configureSSL() ? "https" : "http") + "://"
-                    + proxyListenAddress + ":" + configuredLocalPort + "/");
+        return new ProctorStaticRouteProperties("adminrouteID",
+                                                0,
+                                                contextPath + ".*",
+                                                "true",
+                                                (configureSSL() ?
+                                                 "https" :
+                                                 "http") +
+                                                "://" +
+                                                proxyListenAddress +
+                                                ":" +
+                                                configuredLocalPort +
+                                                "/");
 
     }
 
@@ -146,13 +157,6 @@ public class ProctorApplicationContextConfiguration {
                                               localPort,
                                               proxyListenPort,
                                               keystorePath);
-
-    }
-
-    boolean configureSSL() {
-
-        return StringUtils.isNotBlank(keystorePath) &&
-               StringUtils.isNotBlank(keyStorePassword);
 
     }
 

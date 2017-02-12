@@ -27,9 +27,11 @@ public class InputNotMatchedException
 
     }
 
-    public InputNotMatchedException(String message, Throwable e) {
+    public InputNotMatchedException(String message,
+                                    Throwable e) {
 
-        super(message, e);
+        super(message,
+              e);
 
     }
 

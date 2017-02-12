@@ -15,8 +15,6 @@
  */
 package se.oyabun.proctor.handler.manager;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.persistence.ProctorRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * Default proctor route handler manager
+ * Default Proctor route handler manager
  */
 @Component
 public class DefaultProctorRouteHandlerManager
@@ -41,21 +40,21 @@ public class DefaultProctorRouteHandlerManager
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final ApplicationContext applicationContext;
-
-    private final IMap<String, ProctorHandlerProperties> distributedProperties;
+    private final ProctorRepository proctorRepository;
 
     @Autowired
     public DefaultProctorRouteHandlerManager(final ApplicationContext applicationContext,
-                                             final HazelcastInstance hazelcastInstance,
+                                             final ProctorRepository proctorRepository,
                                              final List<ProctorHandlerProperties> initialProperties) {
 
         this.applicationContext = applicationContext;
-        this.distributedProperties = hazelcastInstance.getMap("proctorHandlerProperties");
+        this.proctorRepository = proctorRepository;
 
         //
         // Register initial route properties
         //
-        initialProperties.stream().forEach(this::registerRouteProperties);
+        initialProperties.stream()
+                         .forEach(this::registerRouteProperties);
 
     }
 
@@ -66,25 +65,25 @@ public class DefaultProctorRouteHandlerManager
     @Override
     public void registerRouteProperties(final ProctorHandlerProperties properties) {
 
-        if(!distributedProperties.containsKey(properties.getConfigurationID())) {
+        if (!proctorRepository.containsPropertyKey(properties.getConfigurationID())) {
 
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
 
-                  log.debug("Registrering new route handler configuration for '{}' with ID '{}'.",
+                log.debug("Registrering new route handler configuration for '{}' with ID '{}'.",
                           properties.getHandlerType(),
                           properties.getConfigurationID());
 
             }
 
-            distributedProperties.put(properties.getConfigurationID(), properties);
+            proctorRepository.persistProperty(properties);
 
         } else {
 
-            if(log.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
 
                 log.debug("Ignoring existing route configuration registration for '{}' with ID '{}'.",
-                        properties.getHandlerType(),
-                        properties.getConfigurationID());
+                          properties.getHandlerType(),
+                          properties.getConfigurationID());
 
             }
 
@@ -96,25 +95,25 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public void unregisterRouteProperties(final ProctorHandlerProperties properties) {
+    public void unregisterRouteProperties(final String configurationID) {
 
-        if (distributedProperties.containsKey(properties.getConfigurationID())) {
+        if (proctorRepository.containsPropertyKey(configurationID)) {
 
-           if (log.isDebugEnabled()) {
-               log.debug("Unregistering route handler configuration for '{}' with ID '{}'.",
-                        properties.getHandlerType(),
-                        properties.getConfigurationID());
-           }
+            if (log.isDebugEnabled()) {
 
-           distributedProperties.remove(properties.getConfigurationID());
+                log.debug("Unregistering route handler configuration with ID '{}'.",
+                          configurationID);
+
+            }
+
+            proctorRepository.deleteProperty(configurationID);
 
         } else {
 
             if (log.isDebugEnabled()) {
 
-                log.debug("Attempted removal of missing route handler configuration for '{}' with ID '{}'.",
-                        properties.getHandlerType(),
-                        properties.getConfigurationID());
+                log.debug("Attempted removal of missing route handler configuration with ID '{}'.",
+                          configurationID);
 
             }
 
@@ -128,11 +127,10 @@ public class DefaultProctorRouteHandlerManager
     @Override
     public Stream<ProctorHandlerProperties> getMatchingPropertiesFor(final String input) {
 
-        return distributedProperties.values()
-                .stream()
-                .filter(properties ->
-                        Pattern.compile(properties.getPattern())
-                                .matcher(input).matches());
+        return proctorRepository.getProperties()
+                                .filter(properties -> Pattern.compile(properties.getPattern())
+                                                             .matcher(input)
+                                                             .matches());
 
     }
 
@@ -142,7 +140,7 @@ public class DefaultProctorRouteHandlerManager
     @Override
     public Stream<ProctorHandlerProperties> getRegisteredProperties() {
 
-        return distributedProperties.values().stream();
+        return proctorRepository.getProperties();
 
     }
 
@@ -150,23 +148,39 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorHandlerProperties> getProperty(final String ID) {
+    public Optional<ProctorHandlerProperties> getPropertiesForHandler(final String ID) {
 
-        return distributedProperties.values()
-                .stream()
-                .filter(property -> property.getConfigurationID().equals(ID))
-                .findFirst();
+        return proctorRepository.getProperty(ID);
 
     }
 
+    /**
+     * ${@inheritDoc}
+     */
     @Override
     public Optional<ProctorRouteHandler> getHandler(ProctorHandlerProperties properties) {
 
         return Arrays.stream(applicationContext.getBeanDefinitionNames())
-                .map(applicationContext::getBean)
-                .filter(object -> object.getClass().getSimpleName().equals(properties.getHandlerType()))
-                .map(object -> (ProctorRouteHandler) object)
-                .findAny();
+                     .map(applicationContext::getBean)
+                     .filter(object -> object.getClass()
+                                             .getName()
+                                             .equals(properties.getHandlerType()))
+                     .map(object -> (ProctorRouteHandler) object)
+                     .findAny();
+
+    }
+
+    /**
+     * ${@inheritDoc}
+     */
+    @Override
+    public Stream<String> getManagedHandlerTypes() {
+
+        return Arrays.stream(applicationContext.getBeanDefinitionNames())
+                     .map(applicationContext::getBean)
+                     .map(Object::getClass)
+                     .filter(aClass -> aClass.isInstance(ProctorRouteHandler.class))
+                     .map(Class::getName);
 
     }
 

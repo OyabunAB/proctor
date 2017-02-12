@@ -39,7 +39,7 @@ public class DefaultProctorStatisticsManager
     private final ProctorStatisticsGatherer[] proctorStatisticsGatherers;
 
     @Autowired
-    public DefaultProctorStatisticsManager(ProctorStatisticsGatherer ... proctorStatisticsGatherers) {
+    public DefaultProctorStatisticsManager(ProctorStatisticsGatherer... proctorStatisticsGatherers) {
 
         this.proctorStatisticsGatherers = proctorStatisticsGatherers;
 
@@ -51,8 +51,8 @@ public class DefaultProctorStatisticsManager
     ProctorStatisticsGatherer[] getProctorStatisticsGatherersFor(final ProctorStatistic proctorStatistic) {
 
         return Arrays.stream(proctorStatisticsGatherers)
-                        .filter(proctorStatisticsGatherer -> proctorStatisticsGatherer.gathers(proctorStatistic))
-                        .toArray(ProctorStatisticsGatherer[]::new);
+                     .filter(proctorStatisticsGatherer -> proctorStatisticsGatherer.gathers(proctorStatistic))
+                     .toArray(ProctorStatisticsGatherer[]::new);
 
     }
 
@@ -62,29 +62,32 @@ public class DefaultProctorStatisticsManager
     public ProctorStatisticsReport[] getStatisticsFor(final ProctorStatistic proctorStatistic) {
 
         return Arrays.stream(getProctorStatisticsGatherersFor(proctorStatistic))
-                .map(proctorStatisticsGatherer -> {
-                        try {
-                            return new ProctorStatisticsReport(
-                                    proctorStatistic,
-                                    proctorStatisticsGatherer.getMeanFor(proctorStatistic),
-                                    proctorStatisticsGatherer.getCountFor(proctorStatistic),
-                                    proctorStatisticsGatherer.getFifteenMinuteRateFor(proctorStatistic),
-                                    proctorStatisticsGatherer.getFiveMinuteRateFor(proctorStatistic),
-                                    proctorStatisticsGatherer.getOneMinuteRateFor(proctorStatistic));
-                        } catch (NonGatheredStatisticRequestException e) {
+                     .map(proctorStatisticsGatherer -> {
+                         try {
+                             return new ProctorStatisticsReport(proctorStatistic,
+                                                                proctorStatisticsGatherer.getMeanFor(proctorStatistic),
+                                                                proctorStatisticsGatherer.getCountFor(proctorStatistic),
+                                                                proctorStatisticsGatherer.getFifteenMinuteRateFor
+                                                                        (proctorStatistic),
+                                                                proctorStatisticsGatherer.getFiveMinuteRateFor
+                                                                        (proctorStatistic),
+                                                                proctorStatisticsGatherer.getOneMinuteRateFor
+                                                                        (proctorStatistic));
+                         } catch (NonGatheredStatisticRequestException e) {
 
-                            if(logger.isErrorEnabled()) {
+                             if (logger.isErrorEnabled()) {
 
-                                logger.error("Failed to fetch statistics for '"+proctorStatistic+"'.", e);
+                                 logger.error("Failed to fetch statistics for '" + proctorStatistic + "'.",
+                                              e);
 
-                            }
+                             }
 
-                            return null;
+                             return null;
 
-                        }
-                })
-                .filter(proctorStatisticsReport -> proctorStatistic != null)
-                .toArray(ProctorStatisticsReport[]::new);
+                         }
+                     })
+                     .filter(proctorStatisticsReport -> proctorStatistic != null)
+                     .toArray(ProctorStatisticsReport[]::new);
 
     }
 
@@ -94,9 +97,9 @@ public class DefaultProctorStatisticsManager
     public ProctorStatisticsReport[] getAllStatistics() {
 
         return Arrays.stream(ProctorStatistic.values())
-                .map(proctorStatistic -> getStatisticsFor(proctorStatistic))
-                .flatMap(Stream::of)
-                .toArray(ProctorStatisticsReport[]::new);
+                     .map(proctorStatistic -> getStatisticsFor(proctorStatistic))
+                     .flatMap(Stream::of)
+                     .toArray(ProctorStatisticsReport[]::new);
 
     }
 

@@ -34,12 +34,21 @@ public abstract class AbstractProctorHttpClient
         implements ProctorHttpClient {
 
     public abstract HttpResponseData execute(HttpRequestData request)
-            throws IOException, CancellationException, InterruptedException, ExecutionException, TimeoutException;
+            throws
+            IOException,
+            CancellationException,
+            InterruptedException,
+            ExecutionException,
+            TimeoutException;
 
     @PostConstruct
-    public abstract void initHttpClient() throws Exception;
+    public abstract void initHttpClient()
+            throws
+            Exception;
 
     @PreDestroy
-    public abstract void shutDownHttpClient() throws Exception;
+    public abstract void shutDownHttpClient()
+            throws
+            Exception;
 
 }

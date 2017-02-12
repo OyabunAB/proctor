@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.5.RELEASE</version>
+        <version>1.4.3.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -24,11 +24,15 @@
 
         <proctor-netty-proxy.version>0.0.1-SNAPSHOT</proctor-netty-proxy.version>
         <proctor-grizzly-proxy.version>0.0.1-SNAPSHOT</proctor-grizzly-proxy.version>
+        <proctor-apache-httpclient.version>0.0.1-SNAPSHOT</proctor-apache-httpclient.version>
         <proctor-ning-httpclient.version>0.0.1-SNAPSHOT</proctor-ning-httpclient.version>
         <proctor-static-handler.version>0.0.1-SNAPSHOT</proctor-static-handler.version>
         <proctor-metrics-statistics.version>0.0.1-SNAPSHOT</proctor-metrics-statistics.version>
         <proctor-admin-service.version>0.0.1-SNAPSHOT</proctor-admin-service.version>
         <proctor-admin-web.version>0.0.1-SNAPSHOT</proctor-admin-web.version>
+        <proctor-hazelcast-cache.version>0.0.1-SNAPSHOT</proctor-hazelcast-cache.version>
+        <proctor-neo4j-repository.version>0.0.1-SNAPSHOT</proctor-neo4j-repository.version>
+        <proctor-filestore-repository.version>0.0.1-SNAPSHOT</proctor-filestore-repository.version>
 
         <webjars-locator.version>0.30</webjars-locator.version>
 
@@ -47,14 +51,26 @@
 
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
-            <artifactId>proctor-ning-httpclient</artifactId>
-            <version>${proctor-ning-httpclient.version}</version>
+            <artifactId>proctor-apache-httpclient</artifactId>
+            <version>${proctor-apache-httpclient.version}</version>
         </dependency>
 
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-static-handler</artifactId>
             <version>${proctor-static-handler.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.persistence</groupId>
+            <artifactId>proctor-filestore-repository</artifactId>
+            <version>${proctor-filestore-repository.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.cache</groupId>
+            <artifactId>proctor-hazelcast-cache</artifactId>
+            <version>${proctor-hazelcast-cache.version}</version>
         </dependency>
 
         <dependency>

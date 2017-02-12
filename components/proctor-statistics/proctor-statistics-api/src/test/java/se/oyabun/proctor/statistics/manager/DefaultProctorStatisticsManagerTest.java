@@ -51,10 +51,8 @@ public class DefaultProctorStatisticsManagerTest {
     @Before
     public void initTests() {
 
-        defaultProctorStatisticsManager =
-                new DefaultProctorStatisticsManager(
-                        mockedMatchingProctorStatisticsGatherer,
-                        mockedNonMatchingProctorStatisticsGatherer);
+        defaultProctorStatisticsManager = new DefaultProctorStatisticsManager(mockedMatchingProctorStatisticsGatherer,
+                                                                              mockedNonMatchingProctorStatisticsGatherer);
 
         when(mockedMatchingProctorStatisticsGatherer.gathers(any(ProctorStatistic.class))).thenReturn(true);
 
@@ -63,18 +61,23 @@ public class DefaultProctorStatisticsManagerTest {
     }
 
     @Test
-    public void testDefaultProcotorStatisticManager() throws NonGatheredStatisticRequestException {
+    public void testDefaultProcotorStatisticManager()
+            throws
+            NonGatheredStatisticRequestException {
 
-        when(mockedMatchingProctorStatisticsGatherer.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH))
-                .thenReturn(COUNT_VALUE);
+        when(mockedMatchingProctorStatisticsGatherer.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH)).thenReturn
+                (COUNT_VALUE);
 
-        verify(mockedNonMatchingProctorStatisticsGatherer, never()).gathers(ProctorStatistic.PROXY_HANDLER_MATCH);
+        verify(mockedNonMatchingProctorStatisticsGatherer,
+               never()).gathers(ProctorStatistic.PROXY_HANDLER_MATCH);
 
-        ProctorStatisticsReport[] proctorStatisticsReports =
-                defaultProctorStatisticsManager.getStatisticsFor(ProctorStatistic.PROXY_HANDLER_MATCH);
+        ProctorStatisticsReport[] proctorStatisticsReports = defaultProctorStatisticsManager.getStatisticsFor
+                (ProctorStatistic.PROXY_HANDLER_MATCH);
 
-        assertThat(proctorStatisticsReports.length, is(1));
-        assertThat(proctorStatisticsReports[0].getCountValue(), is(COUNT_VALUE));
+        assertThat(proctorStatisticsReports.length,
+                   is(1));
+        assertThat(proctorStatisticsReports[ 0 ].getCountValue(),
+                   is(COUNT_VALUE));
 
     }
 

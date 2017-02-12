@@ -15,6 +15,7 @@
  */
 package se.oyabun.proctor.http;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,27 +23,22 @@ import java.util.Objects;
 /**
  * HTTP Data wrapper
  */
-public class HttpData {
+public class HttpData
+        implements Serializable {
 
     private final Map<String, List<String>> headers;
     private final byte[] body;
 
     public HttpData(final Map<String, List<String>> headers,
                     final byte[] body) {
+
         this.headers = headers;
         this.body = body;
     }
 
-    public Map<String, List<String>> getHeaders() {
-        return headers;
-    }
-
-    public byte[] getBody() {
-        return body;
-    }
-
     @Override
     public int hashCode() {
+
         int hash = 3;
         hash = 37 * hash + Objects.hashCode(this.headers);
         hash = 37 * hash + Objects.hashCode(this.body);
@@ -66,12 +62,14 @@ public class HttpData {
 
         final HttpData other = (HttpData) obj;
 
-        if (!Objects.equals(this.getHeaders(), other.getHeaders())) {
+        if (!Objects.equals(this.getHeaders(),
+                            other.getHeaders())) {
 
             return false;
         }
 
-        if (!Objects.equals(this.getBody(), other.getBody())) {
+        if (!Objects.equals(this.getBody(),
+                            other.getBody())) {
 
             return false;
 
@@ -81,12 +79,20 @@ public class HttpData {
 
     }
 
+    public Map<String, List<String>> getHeaders() {
+
+        return headers;
+    }
+
+    public byte[] getBody() {
+
+        return body;
+    }
+
     @Override
     public String toString() {
 
-        return "HttpData{" +
-                "headers=" + headers + ", " +
-                "body=" + body + '}';
+        return "HttpData{" + "headers=" + headers + ", " + "body=" + body + '}';
 
     }
 

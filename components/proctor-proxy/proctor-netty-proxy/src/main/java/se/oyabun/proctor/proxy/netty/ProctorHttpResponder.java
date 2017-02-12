@@ -56,6 +56,9 @@ import static io.netty.buffer.Unpooled.copiedBuffer;
 public class ProctorHttpResponder {
 
     private static final Logger logger = LoggerFactory.getLogger(ProctorHttpResponder.class);
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ProctorRouteHandlerManager proctorRouteHandlerManager;
+    private final ProctorHttpClient proctorHttpClient;
 
     @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
     private String keystorePath;
@@ -68,12 +71,6 @@ public class ProctorHttpResponder {
 
     @Value("${se.oyabun.proctor.proxy.listen.address}")
     private String proxyListenAddress;
-
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    private final ProctorRouteHandlerManager proctorRouteHandlerManager;
-
-    private final ProctorHttpClient proctorHttpClient;
 
     @Autowired
     public ProctorHttpResponder(final ApplicationEventPublisher applicationEventPublisher,
@@ -88,40 +85,44 @@ public class ProctorHttpResponder {
 
     /**
      * Process incomming request for proxying
+     *
      * @param request to process
      * @return full http response
      */
     FullHttpResponse processRequest(final FullHttpRequest request)
-            throws InterruptedException, ExecutionException, TimeoutException, IOException,
-                   InputNotMatchedException, NoHandleForNameException {
+            throws
+            InterruptedException,
+            ExecutionException,
+            TimeoutException,
+            IOException,
+            InputNotMatchedException,
+            NoHandleForNameException {
 
         final FullHttpResponse response;
 
         final Map<String, List<String>> headers = new HashMap<>();
-        extractHeaders(request, headers);
+        extractHeaders(request,
+                       headers);
 
         final String clientRequestPath = request.getUri();
 
-        Optional<ProctorHandlerProperties> optionalProperties =
+        final Optional<ProctorHandlerProperties> optionalProperties =
                 proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
-                .findFirst();
+                                          .findFirst();
 
         final Optional<ProctorRouteHandler> optionalHandler =
                 optionalProperties.isPresent() ?
-                        proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
-                        Optional.empty();
+                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                    Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
             final ProctorRouteHandler matchingProctorRouteHandler = optionalHandler.get();
 
-            applicationEventPublisher.publishEvent(
-                    new ProxyHandlerMatchedEvent(clientRequestPath));
+            applicationEventPublisher.publishEvent(new ProxyHandlerMatchedEvent(clientRequestPath));
 
-            final URL proxyURL =
-                    matchingProctorRouteHandler.resolveURLFor(
-                            clientRequestPath,
-                            optionalProperties.get());
+            final URL proxyURL = matchingProctorRouteHandler.resolveURLFor(clientRequestPath,
+                                                                           optionalProperties.get());
 
             //
             // Redirect request to handler generated URL
@@ -130,25 +131,22 @@ public class ProctorHttpResponder {
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace(
-                        "Proxying request for URI '{}' to '{}'.",
-                        clientRequestPath,
-                        proxyURLExternalForm);
+                logger.trace("Proxying request for URI '{}' to '{}'.",
+                             clientRequestPath,
+                             proxyURLExternalForm);
 
             }
 
             final QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
 
-            final HttpRequestData proxyRequest =
-                    new HttpRequestData(
-                            proxyURL.getProtocol(),
-                            InetAddress.getByName(proxyURL.getHost()),
-                            proxyURL.getPort(),
-                            request.getMethod().name(),
-                            headers,
-                            request.content().array(),
-                            queryStringDecoder.parameters(),
-                            queryStringDecoder.uri());
+            final HttpRequestData proxyRequest = new HttpRequestData(proxyURL.getProtocol(),
+                                                                     InetAddress.getByName(proxyURL.getHost()),
+                                                                     proxyURL.getPort(),
+                                                                     request.getMethod().name(),
+                                                                     headers,
+                                                                     request.content().array(),
+                                                                     queryStringDecoder.parameters(),
+                                                                     queryStringDecoder.uri());
 
             applicationEventPublisher.publishEvent(new ProxyRequestReceivedEvent(proxyRequest));
 
@@ -156,19 +154,36 @@ public class ProctorHttpResponder {
 
             applicationEventPublisher.publishEvent(new ProxyReplySentEvent(httpResponseData));
 
-            response = new DefaultFullHttpResponse(
-                    request.getProtocolVersion(),
-                    HttpResponseStatus.valueOf(httpResponseData.getStatusCode()),
-                    copiedBuffer(httpResponseData.getBody()));
+            response = new DefaultFullHttpResponse(request.getProtocolVersion(),
+                                                   HttpResponseStatus.valueOf(httpResponseData.getStatusCode()),
+                                                   copiedBuffer(httpResponseData.getBody()));
 
-            handleResponseHeaders(httpResponseData, response, proxyURL);
+            handleResponseHeaders(httpResponseData,
+                                  response,
+                                  proxyURL);
+
+            if (logger.isTraceEnabled()) {
+
+                logger.trace("Returning response for URI '{}'.",
+                             clientRequestPath);
+
+            }
 
         } else {
 
-            applicationEventPublisher.publishEvent(
-                    new ProxyHandlerNotMatchedEvent(clientRequestPath));
 
-            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
+            if (logger.isTraceEnabled()) {
+
+                logger.trace("No matching handler found for request for URI '{}'.",
+                             clientRequestPath);
+
+            }
+
+
+            applicationEventPublisher.publishEvent(new ProxyHandlerNotMatchedEvent(clientRequestPath));
+
+            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                                                   HttpResponseStatus.NOT_FOUND);
 
         }
 
@@ -176,26 +191,52 @@ public class ProctorHttpResponder {
 
     }
 
+    void extractHeaders(final HttpRequest request,
+                        final Map<String, List<String>> headers) {
+
+        for (String headername : request.headers()
+                                        .names()) {
+
+            Iterable<String> headerValues = request.headers()
+                                                   .getAll(headername);
+
+            ArrayList<String> headerValuesCopy = new ArrayList<>();
+
+            for (String headerValue : headerValues) {
+
+                headerValuesCopy.add(headerValue);
+
+            }
+
+            headers.put(headername,
+                        headerValuesCopy);
+
+        }
+
+    }
+
     void handleResponseHeaders(final HttpResponseData responseData,
                                final HttpResponse response,
                                final URL proxyUrl)
-            throws MalformedURLException {
+            throws
+            MalformedURLException {
 
-        URL originURL =
-                new URL(
-                        ((StringUtils.isNotBlank(keyStorePassword) &&
-                                StringUtils.isNotBlank(keystorePath)) ?
-                                "https" :
-                                "http") +
-                                "://" + proxyListenAddress + ":" + proxyListenPort + "/");
+        URL originURL = new URL(((StringUtils.isNotBlank(keyStorePassword) && StringUtils.isNotBlank(keystorePath)) ?
+                                 "https" :
+                                 "http") + "://" + proxyListenAddress + ":" + proxyListenPort + "/");
 
-        response.setStatus(new HttpResponseStatus(responseData.getStatusCode(), responseData.getStatusMessage()));
+        response.setStatus(new HttpResponseStatus(responseData.getStatusCode(),
+                                                  responseData.getStatusMessage()));
 
-        response.headers().add(HttpHeaders.Names.CONTENT_LENGTH, responseData.getContentLength());
+        response.headers()
+                .add(HttpHeaders.Names.CONTENT_LENGTH,
+                     responseData.getContentLength());
 
-        if(StringUtils.isNotBlank(responseData.getContentType())) {
+        if (StringUtils.isNotBlank(responseData.getContentType())) {
 
-            response.headers().add(HttpHeaders.Names.CONTENT_TYPE, responseData.getContentType());
+            response.headers()
+                    .add(HttpHeaders.Names.CONTENT_TYPE,
+                         responseData.getContentType());
 
         }
 
@@ -206,34 +247,16 @@ public class ProctorHttpResponder {
             final List<String> responseHeaderValues = responseHeader.getValue();
             final List<String> rewrittenHeaderValues = new ArrayList<>();
 
-            for(String responseHeaderValue : responseHeaderValues) {
+            for (String responseHeaderValue : responseHeaderValues) {
 
-                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(), originURL.toString()));
-
-            }
-
-            response.headers().set(responseHeader.getKey(), responseHeaderValues);
-
-        }
-
-    }
-
-    void extractHeaders(final HttpRequest request,
-                        final Map<String, List<String>> headers) {
-
-        for (String headername : request.headers().names()) {
-
-            Iterable<String> headerValues = request.headers().getAll(headername);
-
-            ArrayList<String> headerValuesCopy = new ArrayList<>();
-
-            for (String headerValue : headerValues) {
-
-                headerValuesCopy.add(headerValue);
+                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(),
+                                                                         originURL.toString()));
 
             }
 
-            headers.put(headername, headerValuesCopy);
+            response.headers()
+                    .set(responseHeader.getKey(),
+                         responseHeaderValues);
 
         }
 
@@ -241,7 +264,8 @@ public class ProctorHttpResponder {
 
     /**
      * Genereate a plain text full HTTP Response
-     * @param statusCode of remote call
+     *
+     * @param statusCode    of remote call
      * @param statusMessage of remote call
      * @return Plain text http response
      */
@@ -250,19 +274,28 @@ public class ProctorHttpResponder {
 
         DefaultFullHttpResponse response = null;
 
-        final String msg =
-                AsciiUtil.generateAsciiArtText(Integer.toString(statusCode.code())) + "\n\n" +
-                        ((statusMessage == null) ? "" : statusMessage) + "\n\n";
+        final String msg = AsciiUtil.generateAsciiArtText(Integer.toString(statusCode.code())) +
+                           "\n\n" +
+                           ((statusMessage == null) ?
+                            "" :
+                            statusMessage) +
+                           "\n\n";
 
         try {
 
             final byte[] bytes = msg.getBytes("UTF-8");
 
-            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, statusCode, Unpooled.wrappedBuffer(bytes));
+            response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                                                   statusCode,
+                                                   Unpooled.wrappedBuffer(bytes));
 
-            HttpHeaders.addHeader(response, HttpHeaders.Names.CONTENT_TYPE, "text/plain");
+            HttpHeaders.addHeader(response,
+                                  HttpHeaders.Names.CONTENT_TYPE,
+                                  "text/plain");
 
-            HttpHeaders.addHeader(response, HttpHeaders.Names.CONTENT_LENGTH, bytes.length);
+            HttpHeaders.addHeader(response,
+                                  HttpHeaders.Names.CONTENT_LENGTH,
+                                  bytes.length);
 
         } catch (UnsupportedEncodingException e) {
 

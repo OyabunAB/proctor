@@ -12,5 +12,6 @@
     =================================================================================================
 
 ###Running the application in development mode
-Add VM option _-Dproctor.properties=proctor_development.properties_ to override the default property lookup.
- 
+ * Add VM option _-Dproctor.properties=proctor_development.properties_ to override the default property lookup.
+ * Working directory should be set to _proctor/applications/proctor-application_
+ * Main class _ProctorApplication_

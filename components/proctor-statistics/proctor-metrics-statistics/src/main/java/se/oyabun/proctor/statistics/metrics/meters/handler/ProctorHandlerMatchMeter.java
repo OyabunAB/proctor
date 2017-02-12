@@ -39,12 +39,13 @@ public class ProctorHandlerMatchMeter
     public ProctorHandlerMatchMeter(ProctorMetricsRegistry proctorMetricsRegistry) {
 
         hits = proctorMetricsRegistry.getMetricsRegistry()
-                .meter(ProctorStatistic.PROXY_HANDLER_MATCH.name());
+                                     .meter(ProctorStatistic.PROXY_HANDLER_MATCH.name());
 
     }
 
     /**
      * Listener method, feeds the meter
+     *
      * @param proxyHandlerMatchedEvent published by the system
      */
     @EventListener

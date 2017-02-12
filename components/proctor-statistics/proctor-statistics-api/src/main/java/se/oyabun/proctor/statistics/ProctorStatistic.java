@@ -27,9 +27,10 @@ public enum ProctorStatistic {
 
     public static boolean matchesAny(String value) {
 
-        for(ProctorStatistic proctorStatistic : ProctorStatistic.values()) {
+        for (ProctorStatistic proctorStatistic : ProctorStatistic.values()) {
 
-            if(proctorStatistic.name().equals(value)) {
+            if (proctorStatistic.name()
+                                .equals(value)) {
 
                 return true;
 

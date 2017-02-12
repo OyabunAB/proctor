@@ -28,6 +28,7 @@ import se.oyabun.proctor.web.admin.api.AbstractSecuredAPIController;
 
 /**
  * Proctor Proxy Statistics REST API
+ *
  * @version 1
  */
 @RestController
@@ -38,16 +39,15 @@ public class StatisticsRestController1
     @Autowired
     private ProctorStatisticsManager proctorStatisticsManager;
 
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET)
-    public ResponseEntity<ProctorStatisticsReport[]> getProctorStatisticReportFor(@RequestParam(required = false)
-                                                                                      final String proctorStatistic) {
-        return ResponseEntity.ok(
-                ProctorStatistic.matchesAny(proctorStatistic.toUpperCase()) ?
-                        proctorStatisticsManager.getStatisticsFor(
-                                ProctorStatistic.valueOf(proctorStatistic.toUpperCase())) :
-                        proctorStatisticsManager.getAllStatistics());
+    @RequestMapping(value = "/",
+                    method = RequestMethod.GET)
+    public ResponseEntity<ProctorStatisticsReport[]> get(@RequestParam(required = false)
+                                                         final String proctorStatistic) {
+
+        return ResponseEntity.ok(ProctorStatistic.matchesAny(proctorStatistic.toUpperCase()) ?
+                                 proctorStatisticsManager.getStatisticsFor(ProctorStatistic.valueOf(proctorStatistic
+                                                                                                            .toUpperCase())) :
+                                 proctorStatisticsManager.getAllStatistics());
 
     }
 

@@ -27,9 +27,11 @@ public class NonGatheredStatisticRequestException
 
     }
 
-    public NonGatheredStatisticRequestException(String message, Throwable e) {
+    public NonGatheredStatisticRequestException(String message,
+                                                Throwable e) {
 
-        super(message, e);
+        super(message,
+              e);
 
     }
 

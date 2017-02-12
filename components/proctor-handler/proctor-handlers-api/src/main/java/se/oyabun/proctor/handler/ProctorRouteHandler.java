@@ -29,14 +29,17 @@ public interface ProctorRouteHandler {
 
     /**
      * Return URL for given handle name
-     * @param input of request
+     *
+     * @param input      of request
      * @param properties for handler
      * @return complete url including requested uri for given handle name
      * @throws NoHandleForNameException if handle is not present
-     * @throws MalformedURLException on malformed URLs
+     * @throws MalformedURLException    on malformed URLs
      */
     URL resolveURLFor(final String input,
                       final ProctorHandlerProperties properties)
-            throws NoHandleForNameException, MalformedURLException;
+            throws
+            NoHandleForNameException,
+            MalformedURLException;
 
 }

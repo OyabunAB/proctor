@@ -47,6 +47,7 @@ public class ProctorZooKeeperHandlerContextConfiguration {
 
     /**
      * Defines the curator framework instance for discovery
+     *
      * @return configured curator framework instance
      */
     @Bean(name = "discoveryCuratorFramework")
@@ -55,14 +56,13 @@ public class ProctorZooKeeperHandlerContextConfiguration {
         //
         // Prefer IPv4 stack for ZooKeeper nodes
         //
-        System.setProperty("java.net.preferIPv4Stack", "true");
+        System.setProperty("java.net.preferIPv4Stack",
+                           "true");
 
-        CuratorFramework curatorFramework =
-                CuratorFrameworkFactory.newClient(
-                        registryNodesProperty,
-                        new ExponentialBackoffRetry(
-                                BACKOFF_SLEEP_MS,
-                                MAXIMUM_RETRIES));
+        CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient(registryNodesProperty,
+                                                                              new ExponentialBackoffRetry
+                                                                                      (BACKOFF_SLEEP_MS,
+                                                                                                          MAXIMUM_RETRIES));
 
         curatorFramework.start();
 
@@ -72,13 +72,14 @@ public class ProctorZooKeeperHandlerContextConfiguration {
 
     /**
      * Defines the curator service discovery instance for discovery
+     *
      * @param curatorFramework autowired
      * @return configured service discovery instance
      */
     @Autowired
     @Bean(name = "discoveryServiceDiscovery",
-            initMethod = "start",
-            destroyMethod = "close" )
+          initMethod = "start",
+          destroyMethod = "close")
     public ServiceDiscovery serviceDiscovery(
             @Qualifier("discoveryCuratorFramework")
                     CuratorFramework curatorFramework) {
@@ -86,12 +87,11 @@ public class ProctorZooKeeperHandlerContextConfiguration {
         //
         // Void payload for services
         //
-        return ServiceDiscoveryBuilder
-                .builder(Void.class)
-                .client(curatorFramework)
-                .watchInstances(whatchInstancesProperty)
-                .basePath(basePathProperty)
-                .build();
+        return ServiceDiscoveryBuilder.builder(Void.class)
+                                      .client(curatorFramework)
+                                      .watchInstances(whatchInstancesProperty)
+                                      .basePath(basePathProperty)
+                                      .build();
 
     }
 

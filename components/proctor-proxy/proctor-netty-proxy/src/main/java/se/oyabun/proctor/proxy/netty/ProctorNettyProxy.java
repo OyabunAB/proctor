@@ -73,7 +73,7 @@ public class ProctorNettyProxy
     @Autowired
     private ProctorHttpHandler proctorHttpHandler;
 
-        private SslContext sslContext = null;
+    private SslContext sslContext = null;
 
     private Channel channel;
 
@@ -83,9 +83,11 @@ public class ProctorNettyProxy
     /**
      * ${@inheritDoc}
      */
-    public void startProxy() throws Exception {
+    public void startProxy()
+            throws
+            Exception {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
 
             logger.debug("Starting Proctor Netty HTTP Server.");
 
@@ -93,7 +95,8 @@ public class ProctorNettyProxy
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-        serverBootstrap.group(masterGroup, slaveGroup);
+        serverBootstrap.group(masterGroup,
+                              slaveGroup);
 
         serverBootstrap.channel(NioServerSocketChannel.class);
 
@@ -110,43 +113,52 @@ public class ProctorNettyProxy
 
                         KeyStore ks = KeyStore.getInstance("JKS");
 
-                        ks.load(new FileInputStream(keystorePath), keyStorePassword.toCharArray());
+                        ks.load(new FileInputStream(keystorePath),
+                                keyStorePassword.toCharArray());
 
                         //
                         // Set up key manager factory to use our key store
                         //
-                        KeyManagerFactory keyManagerFactory =
-                                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory
+                                                                                                    .getDefaultAlgorithm());
 
-                        keyManagerFactory.init(ks, keyStorePassword.toCharArray());
+                        keyManagerFactory.init(ks,
+                                               keyStorePassword.toCharArray());
 
-                        sslContext = SslContextBuilder.forServer(keyManagerFactory).build();
+                        sslContext = SslContextBuilder.forServer(keyManagerFactory)
+                                                      .build();
 
                     }
 
                 } catch (CertificateException e) {
 
-                    logger.error("Failed to initialize SSL Certificate.", e );
+                    logger.error("Failed to initialize SSL Certificate.",
+                                 e);
 
                 } catch (SSLException e) {
 
-                    logger.error("Failed to initialize SSL.", e );
+                    logger.error("Failed to initialize SSL.",
+                                 e);
 
                 } catch (NoSuchAlgorithmException e) {
 
-                    logger.error("Failed to initialize SSL.", e );
+                    logger.error("Failed to initialize SSL.",
+                                 e);
 
                 } catch (KeyStoreException e) {
 
-                    logger.error("Failed to initialize SSL.", e );
+                    logger.error("Failed to initialize SSL.",
+                                 e);
 
                 } catch (IOException e) {
 
-                    logger.error("Failed to initialize SSL.", e );
+                    logger.error("Failed to initialize SSL.",
+                                 e);
 
                 } catch (UnrecoverableKeyException e) {
 
-                    logger.error("Failed to initialize SSL.", e );
+                    logger.error("Failed to initialize SSL.",
+                                 e);
 
                 }
 
@@ -154,21 +166,27 @@ public class ProctorNettyProxy
 
                 if (sslContext != null) {
 
-                    pipeline.addLast("tls", sslContext.newHandler(channel.alloc()));
+                    pipeline.addLast("tls",
+                                     sslContext.newHandler(channel.alloc()));
 
                 }
 
-                pipeline.addLast("codec-http", new HttpServerCodec());
+                pipeline.addLast("codec-http",
+                                 new HttpServerCodec());
 
-                pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
+                pipeline.addLast("aggregator",
+                                 new HttpObjectAggregator(Integer.MAX_VALUE));
 
-                pipeline.addLast("proxy", proctorHttpHandler);
+                pipeline.addLast("proxy",
+                                 proctorHttpHandler);
 
             }
 
         });
 
-        channel = serverBootstrap.bind(proxyListenAddress, proxyListenPort).channel();
+        channel = serverBootstrap.bind(proxyListenAddress,
+                                       proxyListenPort)
+                                 .channel();
 
     }
 
@@ -177,7 +195,7 @@ public class ProctorNettyProxy
      */
     public void stopProxy() {
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
 
             logger.debug("Shutting down Proctor Netty HTTP Server.");
 

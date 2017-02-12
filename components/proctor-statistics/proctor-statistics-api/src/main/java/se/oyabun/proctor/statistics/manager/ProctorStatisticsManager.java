@@ -25,6 +25,7 @@ public interface ProctorStatisticsManager {
 
     /**
      * Generate a proctor average statistics report on a statistic.
+     *
      * @param proctorStatistic to generate report for
      * @return report
      */
@@ -32,6 +33,7 @@ public interface ProctorStatisticsManager {
 
     /**
      * Return all proctor average statistics reports
+     *
      * @return list of all collected statistics as reports
      */
     ProctorStatisticsReport[] getAllStatistics();

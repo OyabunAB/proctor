@@ -79,21 +79,27 @@ public class ProctorProxyRequestMeterTest {
 
         proctorProxyRequestMeter.incomingRequest(new ProxyRequestReceivedEvent(mockedHttpRequestData));
 
-        verify(mockedMeter, times(1)).mark();
+        verify(mockedMeter,
+               times(1)).mark();
 
     }
 
     @Test
-    public void returningCountFor() throws NonGatheredStatisticRequestException {
+    public void returningCountFor()
+            throws
+            NonGatheredStatisticRequestException {
 
         when(mockedMeter.getCount()).thenReturn(BigInteger.ONE.longValue());
 
-        assertThat(proctorProxyRequestMeter.getCountFor(ProctorStatistic.PROXY_REQUEST_RECEIVED), is(BigInteger.ONE));
+        assertThat(proctorProxyRequestMeter.getCountFor(ProctorStatistic.PROXY_REQUEST_RECEIVED),
+                   is(BigInteger.ONE));
 
     }
 
     @Test(expected = NonGatheredStatisticRequestException.class)
-    public void notReturningOnOtherStatistic() throws NonGatheredStatisticRequestException {
+    public void notReturningOnOtherStatistic()
+            throws
+            NonGatheredStatisticRequestException {
 
         proctorProxyRequestMeter.getCountFor(ProctorStatistic.PROXY_REPLY_SENT);
 

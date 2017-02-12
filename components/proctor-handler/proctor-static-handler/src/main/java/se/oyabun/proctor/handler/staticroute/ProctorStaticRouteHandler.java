@@ -30,7 +30,7 @@ import java.net.URL;
  */
 @Component
 public class ProctorStaticRouteHandler
-    extends AbstractDefaultProctorRouteHandler
+        extends AbstractDefaultProctorRouteHandler
         implements ProctorRouteHandler {
 
     public static final String APPEND_PATH_PROPERTY = "appendpath";
@@ -38,54 +38,69 @@ public class ProctorStaticRouteHandler
 
     /**
      * Return staticly configured URL for configured matcher pattern.
+     *
      * @param input to request on base URL
      * @return static configured url
      * @throws NoHandleForNameException when no handle can be found for given name
      */
     public URL resolveURLFor(final String input,
                              final ProctorHandlerProperties properties)
-            throws NoHandleForNameException, MalformedURLException {
+            throws
+            NoHandleForNameException,
+            MalformedURLException {
 
-        boolean appendOriginalPath = Boolean.valueOf(
-                properties.getProperties().getOrDefault(APPEND_PATH_PROPERTY, "false"));
+        boolean appendOriginalPath = Boolean.valueOf(properties.getProperties()
+                                                               .getOrDefault(APPEND_PATH_PROPERTY,
+                                                                             "false"));
 
         return appendOriginalPath ?
-                new URL(getRoot(properties), input) :
-                getRoot(properties);
+               new URL(getRoot(properties),
+                       input) :
+               getRoot(properties);
 
     }
 
     /**
      * Returns the configured static root URL
+     *
      * @param properties for static handler
      * @return the configured root url
      */
     @Override
     protected URL getRoot(final ProctorHandlerProperties properties)
-            throws MalformedURLException {
+            throws
+            MalformedURLException {
 
-        return new URL(properties.getProperties().getOrDefault(DEFAULT_URL_PROPERTY, "/"));
+        return new URL(properties.getProperties()
+                                 .getOrDefault(DEFAULT_URL_PROPERTY,
+                                               "/"));
 
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (!(o instanceof ProctorStaticRouteHandler)) return false;
-
-        ProctorStaticRouteHandler that = (ProctorStaticRouteHandler) o;
-
-        return new org.apache.commons.lang3.builder.EqualsBuilder()
-                .append(this, that)
-                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(this)
-                .toHashCode();
+
+        return new HashCodeBuilder(17,
+                                   37).append(this)
+                                      .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof ProctorStaticRouteHandler)) {
+            return false;
+        }
+
+        ProctorStaticRouteHandler that = (ProctorStaticRouteHandler) o;
+
+        return new org.apache.commons.lang3.builder.EqualsBuilder().append(this,
+                                                                           that)
+                                                                   .isEquals();
     }
 
 }

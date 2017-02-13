@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components</groupId>
+        <artifactId>proctor-components-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components</groupId>
+    <artifactId>proctor-cluster-reactor</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor Cluster Reactor</name>
+    <description>Proctor proxy cluster reactor pom.</description>
+
+    <modules>
+        <module>proctor-cluster-api</module>
+        <module>proctor-hazelcast-cluster</module>
+    </modules>
+
+</project>

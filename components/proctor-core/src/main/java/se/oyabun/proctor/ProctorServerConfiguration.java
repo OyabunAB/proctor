@@ -15,7 +15,14 @@
  */
 package se.oyabun.proctor;
 
-public class ProctorServerConfiguration {
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class ProctorServerConfiguration
+        implements Serializable {
 
     private final String proxyListenAddress;
     private final String localAddress;
@@ -94,6 +101,14 @@ public class ProctorServerConfiguration {
     public String getLocalAddressAndPort() {
 
         return proxyListenAddress + ":" + configuredLocalPort;
+
+    }
+
+    public URL getProxyOriginURL()
+            throws MalformedURLException {
+
+        return new URL((StringUtils.isNotBlank(keystorePath) ? "https" : "http") +
+                       "://" + getProxyAddressAndPort() + "/");
 
     }
 }

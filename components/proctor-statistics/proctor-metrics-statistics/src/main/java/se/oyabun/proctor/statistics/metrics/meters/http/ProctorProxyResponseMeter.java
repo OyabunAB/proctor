@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
@@ -39,7 +39,7 @@ public class ProctorProxyResponseMeter
     public ProctorProxyResponseMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
         this.replies = proctorMetricsRegistry.getMetricsRegistry()
-                                             .meter(ProctorStatistic.PROXY_REPLY_SENT.name());
+                                             .meter(ProctorStatisticType.PROXY_REPLY_SENT.name());
 
     }
 
@@ -58,9 +58,9 @@ public class ProctorProxyResponseMeter
     /**
      * ${@inheritDoc}
      */
-    public boolean gathers(ProctorStatistic proctorStatistic) {
+    public boolean gathers(ProctorStatisticType proctorStatisticType) {
 
-        return ProctorStatistic.PROXY_REPLY_SENT.equals(proctorStatistic);
+        return ProctorStatisticType.PROXY_REPLY_SENT.equals(proctorStatisticType);
 
     }
 

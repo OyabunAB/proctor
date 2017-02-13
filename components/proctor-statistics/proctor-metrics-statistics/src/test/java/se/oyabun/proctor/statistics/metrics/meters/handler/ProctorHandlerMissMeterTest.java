@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
 import se.oyabun.proctor.exceptions.NonGatheredStatisticRequestException;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 
 import java.math.BigInteger;
@@ -66,7 +66,7 @@ public class ProctorHandlerMissMeterTest {
     @Test
     public void verifyStatisticsGatherer() {
 
-        assertTrue(proctorHandlerMissMeter.gathers(ProctorStatistic.PROXY_HANDLER_MISS));
+        assertTrue(proctorHandlerMissMeter.gathers(ProctorStatisticType.PROXY_HANDLER_MISS));
 
     }
 
@@ -87,7 +87,7 @@ public class ProctorHandlerMissMeterTest {
 
         when(mockedMeter.getCount()).thenReturn(BigInteger.ONE.longValue());
 
-        assertThat(proctorHandlerMissMeter.getCountFor(ProctorStatistic.PROXY_HANDLER_MISS),
+        assertThat(proctorHandlerMissMeter.getCountFor(ProctorStatisticType.PROXY_HANDLER_MISS),
                    is(BigInteger.ONE));
 
     }
@@ -97,7 +97,7 @@ public class ProctorHandlerMissMeterTest {
             throws
             NonGatheredStatisticRequestException {
 
-        proctorHandlerMissMeter.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH);
+        proctorHandlerMissMeter.getCountFor(ProctorStatisticType.PROXY_HANDLER_MATCH);
 
     }
 

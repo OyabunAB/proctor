@@ -15,7 +15,7 @@
  */
 package se.oyabun.proctor.statistics.manager;
 
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsReport;
 
 /**
@@ -26,10 +26,10 @@ public interface ProctorStatisticsManager {
     /**
      * Generate a proctor average statistics report on a statistic.
      *
-     * @param proctorStatistic to generate report for
+     * @param proctorStatisticType to generate report for
      * @return report
      */
-    ProctorStatisticsReport[] getStatisticsFor(ProctorStatistic proctorStatistic);
+    ProctorStatisticsReport[] getStatisticsFor(ProctorStatisticType proctorStatisticType);
 
     /**
      * Return all proctor average statistics reports

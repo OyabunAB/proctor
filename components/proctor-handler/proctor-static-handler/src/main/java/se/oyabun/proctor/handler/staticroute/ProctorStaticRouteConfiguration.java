@@ -15,7 +15,7 @@
  */
 package se.oyabun.proctor.handler.staticroute;
 
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,19 +27,19 @@ import java.util.Map;
  * @see se.oyabun.proctor.handler.ProctorRouteHandler
  * @see se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager
  */
-public class ProctorStaticRouteProperties
-        implements ProctorHandlerProperties {
+public class ProctorStaticRouteConfiguration
+        implements ProctorHandlerConfiguration {
 
     private String configurationID;
     private int priority;
     private String pattern;
     private Map<String, String> properties = new HashMap<>();
 
-    public ProctorStaticRouteProperties(final String configurationID,
-                                        final int priority,
-                                        final String pattern,
-                                        final String appendPath,
-                                        final String defaultUrl) {
+    public ProctorStaticRouteConfiguration(final String configurationID,
+                                           final int priority,
+                                           final String pattern,
+                                           final String appendPath,
+                                           final String defaultUrl) {
 
         this.configurationID = configurationID;
         this.priority = priority;

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.ProctorProxyEvent;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.persistence.ProctorRepository;
 
 import java.util.Optional;
@@ -49,9 +49,9 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public boolean containsPropertyKey(String configurationID) {
+    public boolean containsConfigurationKey(String configurationID) {
 
-        return getProperty(configurationID).isPresent();
+        return getConfiguration(configurationID).isPresent();
 
     }
 
@@ -59,7 +59,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public void persistProperty(final ProctorHandlerProperties properties) {
+    public void persistConfiguration(final ProctorHandlerConfiguration properties) {
 
         proctorNeo4jStore.createNode(properties.getConfigurationID(),
                                      properties,
@@ -73,7 +73,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorHandlerProperties> getProperty(final String configurationID) {
+    public Optional<ProctorHandlerConfiguration> getConfiguration(final String configurationID) {
 
         return Optional.ofNullable(proctorNeo4jStore.findNode(configurationID,
                                                               graphDatabaseService));
@@ -88,22 +88,10 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<String> getPropertyKeys() {
+    public Stream<String> getConfigurationKeys() {
 
-        return getProperties()
-                .map(ProctorHandlerProperties::getConfigurationID);
-
-    }
-
-    /**
-     * ${@inheritDoc}
-     */
-    @Override
-    public Stream<ProctorHandlerProperties> getProperties() {
-
-        return getPropertyKeys().map(this::getProperty)
-                                .filter(Optional::isPresent)
-                                .map(Optional::get);
+        return getConfigurations()
+                .map(ProctorHandlerConfiguration::getConfigurationID);
 
     }
 
@@ -111,9 +99,21 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public void deleteProperty(final String configurationID) {
+    public Stream<ProctorHandlerConfiguration> getConfigurations() {
 
-        getProperty(configurationID)
+        return getConfigurationKeys().map(this::getConfiguration)
+                                     .filter(Optional::isPresent)
+                                     .map(Optional::get);
+
+    }
+
+    /**
+     * ${@inheritDoc}
+     */
+    @Override
+    public void deleteConfiguration(final String configurationID) {
+
+        getConfiguration(configurationID)
                 .ifPresent(proctorHandlerProperties ->
                        proctorNeo4jStore.deleteNode(proctorHandlerProperties.getConfigurationID(),
                                                     graphDatabaseService));
@@ -124,7 +124,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public boolean containsProxyEventKey(String eventID) {
+    public boolean containsEventKey(String eventID) {
 
         throw new UnsupportedOperationException();
 
@@ -144,7 +144,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorProxyEvent> getProxyEvent(String eventID) {
+    public Optional<ProctorProxyEvent> getEvent(String eventID) {
 
         throw new UnsupportedOperationException();
 
@@ -154,7 +154,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<String> getProxyEventKeys() {
+    public Stream<String> getEventKeys() {
 
         throw new UnsupportedOperationException();
 
@@ -164,7 +164,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorProxyEvent> getProxyEvents() {
+    public Stream<ProctorProxyEvent> getEvents() {
 
         throw new UnsupportedOperationException();
 
@@ -174,7 +174,7 @@ public class ProctorNeo4jRepository
      * ${@inheritDoc}
      */
     @Override
-    public void deleteProxyEvent(String eventID) {
+    public void deleteEvent(final String eventID) {
 
         throw new UnsupportedOperationException();
 

@@ -16,7 +16,7 @@
 package se.oyabun.proctor.handler.manager;
 
 import se.oyabun.proctor.handler.ProctorRouteHandler;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,7 +31,7 @@ public interface ProctorRouteHandlerManager {
      *
      * @param properties to register
      */
-    void registerRouteProperties(final ProctorHandlerProperties properties);
+    void registerRouteProperties(final ProctorHandlerConfiguration properties);
 
     /**
      * Unregister a route handler with a manager
@@ -46,14 +46,14 @@ public interface ProctorRouteHandlerManager {
      * @param input to match properties on
      * @return matching properties
      */
-    Stream<ProctorHandlerProperties> getMatchingPropertiesFor(final String input);
+    Stream<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input);
 
     /**
      * Return all registered handler properties
      *
      * @return stream of all route handler properties
      */
-    Stream<ProctorHandlerProperties> getRegisteredProperties();
+    Stream<ProctorHandlerConfiguration> getRegisteredProperties();
 
     /**
      * Return specified property for ID
@@ -61,7 +61,7 @@ public interface ProctorRouteHandlerManager {
      * @param configurationID of property
      * @return optional property
      */
-    Optional<ProctorHandlerProperties> getPropertiesForHandler(final String configurationID);
+    Optional<ProctorHandlerConfiguration> getPropertiesForHandler(final String configurationID);
 
     /**
      * Return specific handler for property
@@ -69,7 +69,7 @@ public interface ProctorRouteHandlerManager {
      * @param properties to find handler for
      * @return optional handler
      */
-    Optional<ProctorRouteHandler> getHandler(final ProctorHandlerProperties properties);
+    Optional<ProctorRouteHandler> getHandler(final ProctorHandlerConfiguration properties);
 
     /**
      * Returns stream of handler types that is manageable

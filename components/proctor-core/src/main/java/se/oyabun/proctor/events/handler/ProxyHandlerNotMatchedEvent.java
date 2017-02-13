@@ -20,7 +20,7 @@ import se.oyabun.proctor.events.ProctorApplicationEvent;
 /**
  * Proctor proxy handler non matched event
  */
-public class ProxyHandlerNotMatchedEvent
+public class ProxyHandlerNotMatchedEvent<String>
         extends ProctorApplicationEvent {
 
     /**

@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.persistence.ProctorRepository;
 
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class DefaultProctorRouteHandlerManager
     @Autowired
     public DefaultProctorRouteHandlerManager(final ApplicationContext applicationContext,
                                              final ProctorRepository proctorRepository,
-                                             final List<ProctorHandlerProperties> initialProperties) {
+                                             final List<ProctorHandlerConfiguration> initialProperties) {
 
         this.applicationContext = applicationContext;
         this.proctorRepository = proctorRepository;
@@ -63,9 +63,9 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public void registerRouteProperties(final ProctorHandlerProperties properties) {
+    public void registerRouteProperties(final ProctorHandlerConfiguration properties) {
 
-        if (!proctorRepository.containsPropertyKey(properties.getConfigurationID())) {
+        if (!proctorRepository.containsConfigurationKey(properties.getConfigurationID())) {
 
             if (log.isDebugEnabled()) {
 
@@ -75,7 +75,7 @@ public class DefaultProctorRouteHandlerManager
 
             }
 
-            proctorRepository.persistProperty(properties);
+            proctorRepository.persistConfiguration(properties);
 
         } else {
 
@@ -97,7 +97,7 @@ public class DefaultProctorRouteHandlerManager
     @Override
     public void unregisterRouteProperties(final String configurationID) {
 
-        if (proctorRepository.containsPropertyKey(configurationID)) {
+        if (proctorRepository.containsConfigurationKey(configurationID)) {
 
             if (log.isDebugEnabled()) {
 
@@ -106,7 +106,7 @@ public class DefaultProctorRouteHandlerManager
 
             }
 
-            proctorRepository.deleteProperty(configurationID);
+            proctorRepository.deleteConfiguration(configurationID);
 
         } else {
 
@@ -125,9 +125,9 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorHandlerProperties> getMatchingPropertiesFor(final String input) {
+    public Stream<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input) {
 
-        return proctorRepository.getProperties()
+        return proctorRepository.getConfigurations()
                                 .filter(properties -> Pattern.compile(properties.getPattern())
                                                              .matcher(input)
                                                              .matches());
@@ -138,19 +138,9 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorHandlerProperties> getRegisteredProperties() {
+    public Stream<ProctorHandlerConfiguration> getRegisteredProperties() {
 
-        return proctorRepository.getProperties();
-
-    }
-
-    /**
-     * ${@inheritDoc}
-     */
-    @Override
-    public Optional<ProctorHandlerProperties> getPropertiesForHandler(final String ID) {
-
-        return proctorRepository.getProperty(ID);
+        return proctorRepository.getConfigurations();
 
     }
 
@@ -158,7 +148,17 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorRouteHandler> getHandler(ProctorHandlerProperties properties) {
+    public Optional<ProctorHandlerConfiguration> getPropertiesForHandler(final String ID) {
+
+        return proctorRepository.getConfiguration(ID);
+
+    }
+
+    /**
+     * ${@inheritDoc}
+     */
+    @Override
+    public Optional<ProctorRouteHandler> getHandler(ProctorHandlerConfiguration properties) {
 
         return Arrays.stream(applicationContext.getBeanDefinitionNames())
                      .map(applicationContext::getBean)
@@ -179,7 +179,9 @@ public class DefaultProctorRouteHandlerManager
         return Arrays.stream(applicationContext.getBeanDefinitionNames())
                      .map(applicationContext::getBean)
                      .map(Object::getClass)
-                     .filter(aClass -> aClass.isInstance(ProctorRouteHandler.class))
+                     .filter(aClass ->
+                                     Arrays.asList(aClass.getInterfaces())
+                                           .contains(ProctorRouteHandler.class))
                      .map(Class::getName);
 
     }

@@ -18,7 +18,7 @@ package se.oyabun.proctor.statistics;
 /**
  * Proctor Statistic Types
  */
-public enum ProctorStatistic {
+public enum ProctorStatisticType {
 
     PROXY_REQUEST_RECEIVED,
     PROXY_REPLY_SENT,
@@ -27,10 +27,10 @@ public enum ProctorStatistic {
 
     public static boolean matchesAny(String value) {
 
-        for (ProctorStatistic proctorStatistic : ProctorStatistic.values()) {
+        for (ProctorStatisticType proctorStatisticType : ProctorStatisticType.values()) {
 
-            if (proctorStatistic.name()
-                                .equals(value)) {
+            if (proctorStatisticType.name()
+                                    .equals(value)) {
 
                 return true;
 

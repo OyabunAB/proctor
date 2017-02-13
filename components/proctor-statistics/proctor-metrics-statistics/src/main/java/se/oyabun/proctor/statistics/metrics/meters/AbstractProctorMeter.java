@@ -17,7 +17,7 @@ package se.oyabun.proctor.statistics.metrics.meters;
 
 import com.codahale.metrics.Meter;
 import se.oyabun.proctor.exceptions.NonGatheredStatisticRequestException;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 
 import java.math.BigDecimal;
@@ -32,17 +32,17 @@ public abstract class AbstractProctorMeter
     /**
      * ${@inheritDoc}
      */
-    public BigDecimal getMeanFor(final ProctorStatistic proctorStatistic)
+    public BigDecimal getMeanFor(final ProctorStatisticType proctorStatisticType)
             throws
             NonGatheredStatisticRequestException {
 
-        if (this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatisticType)) {
 
             return BigDecimal.valueOf(getMeter().getMeanRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatisticType + "'");
 
         }
 
@@ -53,17 +53,17 @@ public abstract class AbstractProctorMeter
     /**
      * ${@inheritDoc}
      */
-    public BigInteger getCountFor(final ProctorStatistic proctorStatistic)
+    public BigInteger getCountFor(final ProctorStatisticType proctorStatisticType)
             throws
             NonGatheredStatisticRequestException {
 
-        if (this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatisticType)) {
 
             return BigInteger.valueOf(getMeter().getCount());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatisticType + "'");
 
         }
 
@@ -72,17 +72,17 @@ public abstract class AbstractProctorMeter
     /**
      * ${@inheritDoc}
      */
-    public BigDecimal getFifteenMinuteRateFor(final ProctorStatistic proctorStatistic)
+    public BigDecimal getFifteenMinuteRateFor(final ProctorStatisticType proctorStatisticType)
             throws
             NonGatheredStatisticRequestException {
 
-        if (this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatisticType)) {
 
             return BigDecimal.valueOf(getMeter().getFifteenMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatisticType + "'");
 
         }
 
@@ -91,17 +91,17 @@ public abstract class AbstractProctorMeter
     /**
      * ${@inheritDoc}
      */
-    public BigDecimal getFiveMinuteRateFor(final ProctorStatistic proctorStatistic)
+    public BigDecimal getFiveMinuteRateFor(final ProctorStatisticType proctorStatisticType)
             throws
             NonGatheredStatisticRequestException {
 
-        if (this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatisticType)) {
 
             return BigDecimal.valueOf(getMeter().getFiveMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatisticType + "'");
 
         }
 
@@ -110,17 +110,17 @@ public abstract class AbstractProctorMeter
     /**
      * ${@inheritDoc}
      */
-    public BigDecimal getOneMinuteRateFor(final ProctorStatistic proctorStatistic)
+    public BigDecimal getOneMinuteRateFor(final ProctorStatisticType proctorStatisticType)
             throws
             NonGatheredStatisticRequestException {
 
-        if (this.gathers(proctorStatistic)) {
+        if (this.gathers(proctorStatisticType)) {
 
             return BigDecimal.valueOf(getMeter().getOneMinuteRate());
 
         } else {
 
-            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatistic + "'");
+            throw new NonGatheredStatisticRequestException("For given proctor statistic '" + proctorStatisticType + "'");
 
         }
 

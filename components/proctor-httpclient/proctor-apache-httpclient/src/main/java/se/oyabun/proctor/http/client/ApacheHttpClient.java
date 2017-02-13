@@ -15,14 +15,14 @@
  */
 package se.oyabun.proctor.http.client;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -37,9 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
  * Proctor Apache HTTP Client implementation
@@ -49,29 +47,25 @@ public class ApacheHttpClient
         extends AbstractProctorHttpClient
         implements ProctorHttpClient {
 
+    private static final Logger log = LoggerFactory.getLogger(ApacheHttpClient.class);
+
     private static final int DEFAULT_CONNECT_TIMEOUT = 10000;
     private static final int DEFAULT_READ_TIMEOUT = 10000;
     private static final int DEFAULT_REQUEST_TIMEOUT = 60000;
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private CloseableHttpClient httpclient;
+
+    private CloseableHttpAsyncClient httpclient;
 
     @Override
     public HttpResponseData execute(final HttpRequestData request)
-            throws
-            IOException,
-            CancellationException,
-            InterruptedException,
-            ExecutionException,
-            TimeoutException {
+            throws IOException,
+                   CancellationException,
+                   InterruptedException,
+                   ExecutionException,
+                   TimeoutException {
 
 
-        final String requestUrl = request.getProtocol() +
-                                  "://" +
-                                  request.getHost()
-                                         .getHostName() +
-                                  (request.getPort() != null ?
-                                   ":" + request.getPort() :
-                                   "") +
+        final String requestUrl = request.getProtocol() + "://" + request.getHost().getHostName() +
+                                  (request.getPort() != null ? ":" + request.getPort() : "") +
                                   request.getPath();
 
         RequestBuilder requestBuilder = RequestBuilder.create(request.getMethod())
@@ -80,23 +74,23 @@ public class ApacheHttpClient
 
         final HttpUriRequest httpRequest = requestBuilder.build();
 
-        final CloseableHttpResponse response = httpclient.execute(httpRequest);
+        final Future<HttpResponse> asyncResponse = httpclient.execute(httpRequest,
+                                                                      null);
+
+        final HttpResponse response = asyncResponse.get(DEFAULT_REQUEST_TIMEOUT + 100,
+                                                        TimeUnit.MILLISECONDS);
 
         final Map<String, List<String>> responseHeaders = new HashMap<>();
         Arrays.stream(response.getAllHeaders())
-              .map(header -> responseHeaders.put(header.getName(),
-                                                 Arrays.asList(header.getValue())));
+              .map(header ->
+                           responseHeaders.put(header.getName(),
+                                               Arrays.asList(header.getValue())));
 
-        return new HttpResponseData(response.getStatusLine()
-                                            .getStatusCode(),
-                                    response.getStatusLine()
-                                            .getReasonPhrase(),
+        return new HttpResponseData(response.getStatusLine().getStatusCode(),
+                                    response.getStatusLine().getReasonPhrase(),
                                     responseHeaders,
-                                    response.getEntity()
-                                            .getContentType()
-                                            .getValue(),
-                                    response.getEntity()
-                                            .getContentLength(),
+                                    response.getEntity().getContentType().getValue(),
+                                    response.getEntity().getContentLength(),
                                     EntityUtils.toByteArray(response.getEntity()));
 
     }
@@ -106,32 +100,44 @@ public class ApacheHttpClient
             throws
             Exception {
 
-        log.debug("Initializing Apache HTTP Client.");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Initializing Apache HTTP Client.");
+
+        }
 
 
-        httpclient = HttpClients.custom()
-                                .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null,
-                                                                                              (TrustStrategy) (chain,
-                                                                                                               authType) -> true)
-                                                                           .setSecureRandom(new SecureRandom())
-                                                                           .build())
-                                .setSSLHostnameVerifier((variable, sslSession) -> true)
-                                .setDefaultRequestConfig(RequestConfig.custom()
-                                                                           .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
-                                                                           .setConnectionRequestTimeout
-                                                                                   (DEFAULT_REQUEST_TIMEOUT)
-                                                                           .setSocketTimeout(DEFAULT_READ_TIMEOUT)
-                                                                           .build())
-                                .build();
+
+        httpclient =
+                HttpAsyncClients
+                        .custom()
+                        .setSSLContext(
+                                new SSLContextBuilder()
+                                        .loadTrustMaterial(null, (TrustStrategy) (chain, authType) -> true)
+                                        .setSecureRandom(new SecureRandom())
+                                        .build())
+                        .setSSLHostnameVerifier((variable, sslSession) -> true)
+                        .setDefaultRequestConfig(
+                                RequestConfig.custom()
+                                             .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
+                                             .setConnectionRequestTimeout(DEFAULT_REQUEST_TIMEOUT)
+                                             .setSocketTimeout(DEFAULT_READ_TIMEOUT)
+                                             .build())
+                        .build();
+
+        httpclient.start();
 
     }
 
     @Override
     public void shutDownHttpClient()
-            throws
-            Exception {
+            throws Exception {
 
-        log.debug("Stopping Apache HTTP Client.");
+        if(log.isDebugEnabled()) {
+
+            log.debug("Stopping Apache HTTP Client.");
+
+        }
 
         httpclient.close();
 

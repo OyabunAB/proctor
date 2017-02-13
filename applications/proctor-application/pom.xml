@@ -33,6 +33,7 @@
         <proctor-hazelcast-cache.version>0.0.1-SNAPSHOT</proctor-hazelcast-cache.version>
         <proctor-neo4j-repository.version>0.0.1-SNAPSHOT</proctor-neo4j-repository.version>
         <proctor-filestore-repository.version>0.0.1-SNAPSHOT</proctor-filestore-repository.version>
+        <proctor-hazelcast-cluster.version>0.0.1-SNAPSHOT</proctor-hazelcast-cluster.version>
 
         <webjars-locator.version>0.30</webjars-locator.version>
 
@@ -51,8 +52,8 @@
 
         <dependency>
             <groupId>se.oyabun.proctor.components.httpclient</groupId>
-            <artifactId>proctor-apache-httpclient</artifactId>
-            <version>${proctor-apache-httpclient.version}</version>
+            <artifactId>proctor-ning-httpclient</artifactId>
+            <version>${proctor-ning-httpclient.version}</version>
         </dependency>
 
         <dependency>
@@ -77,6 +78,12 @@
             <groupId>se.oyabun.proctor.components.statistics</groupId>
             <artifactId>proctor-metrics-statistics</artifactId>
             <version>${proctor-metrics-statistics.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.cluster</groupId>
+            <artifactId>proctor-hazelcast-cluster</artifactId>
+            <version>${proctor-hazelcast-cluster.version}</version>
         </dependency>
 
         <dependency>

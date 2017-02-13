@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.ProctorProxyEvent;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.persistence.ProctorRepository;
 
 import java.io.File;
@@ -36,12 +36,13 @@ public class ProctorFilestoreRepository
 
     private static final Logger log = LoggerFactory.getLogger(ProctorFilestoreRepository.class);
 
-    private static final String PROPERTIES_DIRECTORY = "properties";
+    private static final String SERVERS_DIRECTORY = "servers";
+    private static final String HANDLERS_DIRECTORY = "handlers";
     private static final String EVENTS_DIRECTORY = "events";
 
     private String dataDirectoryProperty;
     private ProctorFilestore proctorFilestore;
-    private File dataDirectory, propertiesDirectory, eventsDirectory;
+    private File dataDirectory, handlersDirectory, eventsDirectory, serversDirectory;
 
     @Autowired
     public ProctorFilestoreRepository(@Value("${se.oyabun.proctor.repository.filestore.directory:./data/filestore}")
@@ -53,8 +54,9 @@ public class ProctorFilestoreRepository
         this.proctorFilestore = proctorFilestore;
 
         dataDirectory = new File(dataDirectoryProperty);
-        propertiesDirectory = new File(dataDirectory, PROPERTIES_DIRECTORY);
+        handlersDirectory = new File(dataDirectory, HANDLERS_DIRECTORY);
         eventsDirectory = new File(dataDirectory, EVENTS_DIRECTORY);
+        serversDirectory = new File(dataDirectory, SERVERS_DIRECTORY);
 
         if(!dataDirectory.exists()) {
 
@@ -62,15 +64,21 @@ public class ProctorFilestoreRepository
 
         }
 
-        if(!propertiesDirectory.exists()) {
+        if(!handlersDirectory.exists()) {
 
-            FileUtils.forceMkdir(propertiesDirectory);
+            FileUtils.forceMkdir(handlersDirectory);
 
         }
 
         if(!eventsDirectory.exists()) {
 
             FileUtils.forceMkdir(eventsDirectory);
+
+        }
+
+        if(!serversDirectory.exists()) {
+
+            FileUtils.forceMkdir(serversDirectory);
 
         }
 
@@ -81,11 +89,11 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public boolean containsPropertyKey(final String configurationID) {
+    public boolean containsConfigurationKey(final String configurationID) {
 
         try {
 
-            return FileUtils.directoryContains(propertiesDirectory, new File(configurationID));
+            return FileUtils.directoryContains(handlersDirectory, new File(configurationID));
 
         } catch (IOException e) {
 
@@ -99,11 +107,11 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public void persistProperty(final ProctorHandlerProperties properties) {
+    public void persistConfiguration(final ProctorHandlerConfiguration properties) {
 
         proctorFilestore.createFile(properties.getConfigurationID(),
                                     properties,
-                                    propertiesDirectory);
+                                    handlersDirectory);
 
     }
 
@@ -114,10 +122,10 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorHandlerProperties> getProperty(final String configurationID) {
+    public Optional<ProctorHandlerConfiguration> getConfiguration(final String configurationID) {
 
         return Optional.ofNullable(proctorFilestore.readFile(configurationID,
-                                                             propertiesDirectory));
+                                                             handlersDirectory));
 
     }
 
@@ -126,9 +134,9 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<String> getPropertyKeys() {
+    public Stream<String> getConfigurationKeys() {
 
-        return FileUtils.listFiles(propertiesDirectory,
+        return FileUtils.listFiles(handlersDirectory,
                                    null,
                                    false)
                         .stream()
@@ -140,10 +148,10 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorHandlerProperties> getProperties() {
+    public Stream<ProctorHandlerConfiguration> getConfigurations() {
 
-        return getPropertyKeys()
-                .map(this::getProperty)
+        return getConfigurationKeys()
+                .map(this::getConfiguration)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
 
@@ -153,10 +161,10 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public void deleteProperty(final String configurationID) {
+    public void deleteConfiguration(final String configurationID) {
 
         proctorFilestore.deleteFile(configurationID,
-                                    propertiesDirectory);
+                                    handlersDirectory);
 
     }
 
@@ -164,7 +172,7 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public boolean containsProxyEventKey(final String eventID) {
+    public boolean containsEventKey(final String eventID) {
 
         throw new UnsupportedOperationException();
 
@@ -184,7 +192,7 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Optional<ProctorProxyEvent> getProxyEvent(final String eventID) {
+    public Optional<ProctorProxyEvent> getEvent(final String eventID) {
 
         throw new UnsupportedOperationException();
 
@@ -194,7 +202,7 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<String> getProxyEventKeys() {
+    public Stream<String> getEventKeys() {
 
         throw new UnsupportedOperationException();
     }
@@ -203,7 +211,7 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorProxyEvent> getProxyEvents() {
+    public Stream<ProctorProxyEvent> getEvents() {
 
         throw new UnsupportedOperationException();
 
@@ -213,7 +221,7 @@ public class ProctorFilestoreRepository
      * ${@inheritDoc}
      */
     @Override
-    public void deleteProxyEvent(final String eventID) {
+    public void deleteEvent(final String eventID) {
 
         throw new UnsupportedOperationException();
 

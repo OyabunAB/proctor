@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package se.oyabun.proctor.repository.neo4j.log;
+package se.oyabun.proctor.log.neo4j;
 
 import org.neo4j.logging.Log;
 import org.neo4j.logging.LogProvider;

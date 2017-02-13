@@ -25,8 +25,8 @@ import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletConta
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.oyabun.proctor.ProctorServerConfiguration;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
-import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
+import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteConfiguration;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -130,12 +130,12 @@ public class ProctorApplicationContextConfiguration {
      * Set up the static route to the administration GUI
      */
     @Bean
-    public ProctorHandlerProperties staticAdminRouteConfiguration() {
+    public ProctorHandlerConfiguration staticAdminRouteConfiguration() {
 
-        return new ProctorStaticRouteProperties("adminrouteID",
-                                                0,
+        return new ProctorStaticRouteConfiguration("adminrouteID",
+                                                   0,
                                                 contextPath + ".*",
-                                                "true",
+                                                   "true",
                                                 (configureSSL() ?
                                                  "https" :
                                                  "http") +

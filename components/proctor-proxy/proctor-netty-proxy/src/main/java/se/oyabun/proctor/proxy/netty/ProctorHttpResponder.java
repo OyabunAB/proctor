@@ -15,15 +15,16 @@
  */
 package se.oyabun.proctor.proxy.netty;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import se.oyabun.proctor.ProctorServerConfiguration;
 import se.oyabun.proctor.events.handler.ProxyHandlerMatchedEvent;
 import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
@@ -32,7 +33,7 @@ import se.oyabun.proctor.exceptions.InputNotMatchedException;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
@@ -59,61 +60,47 @@ public class ProctorHttpResponder {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ProctorRouteHandlerManager proctorRouteHandlerManager;
     private final ProctorHttpClient proctorHttpClient;
-
-    @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
-    private String keystorePath;
-
-    @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
-    private String keyStorePassword;
-
-    @Value("${se.oyabun.proctor.proxy.listen.port}")
-    private int proxyListenPort;
-
-    @Value("${se.oyabun.proctor.proxy.listen.address}")
-    private String proxyListenAddress;
+    private final ProctorServerConfiguration localServerConfiguration;
 
     @Autowired
     public ProctorHttpResponder(final ApplicationEventPublisher applicationEventPublisher,
                                 final ProctorRouteHandlerManager proctorRouteHandlerManager,
-                                final ProctorHttpClient proctorHttpClient) {
+                                final ProctorHttpClient proctorHttpClient,
+                                final ProctorServerConfiguration localServerConfiguration) {
 
         this.applicationEventPublisher = applicationEventPublisher;
         this.proctorRouteHandlerManager = proctorRouteHandlerManager;
         this.proctorHttpClient = proctorHttpClient;
+        this.localServerConfiguration = localServerConfiguration;
 
     }
 
     /**
-     * Process incomming request for proxying
+     * Process incoming request for proxy call
      *
      * @param request to process
      * @return full http response
      */
     FullHttpResponse processRequest(final FullHttpRequest request)
-            throws
-            InterruptedException,
-            ExecutionException,
-            TimeoutException,
-            IOException,
-            InputNotMatchedException,
-            NoHandleForNameException {
+            throws InterruptedException,
+                   ExecutionException,
+                   TimeoutException,
+                   IOException,
+                   InputNotMatchedException,
+                   NoHandleForNameException {
 
         final FullHttpResponse response;
 
-        final Map<String, List<String>> headers = new HashMap<>();
-        extractHeaders(request,
-                       headers);
-
         final String clientRequestPath = request.getUri();
 
-        final Optional<ProctorHandlerProperties> optionalProperties =
+        final Optional<ProctorHandlerConfiguration> optionalProperties =
                 proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
                                           .findFirst();
 
         final Optional<ProctorRouteHandler> optionalHandler =
                 optionalProperties.isPresent() ?
-                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
-                    Optional.empty();
+                proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
@@ -131,7 +118,8 @@ public class ProctorHttpResponder {
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace("Proxying request for URI '{}' to '{}'.",
+                logger.trace("Proxying {} request for URI '{}' to '{}'.",
+                             request.getMethod(),
                              clientRequestPath,
                              proxyURLExternalForm);
 
@@ -143,8 +131,8 @@ public class ProctorHttpResponder {
                                                                      InetAddress.getByName(proxyURL.getHost()),
                                                                      proxyURL.getPort(),
                                                                      request.getMethod().name(),
-                                                                     headers,
-                                                                     request.content().array(),
+                                                                     extractHeaders(request.headers()),
+                                                                     extractRequestContent(request.content()),
                                                                      queryStringDecoder.parameters(),
                                                                      queryStringDecoder.uri());
 
@@ -164,7 +152,8 @@ public class ProctorHttpResponder {
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace("Returning response for URI '{}'.",
+                logger.trace("Returning response for {} to URI '{}'.",
+                             request.getMethod(),
                              clientRequestPath);
 
             }
@@ -174,7 +163,8 @@ public class ProctorHttpResponder {
 
             if (logger.isTraceEnabled()) {
 
-                logger.trace("No matching handler found for request for URI '{}'.",
+                logger.trace("No matching handler found for {} request to URI '{}'.",
+                             request.getMethod(),
                              clientRequestPath);
 
             }
@@ -191,39 +181,65 @@ public class ProctorHttpResponder {
 
     }
 
-    void extractHeaders(final HttpRequest request,
-                        final Map<String, List<String>> headers) {
+    /**
+     * Extract bytes from buffer, careful not to use any apparent methods.
+     *
+     * @param byteBuf to extract
+     * @return byte array of buffer
+     */
+    private byte[] extractRequestContent(ByteBuf byteBuf) {
 
-        for (String headername : request.headers()
-                                        .names()) {
+        //
+        // Not all bytebuffers have arrays, must read manually
+        // (because implementing this inside the buffer wouldn´t be super secret and
+        // its better to throw unsupported operation anyways...)
+        //
+        if(byteBuf.hasArray()) {
 
-            Iterable<String> headerValues = request.headers()
-                                                   .getAll(headername);
+            return byteBuf.array();
 
-            ArrayList<String> headerValuesCopy = new ArrayList<>();
+        } else {
 
-            for (String headerValue : headerValues) {
-
-                headerValuesCopy.add(headerValue);
-
-            }
-
-            headers.put(headername,
-                        headerValuesCopy);
+            final byte[] bytes = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(bytes);
+            return bytes;
 
         }
+
+    }
+
+    /**
+     * Extract all headers to a map for proxy call
+     *
+     * @param headers to extract
+     * @return map with header name as key and its values
+     */
+    Map<String, List<String>> extractHeaders(final HttpHeaders headers) {
+
+        final Map<String, List<String>> headersMap = new HashMap<>();
+
+        for (String name : headers.names()) {
+
+            Iterable<String> headerValues = headers.getAll(name);
+            ArrayList<String> headerValuesCopy = new ArrayList<>();
+            for (String headerValue : headerValues) {
+                headerValuesCopy.add(headerValue);
+            }
+
+            headersMap.put(name, headerValuesCopy);
+
+        }
+
+        return headersMap;
 
     }
 
     void handleResponseHeaders(final HttpResponseData responseData,
                                final HttpResponse response,
                                final URL proxyUrl)
-            throws
-            MalformedURLException {
+            throws MalformedURLException {
 
-        URL originURL = new URL(((StringUtils.isNotBlank(keyStorePassword) && StringUtils.isNotBlank(keystorePath)) ?
-                                 "https" :
-                                 "http") + "://" + proxyListenAddress + ":" + proxyListenPort + "/");
+        URL originURL = localServerConfiguration.getProxyOriginURL();
 
         response.setStatus(new HttpResponseStatus(responseData.getStatusCode(),
                                                   responseData.getStatusMessage()));

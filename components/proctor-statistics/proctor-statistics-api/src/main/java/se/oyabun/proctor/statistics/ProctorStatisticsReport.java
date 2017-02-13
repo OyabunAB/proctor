@@ -23,7 +23,7 @@ import java.math.BigInteger;
  */
 public class ProctorStatisticsReport {
 
-    private ProctorStatistic proctorStatistic;
+    private ProctorStatisticType proctorStatisticType;
 
     private BigDecimal meanValue;
 
@@ -35,14 +35,14 @@ public class ProctorStatisticsReport {
 
     private BigDecimal oneMinuteRateValue;
 
-    public ProctorStatisticsReport(final ProctorStatistic proctorStatistic,
+    public ProctorStatisticsReport(final ProctorStatisticType proctorStatisticType,
                                    final BigDecimal meanValue,
                                    final BigInteger countValue,
                                    final BigDecimal fifteenMinuteRateValue,
                                    final BigDecimal fiveMinuteRateValue,
                                    final BigDecimal oneMinuteRateValue) {
 
-        this.proctorStatistic = proctorStatistic;
+        this.proctorStatisticType = proctorStatisticType;
         this.meanValue = meanValue;
         this.countValue = countValue;
         this.fifteenMinuteRateValue = fifteenMinuteRateValue;
@@ -51,9 +51,9 @@ public class ProctorStatisticsReport {
 
     }
 
-    public ProctorStatistic getProctorStatistic() {
+    public ProctorStatisticType getProctorStatisticType() {
 
-        return proctorStatistic;
+        return proctorStatisticType;
 
     }
 

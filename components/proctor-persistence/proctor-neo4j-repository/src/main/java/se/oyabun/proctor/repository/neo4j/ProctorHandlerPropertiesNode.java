@@ -16,7 +16,7 @@
 package se.oyabun.proctor.repository.neo4j;
 
 import org.neo4j.graphdb.*;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -35,15 +35,15 @@ public class ProctorHandlerPropertiesNode {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static List<ProctorHandlerProperties> materializeProctorProperties(final Optional<String> configurationID,
-                                                                              final GraphDatabaseService graphDatabaseService)
+    public static List<ProctorHandlerConfiguration> materializeProctorProperties(final Optional<String> configurationID,
+                                                                                 final GraphDatabaseService graphDatabaseService)
             throws ClassNotFoundException,
                    NoSuchMethodException,
                    InvocationTargetException,
                    IllegalAccessException,
                    InstantiationException {
 
-        List<ProctorHandlerProperties> resultingProctorHandlerProperties = new ArrayList<>();
+        List<ProctorHandlerConfiguration> resultingProctorHandlerProperties = new ArrayList<>();
 
         Transaction transaction = graphDatabaseService.beginTx();
 
@@ -95,16 +95,16 @@ public class ProctorHandlerPropertiesNode {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static ProctorHandlerProperties mapNode(final Node propertyNode)
+    public static ProctorHandlerConfiguration mapNode(final Node propertyNode)
             throws ClassNotFoundException,
                    NoSuchMethodException,
                    InvocationTargetException,
                    IllegalAccessException,
                    InstantiationException {
 
-        ProctorHandlerProperties propertiesInstance =
-                (ProctorHandlerProperties) Class.forName(propertyNode.getProperty("class").toString())
-                                                .newInstance();
+        ProctorHandlerConfiguration propertiesInstance =
+                (ProctorHandlerConfiguration) Class.forName(propertyNode.getProperty("class").toString())
+                                                   .newInstance();
         propertiesInstance.getClass().getMethod("setConfigurationID")
                           .invoke(propertyNode.getProperty("configurationID"));
         propertiesInstance.getClass().getMethod("setHandlerType")

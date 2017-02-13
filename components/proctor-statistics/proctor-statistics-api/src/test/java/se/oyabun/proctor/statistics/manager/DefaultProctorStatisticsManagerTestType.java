@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.oyabun.proctor.exceptions.NonGatheredStatisticRequestException;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.ProctorStatisticsReport;
 
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
  * Test cases for Default Proctor Statistics manager
  */
 @RunWith(MockitoJUnitRunner.class)
-public class DefaultProctorStatisticsManagerTest {
+public class DefaultProctorStatisticsManagerTestType {
 
     private static final BigInteger COUNT_VALUE = BigInteger.TEN;
 
@@ -54,9 +54,9 @@ public class DefaultProctorStatisticsManagerTest {
         defaultProctorStatisticsManager = new DefaultProctorStatisticsManager(mockedMatchingProctorStatisticsGatherer,
                                                                               mockedNonMatchingProctorStatisticsGatherer);
 
-        when(mockedMatchingProctorStatisticsGatherer.gathers(any(ProctorStatistic.class))).thenReturn(true);
+        when(mockedMatchingProctorStatisticsGatherer.gathers(any(ProctorStatisticType.class))).thenReturn(true);
 
-        when(mockedNonMatchingProctorStatisticsGatherer.gathers(any(ProctorStatistic.class))).thenReturn(false);
+        when(mockedNonMatchingProctorStatisticsGatherer.gathers(any(ProctorStatisticType.class))).thenReturn(false);
 
     }
 
@@ -65,14 +65,14 @@ public class DefaultProctorStatisticsManagerTest {
             throws
             NonGatheredStatisticRequestException {
 
-        when(mockedMatchingProctorStatisticsGatherer.getCountFor(ProctorStatistic.PROXY_HANDLER_MATCH)).thenReturn
+        when(mockedMatchingProctorStatisticsGatherer.getCountFor(ProctorStatisticType.PROXY_HANDLER_MATCH)).thenReturn
                 (COUNT_VALUE);
 
         verify(mockedNonMatchingProctorStatisticsGatherer,
-               never()).gathers(ProctorStatistic.PROXY_HANDLER_MATCH);
+               never()).gathers(ProctorStatisticType.PROXY_HANDLER_MATCH);
 
         ProctorStatisticsReport[] proctorStatisticsReports = defaultProctorStatisticsManager.getStatisticsFor
-                (ProctorStatistic.PROXY_HANDLER_MATCH);
+                (ProctorStatisticType.PROXY_HANDLER_MATCH);
 
         assertThat(proctorStatisticsReports.length,
                    is(1));

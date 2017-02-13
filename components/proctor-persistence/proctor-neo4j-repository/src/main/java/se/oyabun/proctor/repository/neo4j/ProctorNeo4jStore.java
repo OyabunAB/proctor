@@ -22,7 +22,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,10 +38,10 @@ public class ProctorNeo4jStore {
      * @param configurationID for cache key
      * @param properties to persist and add to cache
      */
-    @CachePut(value = ProctorHandlerProperties.CACHE_NAME,
-              key = ProctorHandlerProperties.CACHE_KEY)
+    @CachePut(value = ProctorHandlerConfiguration.CACHE_NAME,
+              key = ProctorHandlerConfiguration.CACHE_KEY)
     void createNode(final String configurationID,
-                    final ProctorHandlerProperties properties,
+                    final ProctorHandlerConfiguration properties,
                     final GraphDatabaseService graphDatabaseService) {
 
         if(log.isDebugEnabled()) {
@@ -93,10 +93,10 @@ public class ProctorNeo4jStore {
      * @param configurationID to cache-get for
      * @return cached property or getting it from the database
      */
-    @Cacheable(value = ProctorHandlerProperties.CACHE_NAME,
-               key = ProctorHandlerProperties.CACHE_KEY)
-    ProctorHandlerProperties findNode(final String configurationID,
-                                      final GraphDatabaseService graphDatabaseService) {
+    @Cacheable(value = ProctorHandlerConfiguration.CACHE_NAME,
+               key = ProctorHandlerConfiguration.CACHE_KEY)
+    ProctorHandlerConfiguration findNode(final String configurationID,
+                                         final GraphDatabaseService graphDatabaseService) {
 
         if(log.isDebugEnabled()) {
 
@@ -107,7 +107,7 @@ public class ProctorNeo4jStore {
         try {
 
 
-            List<ProctorHandlerProperties> materializedProperties =
+            List<ProctorHandlerConfiguration> materializedProperties =
                     ProctorHandlerPropertiesNode.materializeProctorProperties(Optional.of(configurationID),
                                                                               graphDatabaseService);
 
@@ -136,8 +136,8 @@ public class ProctorNeo4jStore {
      *
      * @param configurationID
      */
-    @CacheEvict(value = ProctorHandlerProperties.CACHE_NAME,
-                key = ProctorHandlerProperties.CACHE_KEY)
+    @CacheEvict(value = ProctorHandlerConfiguration.CACHE_NAME,
+                key = ProctorHandlerConfiguration.CACHE_KEY)
     void deleteNode(final String configurationID,
                     final GraphDatabaseService graphDatabaseService) {
 

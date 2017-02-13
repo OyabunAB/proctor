@@ -19,7 +19,7 @@ import com.codahale.metrics.Meter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
@@ -37,7 +37,7 @@ public class ProctorHandlerMissMeter
     public ProctorHandlerMissMeter(final ProctorMetricsRegistry proctorMetricsRegistry) {
 
         misses = proctorMetricsRegistry.getMetricsRegistry()
-                                       .meter(ProctorStatistic.PROXY_HANDLER_MISS.name());
+                                       .meter(ProctorStatisticType.PROXY_HANDLER_MISS.name());
 
     }
 
@@ -56,9 +56,9 @@ public class ProctorHandlerMissMeter
     /**
      * ${@inheritDoc}
      */
-    public boolean gathers(final ProctorStatistic proctorStatistic) {
+    public boolean gathers(final ProctorStatisticType proctorStatisticType) {
 
-        return ProctorStatistic.PROXY_HANDLER_MISS.equals(proctorStatistic);
+        return ProctorStatisticType.PROXY_HANDLER_MISS.equals(proctorStatisticType);
 
     }
 

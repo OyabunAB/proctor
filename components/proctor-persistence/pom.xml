@@ -17,8 +17,8 @@
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Database Reactor</name>
-    <description>Proctor proxy database reactor pom.</description>
+    <name>Proctor Persistence Reactor</name>
+    <description>Proctor proxy persistence reactor pom.</description>
 
     <modules>
 

@@ -16,7 +16,7 @@
 package se.oyabun.proctor.persistence;
 
 import se.oyabun.proctor.events.ProctorProxyEvent;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,28 +26,34 @@ import java.util.stream.Stream;
  */
 public interface ProctorRepository {
 
-    boolean containsPropertyKey(final String configurationID);
+    //
+    // Handlers
+    //
+    boolean containsConfigurationKey(final String configurationID);
 
-    void persistProperty(final ProctorHandlerProperties properties);
+    void persistConfiguration(final ProctorHandlerConfiguration properties);
 
-    Optional<ProctorHandlerProperties> getProperty(final String configurationID);
+    Optional<ProctorHandlerConfiguration> getConfiguration(final String configurationID);
 
-    Stream<String> getPropertyKeys();
+    Stream<String> getConfigurationKeys();
 
-    Stream<ProctorHandlerProperties> getProperties();
+    Stream<ProctorHandlerConfiguration> getConfigurations();
 
-    void deleteProperty(final String configurationID);
+    void deleteConfiguration(final String configurationID);
 
-    boolean containsProxyEventKey(final String eventID);
+    //
+    // Events
+    //
+    boolean containsEventKey(final String eventID);
 
     void persistEvent(final ProctorProxyEvent proxyEvent);
 
-    Optional<ProctorProxyEvent> getProxyEvent(final String eventID);
+    Optional<ProctorProxyEvent> getEvent(final String eventID);
 
-    Stream<String> getProxyEventKeys();
+    Stream<String> getEventKeys();
 
-    Stream<ProctorProxyEvent> getProxyEvents();
+    Stream<ProctorProxyEvent> getEvents();
 
-    void deleteProxyEvent(final String eventID);
+    void deleteEvent(final String eventID);
 
 }

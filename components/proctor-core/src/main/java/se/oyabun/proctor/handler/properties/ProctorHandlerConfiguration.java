@@ -22,10 +22,10 @@ import java.util.Map;
  * Handler properties representation,
  * implementations of which is used to identify and configure a handler instance.
  */
-public interface ProctorHandlerProperties
+public interface ProctorHandlerConfiguration
         extends Serializable {
 
-    String CACHE_NAME = "ProctorHandlerProperties";
+    String CACHE_NAME = "ProctorHandlerConfiguration";
     String CACHE_KEY = "configurationID";
 
     /**

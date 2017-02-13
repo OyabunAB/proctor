@@ -19,13 +19,13 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
-public class ProctorApplicationEvent
+public class ProctorApplicationEvent<S>
         extends ApplicationEvent
         implements ProctorProxyEvent {
 
     private final String eventID;
 
-    public ProctorApplicationEvent(Object source) {
+    public ProctorApplicationEvent(S source) {
 
         super(source);
 
@@ -38,6 +38,13 @@ public class ProctorApplicationEvent
     public String getEventID() {
 
         return eventID;
+
+    }
+
+    @Override
+    public S getSource() {
+
+        return (S) super.getSource();
 
     }
 

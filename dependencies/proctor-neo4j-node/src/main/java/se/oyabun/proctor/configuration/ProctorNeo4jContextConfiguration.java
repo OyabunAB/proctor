@@ -20,7 +20,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.oyabun.proctor.repository.neo4j.log.ProctorNeo4jLogProvider;
+import se.oyabun.proctor.log.neo4j.ProctorNeo4jLogProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +28,8 @@ import java.io.IOException;
 @Configuration
 public class ProctorNeo4jContextConfiguration {
 
-
     @Bean
-    public GraphDatabaseService graphDatabaseService(@Value("${se.oyabun.proctor.repository.neo4j.directory:./data/neo4j}")
+    public GraphDatabaseService graphDatabaseService(@Value("${se.oyabun.proctor.neo4j.directory:./data/neo4j}")
                                                      final String dataDirectoryProperty)
             throws IOException {
 

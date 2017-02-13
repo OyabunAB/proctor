@@ -25,7 +25,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
 import se.oyabun.proctor.exceptions.NonGatheredStatisticRequestException;
 import se.oyabun.proctor.http.HttpResponseData;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 
 import java.math.BigInteger;
@@ -70,7 +70,7 @@ public class ProctorProxyResponseMeterTest {
     @Test
     public void verifyStatisticsGatherer() {
 
-        assertTrue(proctorProxyResponseMeter.gathers(ProctorStatistic.PROXY_REPLY_SENT));
+        assertTrue(proctorProxyResponseMeter.gathers(ProctorStatisticType.PROXY_REPLY_SENT));
 
     }
 
@@ -91,7 +91,7 @@ public class ProctorProxyResponseMeterTest {
 
         when(mockedMeter.getCount()).thenReturn(BigInteger.ONE.longValue());
 
-        assertThat(proctorProxyResponseMeter.getCountFor(ProctorStatistic.PROXY_REPLY_SENT),
+        assertThat(proctorProxyResponseMeter.getCountFor(ProctorStatisticType.PROXY_REPLY_SENT),
                    is(BigInteger.ONE));
 
     }
@@ -101,7 +101,7 @@ public class ProctorProxyResponseMeterTest {
             throws
             NonGatheredStatisticRequestException {
 
-        proctorProxyResponseMeter.getCountFor(ProctorStatistic.PROXY_REQUEST_RECEIVED);
+        proctorProxyResponseMeter.getCountFor(ProctorStatisticType.PROXY_REQUEST_RECEIVED);
 
     }
 

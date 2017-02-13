@@ -24,7 +24,7 @@
 
         <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
         <proctor-repository-api.version>0.0.1-SNAPSHOT</proctor-repository-api.version>
-        <neo4j.version>2.3.1</neo4j.version>
+        <proctor-neo4j-node.version>0.0.1-SNAPSHOT</proctor-neo4j-node.version>
 
     </properties>
 
@@ -45,9 +45,15 @@
         </dependency>
 
         <dependency>
+            <groupId>se.oyabun.proctor.dependencies.neo4j</groupId>
+            <artifactId>proctor-neo4j-node</artifactId>
+            <version>${proctor-neo4j-node.version}</version>
+        </dependency>
+
+        <!-- Neo4j dependencies -->
+        <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>${neo4j.version}</version>
         </dependency>
 
         <!-- Test dependencies -->

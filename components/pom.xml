@@ -21,15 +21,16 @@
     <description>Proctor components reactor pom.</description>
 
     <modules>
+        <module>proctor-util</module>
         <module>proctor-core</module>
-        <module>proctor-persistence</module>
-        <module>proctor-cache</module>
-        <module>proctor-admin</module>
+        <module>proctor-handler</module>
         <module>proctor-proxy</module>
         <module>proctor-httpclient</module>
-        <module>proctor-handler</module>
+        <module>proctor-persistence</module>
+        <module>proctor-cache</module>
+        <module>proctor-cluster</module>
         <module>proctor-statistics</module>
-        <module>proctor-util</module>
+        <module>proctor-admin</module>
     </modules>
 
 </project>

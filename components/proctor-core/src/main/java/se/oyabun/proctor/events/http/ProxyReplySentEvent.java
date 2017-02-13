@@ -16,12 +16,11 @@
 package se.oyabun.proctor.events.http;
 
 import se.oyabun.proctor.events.ProctorApplicationEvent;
-import se.oyabun.proctor.http.HttpResponseData;
 
 /**
  * Proctor Proxy Reply Event
  */
-public class ProxyReplySentEvent
+public class ProxyReplySentEvent<HttpResponseData>
         extends ProctorApplicationEvent {
 
     /**

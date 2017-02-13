@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.exceptions.URIParseException;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,7 +59,7 @@ public class ProctorZookeeperRouteHandler
      */
     @Override
     public URL resolveURLFor(final String uri,
-                             final ProctorHandlerProperties properties)
+                             final ProctorHandlerConfiguration properties)
             throws
             NoHandleForNameException,
             MalformedURLException {
@@ -154,7 +154,7 @@ public class ProctorZookeeperRouteHandler
     }
 
     private Optional<ServiceProvider<Void>> cacheLoadServiceProvider(final String serviceName,
-                                                                     final ProctorHandlerProperties properties) {
+                                                                     final ProctorHandlerConfiguration properties) {
 
         Optional<ServiceProvider<Void>> optionalServiceProvider = Optional.ofNullable(serviceProviderCache.get
                 (properties.getConfigurationID()));
@@ -192,7 +192,7 @@ public class ProctorZookeeperRouteHandler
 
     }
 
-    private Optional<ServiceDiscovery<Void>> cacheLoadServiceDiscovery(final ProctorHandlerProperties properties) {
+    private Optional<ServiceDiscovery<Void>> cacheLoadServiceDiscovery(final ProctorHandlerConfiguration properties) {
 
         Optional<ServiceDiscovery<Void>> optionalServiceDiscovery = Optional.ofNullable(serviceDiscoveryCache.get
                 (properties));
@@ -238,7 +238,7 @@ public class ProctorZookeeperRouteHandler
 
     }
 
-    private Optional<CuratorFramework> cacheLoadCuratorFramework(final ProctorHandlerProperties properties) {
+    private Optional<CuratorFramework> cacheLoadCuratorFramework(final ProctorHandlerConfiguration properties) {
 
         CuratorFramework curatorFramework = Optional.ofNullable(curatorCache.get(properties))
                                                     .orElseGet(() -> CuratorFrameworkFactory.newClient(properties

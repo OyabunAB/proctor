@@ -54,9 +54,7 @@ public class ProctorHttpHandler
                              final FullHttpRequest fullHttpRequest)
             throws
             Exception {
-
-        fullHttpRequest.retain();
-
+        
         channelHandlerContext.writeAndFlush(proctorHttpResponder.processRequest(fullHttpRequest));
 
     }

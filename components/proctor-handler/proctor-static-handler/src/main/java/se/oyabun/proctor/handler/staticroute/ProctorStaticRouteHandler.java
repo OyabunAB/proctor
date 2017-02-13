@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.AbstractDefaultProctorRouteHandler;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,7 +44,7 @@ public class ProctorStaticRouteHandler
      * @throws NoHandleForNameException when no handle can be found for given name
      */
     public URL resolveURLFor(final String input,
-                             final ProctorHandlerProperties properties)
+                             final ProctorHandlerConfiguration properties)
             throws
             NoHandleForNameException,
             MalformedURLException {
@@ -67,7 +67,7 @@ public class ProctorStaticRouteHandler
      * @return the configured root url
      */
     @Override
-    protected URL getRoot(final ProctorHandlerProperties properties)
+    protected URL getRoot(final ProctorHandlerConfiguration properties)
             throws
             MalformedURLException {
 

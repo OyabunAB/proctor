@@ -24,7 +24,7 @@
 
         <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
         <proctor-cache-api.version>0.0.1-SNAPSHOT</proctor-cache-api.version>
-        <hazelcast.version>3.5.4</hazelcast.version>
+        <proctor-hazelcast-node.version>0.0.1-SNAPSHOT</proctor-hazelcast-node.version>
 
     </properties>
 
@@ -43,11 +43,16 @@
             <version>${proctor-cache-api.version}</version>
         </dependency>
 
-        <!-- Persistence dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.dependencies.hazelcast</groupId>
+            <artifactId>proctor-hazelcast-node</artifactId>
+            <version>${proctor-hazelcast-node.version}</version>
+        </dependency>
+
+        <!-- Hazelcast transient dependency -->
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-all</artifactId>
-            <version>${hazelcast.version}</version>
         </dependency>
 
 

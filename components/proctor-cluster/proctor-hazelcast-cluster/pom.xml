@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components</groupId>
+        <artifactId>proctor-cluster-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>se.oyabun.proctor.components.cluster</groupId>
+    <artifactId>proctor-hazelcast-cluster</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Proctor Hazelcast Cluster</name>
+    <description>Proctor hazelcast cluster module.</description>
+
+    <properties>
+
+        <proctor-core.version>0.0.1-SNAPSHOT</proctor-core.version>
+        <proctor-cluster-api.version>0.0.1-SNAPSHOT</proctor-cluster-api.version>
+        <proctor-hazelcast-node.version>0.0.1-SNAPSHOT</proctor-hazelcast-node.version>
+
+    </properties>
+
+    <dependencies>
+
+        <!-- Proctor dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.core</groupId>
+            <artifactId>proctor-core</artifactId>
+            <version>${proctor-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.cluster</groupId>
+            <artifactId>proctor-cluster-api</artifactId>
+            <version>${proctor-cluster-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.dependencies.hazelcast</groupId>
+            <artifactId>proctor-hazelcast-node</artifactId>
+            <version>${proctor-hazelcast-node.version}</version>
+        </dependency>
+
+        <!-- Hazelcast transient dependency -->
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

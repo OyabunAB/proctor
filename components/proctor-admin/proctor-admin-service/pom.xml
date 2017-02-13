@@ -22,14 +22,13 @@
 
     <properties>
 
+        <proctor-cluster-api.version>0.0.1-SNAPSHOT</proctor-cluster-api.version>
         <proctor-handlers-api.version>0.0.1-SNAPSHOT</proctor-handlers-api.version>
         <proctor-statistics-api.version>0.0.1-SNAPSHOT</proctor-statistics-api.version>
 
         <spring-web.version>4.2.6.RELEASE</spring-web.version>
         <spring-security.version>4.0.3.RELEASE</spring-security.version>
-
         <servlet-api.version>2.5</servlet-api.version>
-
         <swagger.version>2.6.1</swagger.version>
 
     </properties>
@@ -37,6 +36,12 @@
     <dependencies>
 
         <!-- Proctor Dependencies -->
+        <dependency>
+            <groupId>se.oyabun.proctor.components.cluster</groupId>
+            <artifactId>proctor-cluster-api</artifactId>
+            <version>${proctor-cluster-api.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>se.oyabun.proctor.components.handlers</groupId>
             <artifactId>proctor-handlers-api</artifactId>

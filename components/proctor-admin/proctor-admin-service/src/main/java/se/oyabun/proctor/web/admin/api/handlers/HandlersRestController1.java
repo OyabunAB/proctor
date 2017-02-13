@@ -21,7 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.web.admin.api.AbstractSecuredAPIController;
 
 import java.util.Arrays;
@@ -37,10 +37,12 @@ import java.util.Optional;
 public class HandlersRestController1
         extends AbstractSecuredAPIController {
 
-    public static final String API_ROOT = "/api/1";
-    public static final String CONFIGURATIONS = "/configurations/";
-    public static final String CONFIGURATIONID_PROPERTY = "{configurationID}";
-    public static final String HANDLER_TYPES = "/handletypes";
+    public static final String API_ROOT = "/v1/api/handlers/";
+    public static final String CONFIGURATIONS = "configurations/";
+    public static final String HANDLER_TYPES = "handlertypes/";
+
+    public static final String HANDLERTYPE_PROPERTY = "handlerType";
+    public static final String CONFIGURATIONID_PROPERTY = "configurationID";
 
     private ProctorRouteHandlerManager proctorRouteHandlerManager;
 
@@ -59,27 +61,53 @@ public class HandlersRestController1
     @RequestMapping(value = HandlersRestController1.CONFIGURATIONS,
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProctorHandlerProperties[]> getConfigurations() {
+    public ResponseEntity<String[]> getConfigurations() {
 
-        final ProctorHandlerProperties[] registeredProctorRouteHandlers =
+        final String[] registeredProctorRouteHandlers =
                 proctorRouteHandlerManager.getRegisteredProperties()
-                                          .toArray(size -> new ProctorHandlerProperties[size]);
+                                          .map(ProctorHandlerConfiguration::getConfigurationID)
+                                          .toArray(size -> new String[size]);
 
         return !Arrays.asList(registeredProctorRouteHandlers).isEmpty() ?
                ResponseEntity.status(HttpStatus.OK).body(registeredProctorRouteHandlers) :
-               ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ProctorHandlerProperties[0]);
+               ResponseEntity.status(HttpStatus.NO_CONTENT).body(new String[0]);
 
     }
 
     /**
      * Returns all valid managed handler types
      *
-     * @return all handler type names valid for configurations
+     * @return all handler configurations for given handler type
+     */
+    @RequestMapping(value = HandlersRestController1.HANDLER_TYPES +
+                            "{"+HandlersRestController1.HANDLERTYPE_PROPERTY+"}/" +
+                            HandlersRestController1.CONFIGURATIONS,
+                    method = RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ProctorHandlerConfiguration[]> getForHandlerType(@PathVariable(HANDLERTYPE_PROPERTY)
+                                                                           final String handlerType)
+            throws ClassNotFoundException {
+
+        final ProctorHandlerConfiguration[] propertiesForType =
+                proctorRouteHandlerManager.getRegisteredProperties()
+                                          .filter(properties -> properties.getHandlerType().equals(handlerType))
+                                          .toArray(size -> new ProctorHandlerConfiguration[size]);
+
+        return !Arrays.asList(propertiesForType).isEmpty() ?
+               ResponseEntity.status(HttpStatus.OK).body(propertiesForType) :
+               ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ProctorHandlerConfiguration[0]);
+
+    }
+
+    /**
+     * Returns all available handler types
+     *
+     * @return all handler types
      */
     @RequestMapping(value = HandlersRestController1.HANDLER_TYPES,
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String[]> getTypes() {
+    public ResponseEntity<String[]> getHandlerTypes() {
 
         final String[] managedHandlerTypes =
                 proctorRouteHandlerManager.getManagedHandlerTypes()
@@ -98,13 +126,13 @@ public class HandlersRestController1
      * @return handler configuration with specified configuration ID
      */
     @RequestMapping(value = HandlersRestController1.CONFIGURATIONS +
-                            HandlersRestController1.CONFIGURATIONID_PROPERTY,
+                            "{"+HandlersRestController1.CONFIGURATIONID_PROPERTY+"}/",
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProctorHandlerProperties> getConfiguration(@PathVariable
-                                                                     final String configurationID) {
+    public ResponseEntity<ProctorHandlerConfiguration> getConfiguration(@PathVariable(CONFIGURATIONID_PROPERTY)
+                                                                        final String configurationID) {
 
-        final Optional<ProctorHandlerProperties> optionalProperty =
+        final Optional<ProctorHandlerConfiguration> optionalProperty =
                 proctorRouteHandlerManager.getPropertiesForHandler(configurationID);
 
         return optionalProperty.isPresent() ?
@@ -116,16 +144,16 @@ public class HandlersRestController1
     /**
      * Creates a new handler configuration
      *
-     * @param proctorHandlerProperties to be created
+     * @param handlerConfiguration to be created
      */
     @RequestMapping(value = HandlersRestController1.CONFIGURATIONS,
                     method = RequestMethod.POST,
                     consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void createConfiguration(@RequestBody
-                       ProctorHandlerProperties proctorHandlerProperties) {
+                                    final ProctorHandlerConfiguration handlerConfiguration) {
 
-        proctorRouteHandlerManager.registerRouteProperties(proctorHandlerProperties);
+        proctorRouteHandlerManager.registerRouteProperties(handlerConfiguration);
 
     }
 
@@ -135,10 +163,10 @@ public class HandlersRestController1
      * @param configurationID of the configuration to remove
      */
     @RequestMapping(value = HandlersRestController1.CONFIGURATIONS +
-                            HandlersRestController1.CONFIGURATIONID_PROPERTY,
+                            "{"+HandlersRestController1.CONFIGURATIONID_PROPERTY+"}/",
                     method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void deleteConfiguration(@PathVariable
+    public void deleteConfiguration(@PathVariable(CONFIGURATIONID_PROPERTY)
                                     final String configurationID) {
 
         proctorRouteHandlerManager.unregisterRouteProperties(configurationID);

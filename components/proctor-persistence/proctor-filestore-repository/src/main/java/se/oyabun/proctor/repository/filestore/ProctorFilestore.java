@@ -23,12 +23,12 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.io.*;
 
 @Component
-@CacheConfig(cacheNames = {ProctorHandlerProperties.CACHE_NAME})
+@CacheConfig(cacheNames = { ProctorHandlerConfiguration.CACHE_NAME})
 public class ProctorFilestore {
 
     private static final Logger log = LoggerFactory.getLogger(ProctorFilestore.class);
@@ -40,10 +40,10 @@ public class ProctorFilestore {
      * @param properties to write to file
      * @param propertiesDirectory where file will be written
      */
-    @CachePut(value = ProctorHandlerProperties.CACHE_NAME,
-              key = ProctorHandlerProperties.CACHE_KEY)
+    @CachePut(value = ProctorHandlerConfiguration.CACHE_NAME,
+              key = ProctorHandlerConfiguration.CACHE_KEY)
     void createFile(final String configurationID,
-                    final ProctorHandlerProperties properties,
+                    final ProctorHandlerConfiguration properties,
                     final File propertiesDirectory) {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -97,10 +97,10 @@ public class ProctorFilestore {
      * @param propertiesDirectory where the file exists.
      * @return materialized file.
      */
-    @Cacheable(value = ProctorHandlerProperties.CACHE_NAME,
-               key = ProctorHandlerProperties.CACHE_KEY)
-    ProctorHandlerProperties readFile(final String configurationID,
-                                      final File propertiesDirectory) {
+    @Cacheable(value = ProctorHandlerConfiguration.CACHE_NAME,
+               key = ProctorHandlerConfiguration.CACHE_KEY)
+    ProctorHandlerConfiguration readFile(final String configurationID,
+                                         final File propertiesDirectory) {
 
         ObjectInput in = null;
 
@@ -118,7 +118,7 @@ public class ProctorFilestore {
 
                 in = new ObjectInputStream(bis);
 
-                return (ProctorHandlerProperties) in.readObject();
+                return (ProctorHandlerConfiguration) in.readObject();
 
             }
 
@@ -162,8 +162,8 @@ public class ProctorFilestore {
      * @param configurationID to delete
      * @param propertiesDirectory where the file exists
      */
-    @CacheEvict(value = ProctorHandlerProperties.CACHE_NAME,
-                key = ProctorHandlerProperties.CACHE_KEY)
+    @CacheEvict(value = ProctorHandlerConfiguration.CACHE_NAME,
+                key = ProctorHandlerConfiguration.CACHE_KEY)
     void deleteFile(final String configurationID,
                     final File propertiesDirectory) {
 

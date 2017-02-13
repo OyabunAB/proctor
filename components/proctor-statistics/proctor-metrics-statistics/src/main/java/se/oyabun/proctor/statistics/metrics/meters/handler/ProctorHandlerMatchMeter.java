@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import se.oyabun.proctor.events.handler.ProxyHandlerMatchedEvent;
-import se.oyabun.proctor.statistics.ProctorStatistic;
+import se.oyabun.proctor.statistics.ProctorStatisticType;
 import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.metrics.ProctorMetricsRegistry;
 import se.oyabun.proctor.statistics.metrics.meters.AbstractProctorMeter;
@@ -39,7 +39,7 @@ public class ProctorHandlerMatchMeter
     public ProctorHandlerMatchMeter(ProctorMetricsRegistry proctorMetricsRegistry) {
 
         hits = proctorMetricsRegistry.getMetricsRegistry()
-                                     .meter(ProctorStatistic.PROXY_HANDLER_MATCH.name());
+                                     .meter(ProctorStatisticType.PROXY_HANDLER_MATCH.name());
 
     }
 
@@ -58,9 +58,9 @@ public class ProctorHandlerMatchMeter
     /**
      * ${@inheritDoc}
      */
-    public boolean gathers(final ProctorStatistic proctorStatistic) {
+    public boolean gathers(final ProctorStatisticType proctorStatisticType) {
 
-        return ProctorStatistic.PROXY_HANDLER_MATCH.equals(proctorStatistic);
+        return ProctorStatisticType.PROXY_HANDLER_MATCH.equals(proctorStatisticType);
 
     }
 

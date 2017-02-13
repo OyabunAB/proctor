@@ -16,7 +16,7 @@
 package se.oyabun.proctor.handler;
 
 import se.oyabun.proctor.exceptions.NoHandleForNameException;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,7 +37,7 @@ public interface ProctorRouteHandler {
      * @throws MalformedURLException    on malformed URLs
      */
     URL resolveURLFor(final String input,
-                      final ProctorHandlerProperties properties)
+                      final ProctorHandlerConfiguration properties)
             throws
             NoHandleForNameException,
             MalformedURLException;

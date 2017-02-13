@@ -15,22 +15,21 @@
  */
 package se.oyabun.proctor.proxy.grizzly;
 
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.grizzly.http.io.NIOReader;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import se.oyabun.proctor.ProctorServerConfiguration;
 import se.oyabun.proctor.events.handler.ProxyHandlerNotMatchedEvent;
 import se.oyabun.proctor.events.http.ProxyReplySentEvent;
 import se.oyabun.proctor.events.http.ProxyRequestReceivedEvent;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
-import se.oyabun.proctor.handler.properties.ProctorHandlerProperties;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
@@ -54,26 +53,17 @@ public class ProctorGrizzlyHttpHandler
     private ApplicationEventPublisher applicationEventPublisher;
     private ProctorRouteHandlerManager proctorRouteHandlerManager;
     private ProctorHttpClient httpClient;
-
-    @Value("${se.oyabun.proctor.proxy.local.keystore.path:#{null}}")
-    private String keystorePath;
-
-    @Value("${se.oyabun.proctor.proxy.local.keystore.password:#{null}}")
-    private String keyStorePassword;
-
-    @Value("${se.oyabun.proctor.proxy.listen.port}")
-    private int proxyListenPort;
-
-    @Value("${se.oyabun.proctor.proxy.listen.address}")
-    private String proxyListenAddress;
+    private ProctorServerConfiguration localServerConfiguration;
 
     public ProctorGrizzlyHttpHandler(final ApplicationEventPublisher applicationEventPublisher,
                                      final ProctorRouteHandlerManager proctorRouteHandlerManager,
-                                     final ProctorHttpClient httpClient) {
+                                     final ProctorHttpClient httpClient,
+                                     final ProctorServerConfiguration localServerConfiguration) {
 
         this.applicationEventPublisher = applicationEventPublisher;
         this.proctorRouteHandlerManager = proctorRouteHandlerManager;
         this.httpClient = httpClient;
+        this.localServerConfiguration = localServerConfiguration;
 
     }
 
@@ -93,9 +83,9 @@ public class ProctorGrizzlyHttpHandler
 
         final String clientRequestPath = request.getHttpHandlerPath();
 
-        Optional<ProctorHandlerProperties> optionalProperties = proctorRouteHandlerManager.getMatchingPropertiesFor
+        Optional<ProctorHandlerConfiguration> optionalProperties = proctorRouteHandlerManager.getMatchingPropertiesFor
                 (clientRequestPath)
-                                                                                          .findFirst();
+                                                                                             .findFirst();
 
         Optional<ProctorRouteHandler> optionalHandler = optionalProperties.isPresent() ?
                                                         proctorRouteHandlerManager.getHandler(optionalProperties.get
@@ -222,11 +212,7 @@ public class ProctorGrizzlyHttpHandler
                                        final URL proxyUrl)
             throws MalformedURLException {
 
-        URL originURL = new URL(((StringUtils.isNotBlank(keyStorePassword) && StringUtils.isNotBlank(keystorePath)) ?
-                                 "https" :
-                                 "http") + "://" + proxyListenAddress + ":" + proxyListenPort + "/");
-
-
+        URL originURL = localServerConfiguration.getProxyOriginURL();
 
         response.setStatus(responseData.getStatusCode(),
                            responseData.getStatusMessage());

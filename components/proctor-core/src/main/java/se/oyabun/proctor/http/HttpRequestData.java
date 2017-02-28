@@ -16,6 +16,7 @@
 package se.oyabun.proctor.http;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class HttpRequestData
                            final InetAddress host,
                            final Integer port,
                            final String method,
-                           final Map<String, List<String>> headers,
+                           final Map<String, Collection<String>> headers,
                            final byte[] body,
                            final Map<String, List<String>> queryParameters,
                            final String path) {

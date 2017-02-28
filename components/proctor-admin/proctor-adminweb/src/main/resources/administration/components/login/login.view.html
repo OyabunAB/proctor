@@ -1,0 +1,62 @@
+<!-- BOF login.view.html -->
+<div id="proctor-login" class="login-pf">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="tight">
+                    <img src="assets/img/proctor_logo.svg" alt="Proctor Administration">
+                    <span class="proctor_logo_text">PROCTOR</span><br/>
+                    <img style="vertical-align:sub" src="assets/img/oyabun_logo.svg" height="15em" alt="Oyabun AB" />
+                    <span class="oyabun_copytight_text">Oyabun AB &copy; 2016 </span>
+                </p>
+            </div>
+            <div class="col-sm-7 col-md-6 col-lg-5 login">
+                <form class="form-horizontal" role="form" ng-submit="loginController.login()" novalidate >
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 col-md-2 control-label">Username</label>
+                        <div class="col-sm-10 col-md-10">
+                            <input id="username" name="username" type="text" ng-model="loginController.username"
+                                   class="form-control" placeholder="" tabindex="1"  required />
+                            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
+                                <div ng-message="required">Username is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 col-md-2 control-label">Password</label>
+                        <div class="col-sm-10 col-md-10">
+                            <input id="password" name="password" type="password" class="form-control"
+                                   placeholder="" tabindex="2" ng-model="loginController.password" required />
+                            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
+                                <div ng-message="required">Password is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
+                            <div ng-if="loginController.error" class="alert alert-danger">{{loginController.error}}</div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 submit">
+
+                            <button type="submit" ng-disabled="loginController.loading"
+                                    class="btn btn-primary btn-lg" tabindex="4">
+                                <img ng-if="loginController.loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                Log In
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-5 col-md-6 col-lg-7 details">
+                <p>
+                    <strong>Proctor Proxy Administration | open proxy framework</strong><br/>
+                    Proctor administration pages require credentials to access, please provide username and
+                    password to access the application controls and statistics. If you requrire an account please
+                    contact your proxy administrator.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- EOF login.view.html -->

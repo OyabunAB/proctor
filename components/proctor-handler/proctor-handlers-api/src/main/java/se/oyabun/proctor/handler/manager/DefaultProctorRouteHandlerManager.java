@@ -125,12 +125,13 @@ public class DefaultProctorRouteHandlerManager
      * ${@inheritDoc}
      */
     @Override
-    public Stream<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input) {
+    public Optional<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input) {
 
         return proctorRepository.getConfigurations()
                                 .filter(properties -> Pattern.compile(properties.getPattern())
                                                              .matcher(input)
-                                                             .matches());
+                                                             .matches())
+                                .findFirst();
 
     }
 

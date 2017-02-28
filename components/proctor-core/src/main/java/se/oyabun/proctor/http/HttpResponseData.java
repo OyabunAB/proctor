@@ -15,7 +15,7 @@
  */
 package se.oyabun.proctor.http;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -32,7 +32,7 @@ public class HttpResponseData
 
     public HttpResponseData(final int statusCode,
                             final String statusMessage,
-                            final Map<String, List<String>> headers,
+                            final Map<String, Collection<String>> headers,
                             final String contentType,
                             final long contentLength,
                             final byte[] body) {

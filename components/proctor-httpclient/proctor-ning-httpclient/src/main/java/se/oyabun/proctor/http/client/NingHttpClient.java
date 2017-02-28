@@ -23,10 +23,7 @@ import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -51,12 +48,11 @@ public class NingHttpClient
     private AsyncHttpClient asyncHttpClient;
 
     public HttpResponseData execute(final HttpRequestData request)
-            throws
-            IOException,
-            CancellationException,
-            InterruptedException,
-            ExecutionException,
-            TimeoutException {
+            throws IOException,
+                   CancellationException,
+                   InterruptedException,
+                   ExecutionException,
+                   TimeoutException {
 
         final String requestUrl = request.getProtocol() +
                                   "://" +
@@ -68,6 +64,7 @@ public class NingHttpClient
                                   request.getPath();
 
         final Request httpRequest = new RequestBuilder().setUrl(requestUrl)
+                                                        .setHeaders(request.getHeaders())
                                                         .setMethod(request.getMethod())
                                                         .setBody(request.getBody())
                                                         .build();
@@ -77,25 +74,24 @@ public class NingHttpClient
         final Response response = asyncResponse.get(DEFAULT_REQUEST_TIMEOUT + 100,
                                                     TimeUnit.MILLISECONDS);
 
-        final Map<String, List<String>> responseHeaders = new HashMap<>();
-        for (Map.Entry<String, List<String>> entry : response.getHeaders()
-                                                             .entrySet()) {
 
-            final String headerName = entry.getKey();
-            final ArrayList<String> headerValues = new ArrayList<>(entry.getValue());
-            responseHeaders.put(headerName,
-                                headerValues);
-
-        }
 
         final HttpResponseData responseData = new HttpResponseData(response.getStatusCode(),
                                                                    response.getStatusText(),
-                                                                   responseHeaders,
+                                                                   extractHeaders(response.getHeaders()),
                                                                    response.getContentType(),
                                                                    response.getResponseBodyAsBytes().length,
                                                                    response.getResponseBodyAsBytes());
 
         return responseData;
+
+    }
+
+    private Map<String, Collection<String>> extractHeaders(Map<String, List<String>> originalHeaders) {
+
+        Map<String, Collection<String>> headers = new HashMap<>();
+        originalHeaders.forEach((s, strings) -> headers.put(s, strings));
+        return headers;
 
     }
 

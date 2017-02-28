@@ -19,12 +19,30 @@
     <name>Proctor Utils Component</name>
     <description>Proctor general util component.</description>
 
+    <properties>
+        <jjwt.version>0.7.0</jjwt.version>
+    </properties>
+
     <dependencies>
 
         <!-- General dependencies -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.2</version>
         </dependency>
 
         <!-- Test dependencies -->

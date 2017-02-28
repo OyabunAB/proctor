@@ -20,6 +20,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.FileNotFoundException;
@@ -54,17 +55,21 @@ public class ProctorServer {
 
         if (StringUtils.isNotBlank(propertiesFileOverride)) {
 
-            propertyPlaceholderConfigurer.setLocation(new FileSystemResource(propertiesFileOverride));
+            propertyPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"),
+                                                       new FileSystemResource(propertiesFileOverride));
 
         } else if (defaultPropertiesFile.exists()) {
 
-            propertyPlaceholderConfigurer.setLocation(defaultPropertiesFile);
+            propertyPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"),
+                                                       defaultPropertiesFile);
 
         } else {
 
-            throw new FileNotFoundException("No properties file was found.");
+            throw new FileNotFoundException("'./proctor.properties' file was found, " +
+                                            "override with system property 'proctor.properties'.");
 
         }
+
 
 
         return propertyPlaceholderConfigurer;

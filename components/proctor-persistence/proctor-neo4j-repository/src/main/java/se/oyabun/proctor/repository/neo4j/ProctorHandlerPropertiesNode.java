@@ -26,14 +26,14 @@ public class ProctorHandlerPropertiesNode {
     /**
      * Materialize a proctor handler properties node
      *
-     * @param configurationID
-     * @param graphDatabaseService
-     * @return
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param configurationID to materialize
+     * @param graphDatabaseService for lookup
+     * @return proctor handler configurations
+     * @throws ClassNotFoundException on missing class
+     * @throws NoSuchMethodException on missing constructor
+     * @throws InvocationTargetException when invocation fails
+     * @throws IllegalAccessException when not allowed to access
+     * @throws InstantiationException when instantiation fails
      */
     public static List<ProctorHandlerConfiguration> materializeProctorProperties(final Optional<String> configurationID,
                                                                                  final GraphDatabaseService graphDatabaseService)

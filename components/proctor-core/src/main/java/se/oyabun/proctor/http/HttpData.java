@@ -16,7 +16,7 @@
 package se.oyabun.proctor.http;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,10 +26,10 @@ import java.util.Objects;
 public class HttpData
         implements Serializable {
 
-    private final Map<String, List<String>> headers;
+    private final Map<String, Collection<String>> headers;
     private final byte[] body;
 
-    public HttpData(final Map<String, List<String>> headers,
+    public HttpData(final Map<String, Collection<String>> headers,
                     final byte[] body) {
 
         this.headers = headers;
@@ -79,7 +79,7 @@ public class HttpData
 
     }
 
-    public Map<String, List<String>> getHeaders() {
+    public Map<String, Collection<String>> getHeaders() {
 
         return headers;
     }

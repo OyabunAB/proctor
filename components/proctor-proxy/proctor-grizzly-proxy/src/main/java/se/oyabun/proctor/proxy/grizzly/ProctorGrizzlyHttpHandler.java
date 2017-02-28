@@ -77,20 +77,20 @@ public class ProctorGrizzlyHttpHandler
         CharArrayWriter requestBuffer = getRequestBody(request);
         final String requestBodyAsString = requestBuffer.toString();
 
-        final Map<String, List<String>> headers = new HashMap<>();
+        final Map<String, Collection<String>> headers = new HashMap<>();
+
         extractHeaders(request,
                        headers);
 
         final String clientRequestPath = request.getHttpHandlerPath();
 
-        Optional<ProctorHandlerConfiguration> optionalProperties = proctorRouteHandlerManager.getMatchingPropertiesFor
-                (clientRequestPath)
-                                                                                             .findFirst();
+        Optional<ProctorHandlerConfiguration> optionalProperties =
+                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath);
 
-        Optional<ProctorRouteHandler> optionalHandler = optionalProperties.isPresent() ?
-                                                        proctorRouteHandlerManager.getHandler(optionalProperties.get
-                                                                ()) :
-                                                        Optional.empty();
+        Optional<ProctorRouteHandler> optionalHandler =
+                optionalProperties.isPresent() ?
+                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                    Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
@@ -187,7 +187,7 @@ public class ProctorGrizzlyHttpHandler
     }
 
     private void extractHeaders(final Request request,
-                                final Map<String, List<String>> headers) {
+                                final Map<String, Collection<String>> headers) {
 
         for (String headername : request.getHeaderNames()) {
 
@@ -217,20 +217,17 @@ public class ProctorGrizzlyHttpHandler
         response.setStatus(responseData.getStatusCode(),
                            responseData.getStatusMessage());
 
-        final Map<String, List<String>> responseHeaders = responseData.getHeaders();
+        final Map<String, Collection<String>> responseHeaders = responseData.getHeaders();
 
-        for (final Map.Entry<String, List<String>> responseHeader : responseHeaders.entrySet()) {
+        for (final Map.Entry<String, Collection<String>> responseHeader : responseHeaders.entrySet()) {
 
-            final List<String> responseHeaderValues = responseHeader.getValue();
-            final List<String> rewrittenHeaderValues = new ArrayList<>();
+            final Collection<String> responseHeaderValues = responseHeader.getValue();
 
             for (final String responseHeaderValue : responseHeaderValues) {
 
-                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(),
-                                                                         originURL.toString()));
-
                 response.addHeader(responseHeader.getKey(),
-                                   responseHeaderValue);
+                                   responseHeaderValue.replaceAll(proxyUrl.toString(),
+                                                                  originURL.toString()));
 
             }
 

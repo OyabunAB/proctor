@@ -1,1 +1,0 @@
-var administrationApplication = angular.module('administrationApplication', ['ui.router']);

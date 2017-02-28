@@ -15,19 +15,38 @@
  */
 package se.oyabun.proctor.configuration;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import se.oyabun.proctor.ProctorServerConfiguration;
-import se.oyabun.proctor.web.admin.api.cluster.ClusterRestController1;
-import se.oyabun.proctor.web.admin.api.handlers.HandlersRestController1;
-import se.oyabun.proctor.web.admin.api.statistics.StatisticsRestController1;
+import se.oyabun.proctor.security.CustomTokenAuthenticationFilter;
+import se.oyabun.proctor.security.PassthroughAuthenticationManager;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
 
 /**
  * Proctor admin service context properties
@@ -36,6 +55,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @ComponentScan("se.oyabun.proctor.web")
 public class ProctorAdminWebServiceContextConfiguration {
+
+    private static final Logger log = LoggerFactory.getLogger(ProctorAdminWebServiceContextConfiguration.class);
+
+    @Value("${se.oyabun.proctor.security.signingKey}")
+    private String signingKey;
 
     @Bean
     public ApiInfo apiInfo() {
@@ -50,20 +74,118 @@ public class ProctorAdminWebServiceContextConfiguration {
                 .build();
     }
 
-    @Autowired
     @Bean
-    public Docket usersDocket(final ApiInfo apiInfo,
-                              final ProctorServerConfiguration configuration) {
+    @Autowired
+    public Docket securityDocket(final ApiInfo apiInfo,
+                                 final ProctorServerConfiguration configuration) {
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("proxy")
+                .groupName("security")
                 .apiInfo(apiInfo)
                 .host(configuration.getProxyAddressAndPort())
                 .select()
-                .paths(input -> input.contains(ClusterRestController1.API_ROOT) ||
-                                input.contains(HandlersRestController1.API_ROOT) ||
-                                input.contains(StatisticsRestController1.API_ROOT))
+                .paths(input -> input.startsWith("/security/"))
                 .build();
+    }
+
+    @Bean
+    @Autowired
+    public Docket proxyDocket(final ApiInfo apiInfo,
+                              final ProctorServerConfiguration configuration) {
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("api")
+                .apiInfo(apiInfo)
+                .host(configuration.getProxyAddressAndPort())
+                .securitySchemes(Arrays.asList(new ApiKey(HttpHeaders.AUTHORIZATION,
+                                                          "Bearer",
+                                                          "header")))
+                .select()
+                .paths(input -> input.startsWith("/api/"))
+                .build();
+
+    }
+
+    @Autowired
+    public void configeJackson(Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
+
+        jackson2ObjectMapperBuilder.dateFormat(new ISO8601DateFormat());
+
+    }
+
+    @Configuration
+    @EnableWebSecurity
+    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    protected class ProctorWebSecurityConfig
+            extends WebSecurityConfigurerAdapter {
+
+        @Override
+        @Autowired
+        protected void configure(final AuthenticationManagerBuilder auth)
+                throws Exception {
+
+            auth.parentAuthenticationManager(passthroughAuthenticationManager());
+
+        }
+
+        @Override
+        protected void configure(final HttpSecurity http)
+                throws Exception {
+
+            http
+                    .authorizeRequests()
+                        .antMatchers("/security/**").permitAll()
+                        .antMatchers("/api/**").authenticated()
+                    .and()
+                        .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                        .anonymous()
+                    .and()
+                        .securityContext()
+                    .and()
+                        .headers().disable()
+                        .rememberMe().disable()
+                        .requestCache().disable()
+                        .x509().disable()
+                        .csrf().disable()
+                        .httpBasic().disable()
+                        .formLogin().disable()
+                        .logout().disable()
+                    .addFilterBefore(
+                            new CustomTokenAuthenticationFilter("/api/**", signingKey),
+                            AnonymousAuthenticationFilter.class)
+                    .addFilterBefore(corsFilter(),
+                                     CustomTokenAuthenticationFilter.class)
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+
+        }
+
+
+
+        @Bean
+        public CorsFilter corsFilter() {
+
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(true);
+            config.addAllowedOrigin("*");
+            config.addAllowedHeader("*");
+            config.addAllowedMethod("*");
+            source.registerCorsConfiguration("/**", config);
+
+            return new CorsFilter(source);
+
+        }
+
+        @Bean
+        public PassthroughAuthenticationManager passthroughAuthenticationManager() {
+
+            return new PassthroughAuthenticationManager();
+
+        }
+
     }
 
 }

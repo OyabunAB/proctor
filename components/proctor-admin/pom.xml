@@ -21,8 +21,8 @@
     <description>Proctor administration components reactor pom.</description>
 
     <modules>
-        <module>patternfly-webjar</module>
-        <module>proctor-admin-web</module>
+        <module>patternfly</module>
+        <module>proctor-adminweb</module>
         <module>proctor-admin-service</module>
     </modules>
 

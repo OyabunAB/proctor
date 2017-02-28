@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor Open Proxy Framework Application</name>
+    <name>Proctor Open Proxy Framework</name>
     <description>Proctor standalone proxy application</description>
 
     <properties>
@@ -29,7 +29,7 @@
         <proctor-static-handler.version>0.0.1-SNAPSHOT</proctor-static-handler.version>
         <proctor-metrics-statistics.version>0.0.1-SNAPSHOT</proctor-metrics-statistics.version>
         <proctor-admin-service.version>0.0.1-SNAPSHOT</proctor-admin-service.version>
-        <proctor-admin-web.version>0.0.1-SNAPSHOT</proctor-admin-web.version>
+        <proctor-adminweb.version>0.0.1-SNAPSHOT</proctor-adminweb.version>
         <proctor-hazelcast-cache.version>0.0.1-SNAPSHOT</proctor-hazelcast-cache.version>
         <proctor-neo4j-repository.version>0.0.1-SNAPSHOT</proctor-neo4j-repository.version>
         <proctor-filestore-repository.version>0.0.1-SNAPSHOT</proctor-filestore-repository.version>
@@ -93,9 +93,9 @@
         </dependency>
 
         <dependency>
-            <groupId>se.oyabun.proctor.components.admin</groupId>
-            <artifactId>proctor-admin-web</artifactId>
-            <version>${proctor-admin-web.version}</version>
+            <groupId>se.oyabun.proctor.webjars</groupId>
+            <artifactId>proctor-adminweb</artifactId>
+            <version>${proctor-adminweb.version}</version>
         </dependency>
 
         <!-- Spring dependencies -->
@@ -130,20 +130,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito-all.version}</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

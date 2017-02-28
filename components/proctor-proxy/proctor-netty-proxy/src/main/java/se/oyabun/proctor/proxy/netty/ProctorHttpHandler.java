@@ -52,10 +52,11 @@ public class ProctorHttpHandler
      */
     public void channelRead0(final ChannelHandlerContext channelHandlerContext,
                              final FullHttpRequest fullHttpRequest)
-            throws
-            Exception {
-        
+            throws Exception {
+
         channelHandlerContext.writeAndFlush(proctorHttpResponder.processRequest(fullHttpRequest));
+
+        fullHttpRequest.retain();
 
     }
 
@@ -66,10 +67,9 @@ public class ProctorHttpHandler
      * @param throwable             exception that occured during handling
      * @throws Exception rethrown after logging
      */
-    public void exceptionCaught(ChannelHandlerContext channelHandlerContext,
-                                Throwable throwable)
-            throws
-            Exception {
+    public void exceptionCaught(final ChannelHandlerContext channelHandlerContext,
+                                final Throwable throwable)
+            throws Exception {
 
         logger.error("Exception occurred during handling.",
                      throwable);

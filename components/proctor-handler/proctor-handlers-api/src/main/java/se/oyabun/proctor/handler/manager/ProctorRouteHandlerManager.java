@@ -44,9 +44,9 @@ public interface ProctorRouteHandlerManager {
      * Get all matching handlers for input
      *
      * @param input to match properties on
-     * @return matching properties
+     * @return optional matching properties
      */
-    Stream<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input);
+    Optional<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input);
 
     /**
      * Return all registered handler properties

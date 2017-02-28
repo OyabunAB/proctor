@@ -73,8 +73,7 @@ public class ProctorApplicationContextConfiguration {
         securityProperties.setIgnored(Arrays.asList("/assets/**",
                                                     "/administration/**",
                                                     "/webjars/**",
-                                                    "/index.html",
-                                                    "/**"));
+                                                    "/index.html"));
         return securityProperties;
     }
 
@@ -137,13 +136,9 @@ public class ProctorApplicationContextConfiguration {
                                                 contextPath + ".*",
                                                    "true",
                                                 (configureSSL() ?
-                                                 "https" :
-                                                 "http") +
-                                                "://" +
-                                                proxyListenAddress +
-                                                ":" +
-                                                configuredLocalPort +
-                                                "/");
+                                                    "https" :
+                                                    "http") +
+                                                "://" + proxyListenAddress + ":" + configuredLocalPort + "/");
 
     }
 

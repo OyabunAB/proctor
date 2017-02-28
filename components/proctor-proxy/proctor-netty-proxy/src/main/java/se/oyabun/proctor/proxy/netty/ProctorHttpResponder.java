@@ -37,7 +37,6 @@ import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.http.HttpRequestData;
 import se.oyabun.proctor.http.HttpResponseData;
 import se.oyabun.proctor.http.client.ProctorHttpClient;
-import se.oyabun.proctor.util.lang.AsciiUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -47,6 +46,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static io.netty.buffer.Unpooled.copiedBuffer;
 
@@ -56,7 +56,8 @@ import static io.netty.buffer.Unpooled.copiedBuffer;
 @Component
 public class ProctorHttpResponder {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProctorHttpResponder.class);
+    private static final Logger log = LoggerFactory.getLogger(ProctorHttpResponder.class);
+
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ProctorRouteHandlerManager proctorRouteHandlerManager;
     private final ProctorHttpClient proctorHttpClient;
@@ -94,13 +95,12 @@ public class ProctorHttpResponder {
         final String clientRequestPath = request.getUri();
 
         final Optional<ProctorHandlerConfiguration> optionalProperties =
-                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath)
-                                          .findFirst();
+                proctorRouteHandlerManager.getMatchingPropertiesFor(clientRequestPath);
 
         final Optional<ProctorRouteHandler> optionalHandler =
                 optionalProperties.isPresent() ?
-                proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
-                Optional.empty();
+                    proctorRouteHandlerManager.getHandler(optionalProperties.get()) :
+                    Optional.empty();
 
         if (optionalHandler.isPresent()) {
 
@@ -116,12 +116,12 @@ public class ProctorHttpResponder {
             //
             final String proxyURLExternalForm = proxyURL.toExternalForm();
 
-            if (logger.isTraceEnabled()) {
+            if (log.isTraceEnabled()) {
 
-                logger.trace("Proxying {} request for URI '{}' to '{}'.",
-                             request.getMethod(),
-                             clientRequestPath,
-                             proxyURLExternalForm);
+                log.trace("Proxying {} request for URI '{}' to '{}'.",
+                          request.getMethod(),
+                          clientRequestPath,
+                          proxyURLExternalForm);
 
             }
 
@@ -150,22 +150,22 @@ public class ProctorHttpResponder {
                                   response,
                                   proxyURL);
 
-            if (logger.isTraceEnabled()) {
+            if (log.isTraceEnabled()) {
 
-                logger.trace("Returning response for {} to URI '{}'.",
-                             request.getMethod(),
-                             clientRequestPath);
+                log.trace("Returning response for {} to URI '{}'.",
+                          request.getMethod(),
+                          clientRequestPath);
 
             }
 
         } else {
 
 
-            if (logger.isTraceEnabled()) {
+            if (log.isTraceEnabled()) {
 
-                logger.trace("No matching handler found for {} request to URI '{}'.",
-                             request.getMethod(),
-                             clientRequestPath);
+                log.trace("No matching handler found for {} request to URI '{}'.",
+                          request.getMethod(),
+                          clientRequestPath);
 
             }
 
@@ -187,11 +187,11 @@ public class ProctorHttpResponder {
      * @param byteBuf to extract
      * @return byte array of buffer
      */
-    private byte[] extractRequestContent(ByteBuf byteBuf) {
+    byte[] extractRequestContent(ByteBuf byteBuf) {
 
         //
-        // Not all bytebuffers have arrays, must read manually
-        // (because implementing this inside the buffer wouldn´t be super secret and
+        // Not all byte buffers have backing arrays, must read manually
+        // (because implementing this inside the ByteBuf wouldn't be super secret and
         // its better to throw unsupported operation anyways...)
         //
         if(byteBuf.hasArray()) {
@@ -214,20 +214,16 @@ public class ProctorHttpResponder {
      * @param headers to extract
      * @return map with header name as key and its values
      */
-    Map<String, List<String>> extractHeaders(final HttpHeaders headers) {
+    Map<String, Collection<String>> extractHeaders(final HttpHeaders headers) {
 
-        final Map<String, List<String>> headersMap = new HashMap<>();
+        final Map<String, Collection<String>> headersMap = new HashMap<>();
 
         for (String name : headers.names()) {
-
-            Iterable<String> headerValues = headers.getAll(name);
-            ArrayList<String> headerValuesCopy = new ArrayList<>();
-            for (String headerValue : headerValues) {
-                headerValuesCopy.add(headerValue);
+            if(headersMap.containsKey(name)) {
+                headersMap.get(name).addAll(headers.getAll(name));
+            } else {
+                headersMap.put(name, headers.getAll(name));
             }
-
-            headersMap.put(name, headerValuesCopy);
-
         }
 
         return headersMap;
@@ -256,23 +252,17 @@ public class ProctorHttpResponder {
 
         }
 
-        final Map<String, List<String>> responseHeaders = responseData.getHeaders();
+        final Map<String, Collection<String>> responseHeaders = responseData.getHeaders();
 
-        for (final Map.Entry<String, List<String>> responseHeader : responseHeaders.entrySet()) {
-
-            final List<String> responseHeaderValues = responseHeader.getValue();
-            final List<String> rewrittenHeaderValues = new ArrayList<>();
-
-            for (String responseHeaderValue : responseHeaderValues) {
-
-                rewrittenHeaderValues.add(responseHeaderValue.replaceAll(proxyUrl.toString(),
-                                                                         originURL.toString()));
-
-            }
+        for (final Map.Entry<String, Collection<String>> responseHeader : responseHeaders.entrySet()) {
 
             response.headers()
                     .set(responseHeader.getKey(),
-                         responseHeaderValues);
+                         responseHeader.getValue()
+                                 .stream()
+                                 .map(value -> value.replaceAll(proxyUrl.toString(),
+                                                                originURL.toString()))
+                                 .collect(Collectors.toList()));
 
         }
 
@@ -290,7 +280,7 @@ public class ProctorHttpResponder {
 
         DefaultFullHttpResponse response = null;
 
-        final String msg = AsciiUtil.generateAsciiArtText(Integer.toString(statusCode.code())) +
+        final String msg = Integer.toString(statusCode.code()) +
                            "\n\n" +
                            ((statusMessage == null) ?
                             "" :
@@ -318,7 +308,7 @@ public class ProctorHttpResponder {
             //
             // JVM is required to support UTF-8
             //
-            logger.error("UTF-8 encoding not supported by JVM");
+            log.error("UTF-8 encoding not supported by JVM");
 
         }
 

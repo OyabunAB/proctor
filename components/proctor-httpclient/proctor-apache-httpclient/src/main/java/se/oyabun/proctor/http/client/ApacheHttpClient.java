@@ -33,10 +33,7 @@ import se.oyabun.proctor.http.HttpResponseData;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -80,7 +77,7 @@ public class ApacheHttpClient
         final HttpResponse response = asyncResponse.get(DEFAULT_REQUEST_TIMEOUT + 100,
                                                         TimeUnit.MILLISECONDS);
 
-        final Map<String, List<String>> responseHeaders = new HashMap<>();
+        final Map<String, Collection<String>> responseHeaders = new HashMap<>();
         Arrays.stream(response.getAllHeaders())
               .map(header ->
                            responseHeaders.put(header.getName(),

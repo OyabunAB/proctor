@@ -1,0 +1,39 @@
+<!-- BOF dashboard.view.html -->
+<div id="proctor-dashboard" class="layout-pf layout-pf-fixed-with-footer">
+    <header id="proctor-dashboard-navigation">
+        <nav class="navbar navbar-pf-vertical">
+            <div class="navbar-header">
+                <a class="navbar-brand" id="logo" title="Open Proxy Framework" ui-sref="dashboard">
+                    <p>
+                        <img src="assets/img/proctor_logo.svg" alt="Proctor Administration" height="20em">
+                        <span class="proctor_logo_text_small">PROCTOR</span>
+                    </p>
+                </a>
+            </div>
+            <div class="navbar-collapse navbar-collapse-pf-site collapse">
+                <ul id="menu-primary" class="nav navbar-nav navbar-right">
+                    <li><a ui-sref=".cluster">Cluster</a></li>
+                    <li><a ui-sref=".handlers">Handlers</a></li>
+                    <li><a ui-sref=".statistics">Statistics</a></li>
+                    <li ng-if="isAuthenticated"><a href="#" ng-click="dashboardController.logout()">Log out</a></li>
+                    <li>{{dashboardController.currentUser.username}}</li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div id="proctor-dashboard-content" class="container-fluid" ui-view></div>
+    <footer class="footer-pf footer">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <span class="oyabun_copytight_text">&copy; 2016 <a href="https://www.oyabun.se" target="_blank">Oyabun AB</a></span>
+                    <img style="vertical-align:sub" src="assets/img/oyabun_logo.svg" height="15em" alt="Oyabun AB" />
+                    Except where otherwise noted, content on this site is licensed under a
+                    <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+                </p>
+            </div>
+
+        </div>
+    </footer>
+</div>
+<!-- EOF dashboard.view.html -->

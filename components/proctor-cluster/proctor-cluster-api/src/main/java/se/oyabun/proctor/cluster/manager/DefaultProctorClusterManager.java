@@ -29,6 +29,16 @@ public class DefaultProctorClusterManager
      * ${@inheritDoc}
      */
     @Override
+    public ProctorServerConfiguration getThisServer() {
+
+        return localProctorServerConfiguration;
+
+    }
+
+    /**
+     * ${@inheritDoc}
+     */
+    @Override
     public Stream<ProctorServerConfiguration> getServers() {
 
         return proctorCluster.getServers();

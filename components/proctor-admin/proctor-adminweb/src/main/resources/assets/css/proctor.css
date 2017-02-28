@@ -1,0 +1,69 @@
+
+@font-face {
+  font-family: 'Abel';
+  src: url('../fonts/Abel-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/Abel-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+.proctorbody {
+
+    background-size: 100% auto;
+    background: url(../img/proctor_background.svg) 50% 0 repeat-x rgb(25, 25, 25);
+
+}
+
+#proctorcontent {
+
+    color: #e4e4e4;
+
+}
+
+.proctor_logo_text {
+
+    font-family: 'Abel', sans-serif;
+    font-size: 7em;
+    color: #65abf2;
+    vertical-align: middle
+
+}
+
+.proctor_footer {
+
+    position: absolute;
+    bottom: 0;
+    color: #65abf2;
+
+}
+
+.proctor_logo_text_small {
+
+    font-family: 'Abel', sans-serif;
+    font-size: 2em;
+    color: #65abf2;
+    vertical-align: middle
+
+}
+
+.oyabun_copytight_text {
+
+    color: #65abf2;
+
+}
+
+.login-pf #brand img {
+
+    height: 100%;
+
+}
+
+.tight {
+
+    line-height: 2em;
+
+}
+
+.navbar-pf-vertical .navbar-brand {
+
+    padding: 1em 0em 0em 0em;
+
+}

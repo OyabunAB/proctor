@@ -134,7 +134,10 @@ public class ProctorHttpResponder {
                                                                      extractHeaders(request.headers()),
                                                                      extractRequestContent(request.content()),
                                                                      queryStringDecoder.parameters(),
-                                                                     queryStringDecoder.uri());
+                                                                     proxyURL.getPath());
+
+            handleRequestHeaders(proxyRequest,
+                                 proxyURL);
 
             applicationEventPublisher.publishEvent(new ProxyRequestReceivedEvent(proxyRequest));
 
@@ -219,14 +222,55 @@ public class ProctorHttpResponder {
         final Map<String, Collection<String>> headersMap = new HashMap<>();
 
         for (String name : headers.names()) {
+
             if(headersMap.containsKey(name)) {
+
                 headersMap.get(name).addAll(headers.getAll(name));
+
             } else {
+
                 headersMap.put(name, headers.getAll(name));
+
             }
+
         }
 
         return headersMap;
+
+    }
+
+    void handleRequestHeaders(final HttpRequestData requestData,
+                              final URL proxyUrl)
+            throws MalformedURLException {
+
+        URL originURL = localServerConfiguration.getProxyOriginURL();
+
+        final Map<String, Collection<String>> responseHeaders = requestData.getHeaders();
+
+        for (final Map.Entry<String, Collection<String>> requestHeader : responseHeaders.entrySet()) {
+
+            requestData.getHeaders()
+                    .replace(requestHeader.getKey(),
+                             requestHeader.getValue()
+                                       .stream()
+                                       .map(value -> value.replaceAll(originURL.getHost(),
+                                                                      proxyUrl.getHost()))
+                                       .map(value -> {
+                                           if(originURL.getPort() != -1) {
+
+                                               return value.replaceAll(":"+originURL.getPort(),
+                                                                       proxyUrl.getPort() != -1 ?
+                                                                            ":"+proxyUrl.getPort() :
+                                                                            "");
+                                           } else {
+
+                                               return value;
+
+                                           }
+                                       })
+                                       .collect(Collectors.toList()));
+
+        }
 
     }
 

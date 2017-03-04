@@ -34,7 +34,7 @@
         <proctor-neo4j-repository.version>0.0.1-SNAPSHOT</proctor-neo4j-repository.version>
         <proctor-filestore-repository.version>0.0.1-SNAPSHOT</proctor-filestore-repository.version>
         <proctor-hazelcast-cluster.version>0.0.1-SNAPSHOT</proctor-hazelcast-cluster.version>
-
+        <proctor-utils.version>0.0.1-SNAPSHOT</proctor-utils.version>
         <webjars-locator.version>0.30</webjars-locator.version>
 
         <mockito-all.version>1.9.0</mockito-all.version>
@@ -96,6 +96,12 @@
             <groupId>se.oyabun.proctor.webjars</groupId>
             <artifactId>proctor-adminweb</artifactId>
             <version>${proctor-adminweb.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>se.oyabun.proctor.components.util</groupId>
+            <artifactId>proctor-utils</artifactId>
+            <version>${proctor-utils.version}</version>
         </dependency>
 
         <!-- Spring dependencies -->

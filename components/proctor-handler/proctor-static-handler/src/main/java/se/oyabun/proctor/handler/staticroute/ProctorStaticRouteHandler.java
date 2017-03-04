@@ -64,9 +64,11 @@ public class ProctorStaticRouteHandler
         final Matcher matcher =
                 getPattern(properties).matcher(input);
 
+        boolean foundGroups = matcher.find();
+
         return appendPath ?
                new URL(getRoot(properties),
-                       appendGroup.isPresent() && matcher.groupCount() > 0 ?
+                       appendGroup.isPresent() && foundGroups ?
                             matcher.group(appendGroup.get()) :
                             input) :
                getRoot(properties);

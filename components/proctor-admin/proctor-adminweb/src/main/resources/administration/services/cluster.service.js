@@ -18,13 +18,12 @@
 
     'use strict';
 
-    var nodesUrl = 'api/v1/clusters/nodes';
+    var nodesUrl = 'api/v1/cluster/nodes';
 
     angular.module('proctoradmin')
            .factory('proctorCluster', proctorCluster);
 
     function proctorCluster($http,
-                            $localStorage,
                             proctorLogger,
                             proctorSecurity) {
 
@@ -67,7 +66,8 @@
                         });
 
                     }
-                    callback(null);
+
+                    callback();
 
                 };
 

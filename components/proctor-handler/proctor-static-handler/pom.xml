@@ -35,6 +35,12 @@
             <version>${proctor-handlers-api.version}</version>
         </dependency>
 
+        <!-- General dependencies -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>

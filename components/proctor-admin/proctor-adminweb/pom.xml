@@ -24,10 +24,12 @@
 
         <destination.directory>${project.build.outputDirectory}/META-INF/resources</destination.directory>
 
-        <patternfly.version>3.5.0</patternfly.version>
+        <patternfly.version>3.22.1</patternfly.version>
         <bootstrap.version>3.3.0</bootstrap.version>
         <angularjs.version>1.5.7</angularjs.version>
         <angular-ui-router.version>1.0.0-beta.1</angular-ui-router.version>
+        <angular-jwt.version>0.1.9</angular-jwt.version>
+        <angular-md5.version>3.5.0</angular-md5.version>
         <jquery.version>1.11.1</jquery.version>
         <ngStorage.version>0.3.0</ngStorage.version>
 
@@ -38,38 +40,26 @@
         <!-- WebJar dependencies -->
         <dependency>
             <groupId>se.oyabun.proctor.webjars</groupId>
-            <artifactId>patternfly</artifactId>
+            <artifactId>angular-patternfly</artifactId>
             <version>${patternfly.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>${bootstrap.version}</version>
+            <groupId>se.oyabun.proctor.webjars</groupId>
+            <artifactId>angular-jwt</artifactId>
+            <version>${angular-jwt.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>angularjs</artifactId>
-            <version>${angularjs.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>angular-ui-router</artifactId>
-            <version>${angular-ui-router.version}</version>
+            <groupId>se.oyabun.proctor.webjars</groupId>
+            <artifactId>angular-md5</artifactId>
+            <version>${angular-md5.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>ngStorage</artifactId>
             <version>${ngStorage.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>${jquery.version}</version>
         </dependency>
 
     </dependencies>

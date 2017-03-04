@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.oyabun.proctor.components.admin</groupId>
+        <artifactId>proctor-admin-reactor</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+
+    <groupId>se.oyabun.proctor.webjars</groupId>
+    <artifactId>angular-jwt</artifactId>
+    <packaging>jar</packaging>
+    <version>${angular-jwt.version}</version>
+
+    <name>Proctor angular-jwt WebJar</name>
+    <description>Proctor packaged WebJar for angular-jwt</description>
+
+    <properties>
+
+        <angular-jwt.version>0.1.9</angular-jwt.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <destination.directory>
+            ${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${project.version}
+        </destination.directory>
+
+    </properties>
+
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${destination.directory}</targetPath>
+            </resource>
+
+        </resources>
+
+    </build>
+
+</project>

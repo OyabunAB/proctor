@@ -20,9 +20,10 @@
 
     angular.module('proctoradmin',
                    ['ui.router',
-                    'ngMessages',
                     'ngStorage',
-                    'angular-jwt'])
+                    'patternfly.charts',
+                    'angular-jwt',
+                    'angular-md5'])
            .config(config)
            .run(run);
 
@@ -117,37 +118,37 @@
                  $state,
                  $http,
                  $location,
-                 $localStorage,
                  proctorLogger,
                  proctorSecurity,
+                 proctorStorage,
                  authManager) {
 
         //
         // Exchange auth token for access token if it expires
         //
-        $rootScope.$on('tokenHasExpired', function(proctorSecurity) {
+        $rootScope.$on('tokenHasExpired', function(event, arg) {
 
-          if($localStorage.authToken) {
+            if(proctorSecurity && proctorStorage.getAuthenticationToken()) {
 
-            proctorSecurity.renewAccessToken(function(result) {
+                proctorSecurity.renewAccessToken(function(result) {
 
-                if(result) {
+                    if(result) {
 
-                    proctorLogger.debug('Renewed access token.');
+                        proctorLogger.debug('Renewed access token.');
 
-                } else {
+                    } else {
 
-                    $state.go('login');
+                        $state.go('login');
 
-                }
+                    }
 
-            });
+                });
 
-          } else {
+            } else {
 
-            $location = '/login';
+                $state.go('login');
 
-          }
+            }
 
         });
 

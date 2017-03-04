@@ -31,15 +31,39 @@
         model.nodes = [];
         model.updateNodes = updateNodes;
 
-        updateNodes();
+        initController();
 
-        var promise =
-            $interval( function(){ model.updateNodes(); }, 5000);
+        /**
+         * Initialize the controller, setting up intervals and preparing
+         * to destroy them on scope destruction.
+         */
+        function initController() {
 
-        $scope.$on('$destroy',function() {
-            if(promise) $interval.cancel(promise);
-        });
+            //
+            // Do first update
+            //
+            model.updateNodes();
 
+            //
+            // Instantiate interval updaters
+            //
+            var updateNodesPromise =
+                $interval( function(){ model.updateNodes(); }, 5000);
+
+            //
+            // Register callbacks to cancel intervals on destroy
+            //
+            $scope.$on('$destroy',function() {
+
+                if(updateNodesPromise) $interval.cancel(updateNodesPromise);
+
+            });
+
+        }
+
+        /**
+         * Request an update of cluster nodes
+         */
         function updateNodes() {
 
             var clusterRequestCallback =

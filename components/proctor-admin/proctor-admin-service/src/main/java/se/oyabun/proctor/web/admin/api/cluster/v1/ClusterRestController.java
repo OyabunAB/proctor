@@ -36,10 +36,10 @@ import java.util.Arrays;
  * @version 1
  */
 @RestController
-@RequestMapping(value = ClusterRestController.CLUSTERS_ROOT)
+@RequestMapping(value = ClusterRestController.CLUSTER_ROOT)
 public class ClusterRestController {
 
-    public static final String CLUSTERS_ROOT = "/api/v1/clusters";
+    public static final String CLUSTER_ROOT = "/api/v1/cluster";
     public static final String NODES = "/nodes";
 
     private final ProctorClusterManager proctorClusterManager;

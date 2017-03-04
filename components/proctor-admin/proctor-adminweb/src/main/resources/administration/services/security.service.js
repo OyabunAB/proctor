@@ -29,11 +29,13 @@
      */
     function proctorSecurity($http,
                              $state,
-                             $localStorage,
                              proctorLogger,
-                             jwtHelper) {
+                             proctorStorage,
+                             jwtHelper,
+                             md5) {
 
         var service = {};
+        service.loadingAccesstoken = false;
         service.login = login;
         service.logout = logout;
         service.getCurrentUser = getCurrentUser;
@@ -51,7 +53,9 @@
 
             proctorLogger.debug('Requesting authorization for '+username+'.');
 
-            var userRequestBody = { username: username, password: password };
+            var passwordHash = md5.createHash(password || '');
+
+            var userRequestBody = { 'username': username, 'password': passwordHash };
 
             var successfulAuthorization =
                 function (response) {
@@ -66,9 +70,9 @@
                         //
                         // Store parsed content and complete token wrapper for user
                         //
-                        $localStorage.currentUser = tokenPayload;
+                        proctorStorage.setCurrentUser(tokenPayload);
 
-                        $localStorage.authToken = response.data;
+                        proctorStorage.setAuthenticationToken(response.data);
 
                         proctorLogger.debug('Successfully received ' + response.data.type +
                                             ' token for ' + response.data.username +
@@ -119,10 +123,10 @@
 
              proctorLogger.debug('Verifying authentication.');
 
-            if($localStorage.authToken) {
+            if(proctorStorage.getAuthenticationToken()) {
 
                 if(jwtHelper.isTokenExpired(
-                    $localStorage.authToken.signedContent)) {
+                    proctorStorage.getAuthenticationToken().signedContent)) {
 
                     return false;
 
@@ -144,7 +148,7 @@
          */
         function getAccessToken() {
 
-            var accessToken = $localStorage.accessToken;
+            var accessToken = proctorStorage.getAccessToken();
 
             if(accessToken) {
 
@@ -169,6 +173,8 @@
             var successfulExchange =
                 function (response) {
 
+                    service.loadingAccesstoken = false;
+
                     if(response.data.signedContent) {
 
                         proctorLogger.debug('Successfully received ' + response.data.type +
@@ -176,7 +182,7 @@
                                             ', expiring ' + response.data.expires + '.');
 
 
-                        $localStorage.accessToken = response.data;
+                        proctorStorage.setAccessToken(response.data);
 
                         callback(true);
 
@@ -198,16 +204,29 @@
 
                     proctorLogger.debug('Renew access token request failed.');
 
+                    service.loadingAccesstoken = false;
+
                     callback(false);
 
                 };
 
-            if($localStorage.authToken) {
+            if(proctorStorage.getAuthenticationToken()) {
 
                 proctorLogger.debug('Requesting new access token with authorization.');
 
-                $http.post(accessUrl, $localStorage.authToken)
-                     .then(successfulExchange, failedExchange);
+                if(!service.loadingAccesstoken) {
+
+                    service.loadingAccesstoken = true;
+
+                    $http.post(accessUrl, proctorStorage.getAuthenticationToken())
+                         .then(successfulExchange, failedExchange);
+
+                } else {
+
+                    proctorLogger.debug('Waiting for response, skipping renew attempt.');
+
+                }
+
 
             } else {
 
@@ -228,9 +247,9 @@
             //
             // Remove user security objects from local storage and clear http auth header
             //
-            delete $localStorage.currentUser;
-            delete $localStorage.accessToken;
-            delete $localStorage.authToken;
+            proctorStorage.deleteCurrentUser();
+            proctorStorage.deleteAccessToken();
+            proctorStorage.deleteAuthenticationToken();
 
             if(nextState) {
 
@@ -249,7 +268,7 @@
          */
         function getCurrentUser() {
 
-            return $localStorage.currentUser;
+            return proctorStorage.getCurrentUser();
 
         }
 

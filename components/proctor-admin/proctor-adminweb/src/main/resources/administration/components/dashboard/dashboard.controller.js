@@ -21,7 +21,8 @@
     angular.module('proctoradmin')
            .controller('DashboardController', dashboardController);
 
-    function dashboardController(proctorSecurity) {
+    function dashboardController($state,
+                                 proctorSecurity) {
 
         if(proctorSecurity.isAuthenticated()) {
 

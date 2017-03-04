@@ -15,9 +15,10 @@
  */
 package se.oyabun.proctor.handler.staticroute;
 
+import com.google.common.collect.ImmutableMap;
 import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
+import se.oyabun.proctor.handler.properties.ProctorRouteConfiguration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,81 +31,64 @@ import java.util.Map;
 public class ProctorStaticRouteConfiguration
         implements ProctorHandlerConfiguration {
 
-    private String configurationID;
-    private int priority;
-    private String pattern;
-    private Map<String, String> properties = new HashMap<>();
+    private ProctorRouteConfiguration proctorRouteConfiguration;
 
     public ProctorStaticRouteConfiguration(final String configurationID,
                                            final int priority,
                                            final String pattern,
+                                           final boolean persistent,
                                            final String appendPath,
                                            final String defaultUrl) {
 
-        this.configurationID = configurationID;
-        this.priority = priority;
-        this.pattern = pattern;
-        this.properties.put(ProctorStaticRouteHandler.APPEND_PATH_PROPERTY,
-                            appendPath);
-        this.properties.put(ProctorStaticRouteHandler.DEFAULT_URL_PROPERTY,
-                            defaultUrl);
+        proctorRouteConfiguration =
+                new ProctorRouteConfiguration(configurationID,
+                                              priority,
+                                              pattern,
+                                              ProctorStaticRouteConfiguration.class.getName(),
+                                              persistent,
+                                              ImmutableMap.of(APPEND_PATH_PROPERTY, appendPath,
+                                                              DEFAULT_URL_PROPERTY, defaultUrl));
 
     }
 
     /**
-     * Gets unique configuration ID representing property
-     *
-     * @return configuration ID
+     * ${@inheritDoc}
      */
     @Override
     public String getConfigurationID() {
 
-        return configurationID;
+        return proctorRouteConfiguration.getConfigurationID();
     }
 
-    /**
-     * Gets configured priority for sorting precedence on multiple matching properties
-     *
-     * @return priority of instance
-     */
     @Override
     public int getPriority() {
 
-        return priority;
+        return proctorRouteConfiguration.getPriority();
     }
 
-    /**
-     * Handler type is indicated by the simple name of the handler class.
-     * Used for resolving handlers.
-     *
-     * @return handler type
-     */
     @Override
     public String getHandlerType() {
 
-        return ProctorStaticRouteHandler.class.getName();
+        return proctorRouteConfiguration.getHandlerType();
     }
 
-    /**
-     * Pattern for matching this configuration on incoming request strings
-     *
-     * @return regexp pattern
-     */
     @Override
     public String getPattern() {
 
-        return pattern;
+        return proctorRouteConfiguration.getPattern();
     }
 
-    /**
-     * Specific handler property map holding specific properties used by handler type
-     *
-     * @return string properties for configuring handler for the request
-     */
     @Override
     public Map<String, String> getProperties() {
 
-        return properties;
+        return proctorRouteConfiguration.getProperties();
+
     }
 
+    @Override
+    public boolean isPersistent() {
+
+        return proctorRouteConfiguration.isPersistent();
+
+    }
 }

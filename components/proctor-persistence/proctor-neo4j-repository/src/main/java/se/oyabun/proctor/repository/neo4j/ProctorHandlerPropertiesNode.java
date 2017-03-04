@@ -89,11 +89,11 @@ public class ProctorHandlerPropertiesNode {
      *
      * @param propertyNode to base instance on
      * @return instance of proctor handler property
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ClassNotFoundException when not found
+     * @throws NoSuchMethodException when no such method exists
+     * @throws InvocationTargetException when invocation fails
+     * @throws IllegalAccessException when access is illegal
+     * @throws InstantiationException when instantiation fails
      */
     public static ProctorHandlerConfiguration mapNode(final Node propertyNode)
             throws ClassNotFoundException,

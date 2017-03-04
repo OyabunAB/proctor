@@ -16,6 +16,7 @@
 package se.oyabun.proctor.configuration;
 
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import se.oyabun.proctor.ProctorServerConfiguration;
+import se.oyabun.proctor.handler.properties.ProctorRouteConfiguration;
 import se.oyabun.proctor.security.CustomTokenAuthenticationFilter;
 import se.oyabun.proctor.security.PassthroughAuthenticationManager;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -47,6 +49,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Proctor admin service context properties
@@ -60,6 +63,9 @@ public class ProctorAdminWebServiceContextConfiguration {
 
     @Value("${se.oyabun.proctor.security.signingKey}")
     private String signingKey;
+
+    @Autowired
+    private ProctorServerConfiguration localConfig;
 
     @Bean
     public ApiInfo apiInfo() {
@@ -110,6 +116,72 @@ public class ProctorAdminWebServiceContextConfiguration {
     public void configeJackson(Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
 
         jackson2ObjectMapperBuilder.dateFormat(new ISO8601DateFormat());
+
+    }
+
+
+    /**
+     * Set up specific route rule for this specific node (statistics)
+     *
+     * @return route configuration for this nodes statistics
+     */
+    @Bean
+    public ProctorRouteConfiguration staticNodeSpecificStatisticsRoute() {
+
+        return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
+                                             0,
+                                             localConfig.getContext() +
+                                                "/api/v1/cluster/nodes/" + localConfig.getNodeID() + "/.*",
+                                             "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
+                                             false,
+                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                                             localConfig.getLocalContextUrl(),
+                                                             ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
+                                                             "true"));
+
+    }
+
+    /**
+     * Set up the static route to the administration GUI,
+     * will only be added once over cluster
+     *
+     * @return proctor route configuration for shared admin web route
+     */
+    @Bean
+    public ProctorRouteConfiguration staticAdminWebRoute() {
+
+        return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
+                                             1,
+                                             localConfig.getContext()+".*",
+                                             "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
+                                             false,
+                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                                             localConfig.getLocalContextUrl(),
+                                                             ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
+                                                             "true"));
+
+    }
+
+    /**
+     * Set up the static route to the administration GUI,
+     * will only be added once over cluster
+     *
+     * @return proctor route configuration for shared admin web route
+     */
+    @Bean
+    public ProctorRouteConfiguration oyabunTestRoute() {
+
+        return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
+                                             1,
+                                             "/oyabun(?<requestPath>.*)",
+                                             "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
+                                             false,
+                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                                             "https://www.oyabun.se",
+                                                             ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
+                                                             "true",
+                                                             ProctorRouteConfiguration.APPEND_MATCHER_GROUP,
+                                                             "requestPath"));
 
     }
 

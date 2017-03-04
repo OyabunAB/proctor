@@ -93,7 +93,7 @@ public class ProctorFilestoreRepository
 
         try {
 
-            return FileUtils.directoryContains(handlersDirectory, new File(configurationID));
+            return FileUtils.directoryContains(handlersDirectory, new File(handlersDirectory, configurationID));
 
         } catch (IOException e) {
 

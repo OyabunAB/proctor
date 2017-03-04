@@ -21,8 +21,9 @@
     <head>
         <meta charset="UTF-8">
         <title>Proctor Administration Console</title>
-        <link href="webjars/patternfly/css/patternfly.min.css" rel="stylesheet" media="screen, print">
-        <link href="webjars/patternfly/css/patternfly-additions.min.css" rel="stylesheet" media="screen, print">
+        <link href="webjars/angular-patternfly/css/patternfly.css" rel="stylesheet" media="screen, print">
+        <link href="webjars/angular-patternfly/css/patternfly-additions.css" rel="stylesheet" media="screen, print">
+        <link href="webjars/angular-patternfly/css/angular-patternfly.css" rel="stylesheet" media="screen, print">
         <link href="assets/css/proctor.css" rel="stylesheet" media="screen, print">
         <link rel="apple-touch-icon" sizes="57x57" href="assets/img/icon/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="assets/img/icon/apple-icon-60x60.png">
@@ -48,21 +49,41 @@
         <div id="proctor-content" ui-view></div>
 
         <!-- Framework dependencies  -->
-        <script src="webjars/jquery/jquery.js"></script>
-        <script src="webjars/bootstrap/js/bootstrap.js"></script>
-        <script src="webjars/patternfly/js/patternfly.js"></script>
-        <script src="webjars/angularjs/angular.js"></script>
-        <script src="webjars/angularjs/angular-messages.js"></script>
-        <script src="webjars/angular-ui-router/angular-ui-router.js"></script>
-        <script src="webjars/ngStorage/ngStorage.js"></script>
-        <script src="assets/js/angular-jwt.js"></script>
 
+
+
+
+
+
+        <script src="webjars/angular-patternfly/js/jquery.js"></script>
+        <script src="webjars/angular-patternfly/js/bootstrap.js"></script>
+        <script src="webjars/angular-patternfly/js/bootstrap-combobox.js"></script>
+        <script src="webjars/angular-patternfly/js/bootstrap-datepicker.js"></script>
+        <script src="webjars/angular-patternfly/js/bootstrap-select.js"></script>
+        <script src="webjars/angular-patternfly/js/bootstrap-treeview.js"></script>
+        <script src="webjars/angular-patternfly/js/c3.js"></script>
+        <script src="webjars/angular-patternfly/js/d3.js"></script>
+        <script src="webjars/angular-patternfly/js/patternfly.js"></script>
+        <script src="webjars/angular-patternfly/js/angular.js"></script>
+        <script src="webjars/angular-patternfly/js/angular-sanitize.js"></script>
+        <script src="webjars/angular-patternfly/js/angular-animate.js"></script>
+        <script src="webjars/angular-patternfly/js/ui-bootstrap-tpls.js"></script>
+        <!--script src="webjars/angular-patternfly/js/angular-bootstrap-prettify.js"></script-->
+        <script src="webjars/angular-patternfly/js/lodash.min.js"></script>
+        <script src="webjars/angular-patternfly/js/angular-patternfly.js"></script>
+        <script src="webjars/angular-patternfly/js/angular-ui-router.min.js"></script>
+        <script src="webjars/angular-jwt/angular-jwt.js"></script>
+        <script src="webjars/angular-md5/angular-md5.js"></script>
+        <script src="webjars/ngStorage/ngStorage.js"></script>
 
         <!-- Proctor Administration application -->
         <script src="administration/proctoradmin.js"></script>
         <script src="administration/services/logging.service.js"></script>
+        <script src="administration/services/storage.service.js"></script>
         <script src="administration/services/security.service.js"></script>
         <script src="administration/services/cluster.service.js"></script>
+        <script src="administration/services/handler.service.js"></script>
+        <script src="administration/services/statistics.service.js"></script>
         <script src="administration/components/login/login.controller.js"></script>
         <script src="administration/components/dashboard/dashboard.controller.js"></script>
         <script src="administration/components/dashboard/handlers/handlers.controller.js"></script>

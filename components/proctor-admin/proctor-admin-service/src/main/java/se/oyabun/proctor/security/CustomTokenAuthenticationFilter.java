@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 Oyabun AB
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package se.oyabun.proctor.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -49,8 +64,19 @@ public class CustomTokenAuthenticationFilter
 
     public final String HEADER_SECURITY_TOKEN = HttpHeaders.AUTHORIZATION;
 
+
+
+
     /**
-     * Attempt to authenticate request - basically just pass over to another method to authenticate request headers
+     * Attempt to authenticate request - basically just pass over to
+     * another method to authenticate request headers
+     *
+     * @param request servletrequest
+     * @param response serverlresponse
+     * @return authentication
+     * @throws AuthenticationException on exception
+     * @throws IOException on exception
+     * @throws ServletException on exception
      */
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
@@ -79,8 +105,11 @@ public class CustomTokenAuthenticationFilter
 
 
     /**
-     * Authwnticates request token, or returns null
+     * Authenticates request token, or returns null
+     *
+     * @param token to authenticate
      * @return null or authentication token
+     * @throws AuthenticationException if failure
      */
     private AbstractAuthenticationToken authUserByToken(String token)
             throws AuthenticationException {
@@ -112,11 +141,12 @@ public class CustomTokenAuthenticationFilter
 
     /**
      * Authenticates via token in header
-     * @param servletRequest
-     * @param servletResponse
-     * @param chain
-     * @throws IOException
-     * @throws ServletException
+     *
+     * @param servletRequest of request
+     * @param servletResponse of response
+     * @param chain of filters
+     * @throws IOException when exception
+     * @throws ServletException when exception
      */
     @Override
     public void doFilter(ServletRequest servletRequest,

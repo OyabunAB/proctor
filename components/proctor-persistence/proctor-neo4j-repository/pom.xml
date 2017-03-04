@@ -17,8 +17,8 @@
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Proctor NEO4J Repository</name>
-    <description>Proctor NEO4J repository module.</description>
+    <name>Proctor Neo4j Repository</name>
+    <description>Proctor Neo4j repository module.</description>
 
     <properties>
 

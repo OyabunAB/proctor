@@ -3,7 +3,7 @@
     <header id="proctor-dashboard-navigation">
         <nav class="navbar navbar-pf-vertical">
             <div class="navbar-header">
-                <a class="navbar-brand" id="logo" title="Open Proxy Framework" ui-sref="dashboard">
+                <a href="#" id="logo" title="Open Proxy Framework" class="navbar-brand" ui-sref="dashboard">
                     <p>
                         <img src="assets/img/proctor_logo.svg" alt="Proctor Administration" height="20em">
                         <span class="proctor_logo_text_small">PROCTOR</span>
@@ -11,12 +11,34 @@
                 </a>
             </div>
             <div class="navbar-collapse navbar-collapse-pf-site collapse">
-                <ul id="menu-primary" class="nav navbar-nav navbar-right">
-                    <li><a ui-sref=".cluster">Cluster</a></li>
-                    <li><a ui-sref=".handlers">Handlers</a></li>
-                    <li><a ui-sref=".statistics">Statistics</a></li>
-                    <li ng-if="isAuthenticated"><a href="#" ng-click="dashboardController.logout()">Log out</a></li>
-                    <li>{{dashboardController.currentUser.username}}</li>
+                <ul id="menu-primary" class="nav navbar-nav navbar-right navbar-utility">
+                    <li>
+                        <a ui-sref=".cluster">
+                            <span class="pficon pficon-cluster"></span>&nbsp;&nbsp;Cluster
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref=".handlers">
+                            <span class="pficon pficon-service"></span>&nbsp;&nbsp;Handlers
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref=".statistics">
+                            <span class="fa fa-tachometer"></span>&nbsp;&nbsp;Statistics
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="pficon pficon-user"></span>&nbsp;&nbsp;
+                            {{dashboardController.currentUser.username}}&nbsp;
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href ng-click="dashboardController.logout()">Log out</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -26,10 +48,11 @@
         <div class="row">
             <div class="col-md-12">
                 <p>
-                    <span class="oyabun_copytight_text">&copy; 2016 <a href="https://www.oyabun.se" target="_blank">Oyabun AB</a></span>
-                    <img style="vertical-align:sub" src="assets/img/oyabun_logo.svg" height="15em" alt="Oyabun AB" />
-                    Except where otherwise noted, content on this site is licensed under a
-                    <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0 license</a>.
+                    <span class="oyabun_copytight_text">
+                        &copy; 2016
+                        <img style="vertical-align:sub" src="assets/img/oyabun_logo.svg" height="15em" alt="Oyabun AB"/>
+                        <a href="https://www.oyabun.se" target="_blank">Oyabun AB</a>
+                    </span>
                 </p>
             </div>
 

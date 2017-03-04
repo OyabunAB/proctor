@@ -28,6 +28,10 @@ public interface ProctorHandlerConfiguration
     String CACHE_NAME = "ProctorHandlerConfiguration";
     String CACHE_KEY = "configurationID";
 
+    String APPEND_PATH_PROPERTY = "appendpath";
+    String APPEND_MATCHER_GROUP = "appendmatchergroup";
+    String DEFAULT_URL_PROPERTY = "defaulturl";
+
     /**
      * Cluster/global unique handler identification string
      *
@@ -61,5 +65,11 @@ public interface ProctorHandlerConfiguration
      * Handler interpreted property entries for configuration
      */
     Map<String, String> getProperties();
+
+    /**
+     * Handler should persist between shutdowns
+     * @return
+     */
+    boolean isPersistent();
 
 }

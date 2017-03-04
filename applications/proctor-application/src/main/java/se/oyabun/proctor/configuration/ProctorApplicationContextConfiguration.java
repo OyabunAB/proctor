@@ -25,13 +25,12 @@ import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletConta
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.oyabun.proctor.ProctorServerConfiguration;
-import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
-import se.oyabun.proctor.handler.staticroute.ProctorStaticRouteConfiguration;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Embedded web application context properties
@@ -125,27 +124,11 @@ public class ProctorApplicationContextConfiguration {
 
     }
 
-    /**
-     * Set up the static route to the administration GUI
-     */
-    @Bean
-    public ProctorHandlerConfiguration staticAdminRouteConfiguration() {
-
-        return new ProctorStaticRouteConfiguration("adminrouteID",
-                                                   0,
-                                                contextPath + ".*",
-                                                   "true",
-                                                (configureSSL() ?
-                                                    "https" :
-                                                    "http") +
-                                                "://" + proxyListenAddress + ":" + configuredLocalPort + "/");
-
-    }
-
     @Bean
     public ProctorServerConfiguration serverConfiguration() {
 
-        return new ProctorServerConfiguration(proxyListenAddress,
+        return new ProctorServerConfiguration(UUID.randomUUID().toString(),
+                                              proxyListenAddress,
                                               localAddress,
                                               contextPath,
                                               configuredLocalPort,

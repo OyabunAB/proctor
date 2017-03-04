@@ -37,9 +37,9 @@ import java.util.Optional;
 @RequestMapping(value = HandlersRestController.HANDLERS_ROOT)
 public class HandlersRestController {
 
-    public static final String HANDLERS_ROOT = "/api/v1/handlers/";
-    public static final String CONFIGURATIONS = "configurations/";
-    public static final String HANDLER_TYPES = "handlertypes/";
+    public static final String HANDLERS_ROOT = "/api/v1/handlers";
+    public static final String CONFIGURATIONS = "/configurations";
+    public static final String HANDLER_TYPES = "/handlertypes";
 
     public static final String HANDLERTYPE_PROPERTY = "handlerType";
     public static final String CONFIGURATIONID_PROPERTY = "configurationID";
@@ -78,10 +78,12 @@ public class HandlersRestController {
     /**
      * Returns all valid managed handler types
      *
+     * @param handlerType of configuration request
+     * @throws ClassNotFoundException on failure to find class in confing
      * @return all handler configurations for given handler type
      */
     @RequestMapping(value = HandlersRestController.HANDLER_TYPES +
-                            "{" + HandlersRestController.HANDLERTYPE_PROPERTY + "}/" +
+                            "/{" + HandlersRestController.HANDLERTYPE_PROPERTY + "}" +
                             HandlersRestController.CONFIGURATIONS,
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -126,10 +128,11 @@ public class HandlersRestController {
      * Returns a specific configuration
      *
      * @param configurationID to be returned
+     *
      * @return handler configuration with specified configuration ID
      */
     @RequestMapping(value = HandlersRestController.CONFIGURATIONS +
-                            "{" + HandlersRestController.CONFIGURATIONID_PROPERTY + "}/",
+                            "/{" + HandlersRestController.CONFIGURATIONID_PROPERTY + "}",
                     method = RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -167,7 +170,7 @@ public class HandlersRestController {
      * @param configurationID of the configuration to remove
      */
     @RequestMapping(value = HandlersRestController.CONFIGURATIONS +
-                            "{" + HandlersRestController.CONFIGURATIONID_PROPERTY + "}/",
+                            "/{" + HandlersRestController.CONFIGURATIONID_PROPERTY + "}/",
                     method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteConfiguration(@PathVariable(CONFIGURATIONID_PROPERTY)

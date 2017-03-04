@@ -25,6 +25,7 @@ import se.oyabun.proctor.statistics.ProctorStatisticsGatherer;
 import se.oyabun.proctor.statistics.ProctorStatisticsReport;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -51,7 +52,7 @@ public class DefaultProctorStatisticsManager
     ProctorStatisticsGatherer[] getProctorStatisticsGatherersFor(final ProctorStatisticType proctorStatisticType) {
 
         return Arrays.stream(proctorStatisticsGatherers)
-                     .filter(proctorStatisticsGatherer -> proctorStatisticsGatherer.gathers(proctorStatisticType))
+                     .filter(gatherer -> gatherer.gathers(proctorStatisticType))
                      .toArray(ProctorStatisticsGatherer[]::new);
 
     }
@@ -62,17 +63,14 @@ public class DefaultProctorStatisticsManager
     public ProctorStatisticsReport[] getStatisticsFor(final ProctorStatisticType proctorStatisticType) {
 
         return Arrays.stream(getProctorStatisticsGatherersFor(proctorStatisticType))
-                     .map(proctorStatisticsGatherer -> {
+                     .map(gatherer -> {
                          try {
                              return new ProctorStatisticsReport(proctorStatisticType,
-                                                                proctorStatisticsGatherer.getMeanFor(proctorStatisticType),
-                                                                proctorStatisticsGatherer.getCountFor(proctorStatisticType),
-                                                                proctorStatisticsGatherer.getFifteenMinuteRateFor
-                                                                        (proctorStatisticType),
-                                                                proctorStatisticsGatherer.getFiveMinuteRateFor
-                                                                        (proctorStatisticType),
-                                                                proctorStatisticsGatherer.getOneMinuteRateFor
-                                                                        (proctorStatisticType));
+                                                                gatherer.getMeanFor(proctorStatisticType),
+                                                                gatherer.getCountFor(proctorStatisticType),
+                                                                gatherer.getFifteenMinuteRateFor(proctorStatisticType),
+                                                                gatherer.getFiveMinuteRateFor(proctorStatisticType),
+                                                                gatherer.getOneMinuteRateFor(proctorStatisticType));
                          } catch (NonGatheredStatisticRequestException e) {
 
                              if (logger.isErrorEnabled()) {
@@ -86,7 +84,7 @@ public class DefaultProctorStatisticsManager
 
                          }
                      })
-                     .filter(proctorStatisticsReport -> proctorStatisticType != null)
+                     .filter(Objects::nonNull)
                      .toArray(ProctorStatisticsReport[]::new);
 
     }

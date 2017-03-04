@@ -21,9 +21,13 @@ import se.oyabun.proctor.exceptions.NoHandleForNameException;
 import se.oyabun.proctor.handler.AbstractDefaultProctorRouteHandler;
 import se.oyabun.proctor.handler.ProctorRouteHandler;
 import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
+import se.oyabun.proctor.handler.properties.ProctorRouteConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Proctor Static Route handler implementation
@@ -32,9 +36,6 @@ import java.net.URL;
 public class ProctorStaticRouteHandler
         extends AbstractDefaultProctorRouteHandler
         implements ProctorRouteHandler {
-
-    public static final String APPEND_PATH_PROPERTY = "appendpath";
-    public static final String DEFAULT_URL_PROPERTY = "defaulturl";
 
     /**
      * Return staticly configured URL for configured matcher pattern.
@@ -49,13 +50,25 @@ public class ProctorStaticRouteHandler
             NoHandleForNameException,
             MalformedURLException {
 
-        boolean appendOriginalPath = Boolean.valueOf(properties.getProperties()
-                                                               .getOrDefault(APPEND_PATH_PROPERTY,
-                                                                             "false"));
+        boolean appendPath =
+                Boolean.valueOf(properties.getProperties()
+                                          .getOrDefault(ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
+                                                        "false"));
 
-        return appendOriginalPath ?
+        final Optional<String> appendGroup =
+                Optional.ofNullable(
+                        properties.getProperties()
+                                  .getOrDefault(ProctorRouteConfiguration.APPEND_MATCHER_GROUP,
+                                 null));
+
+        final Matcher matcher =
+                getPattern(properties).matcher(input);
+
+        return appendPath ?
                new URL(getRoot(properties),
-                       input) :
+                       appendGroup.isPresent() && matcher.groupCount() > 0 ?
+                            matcher.group(appendGroup.get()) :
+                            input) :
                getRoot(properties);
 
     }
@@ -63,17 +76,23 @@ public class ProctorStaticRouteHandler
     /**
      * Returns the configured static root URL
      *
-     * @param properties for static handler
+     * @param configuration for static handler
      * @return the configured root url
      */
     @Override
-    protected URL getRoot(final ProctorHandlerConfiguration properties)
+    protected URL getRoot(final ProctorHandlerConfiguration configuration)
             throws
             MalformedURLException {
 
-        return new URL(properties.getProperties()
-                                 .getOrDefault(DEFAULT_URL_PROPERTY,
-                                               "/"));
+        return new URL(configuration.getProperties()
+                                    .getOrDefault(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                                  "/"));
+
+    }
+
+    protected Pattern getPattern(final ProctorHandlerConfiguration configuration) {
+
+        return Pattern.compile(configuration.getPattern());
 
     }
 

@@ -21,7 +21,9 @@
     <description>Proctor administration components reactor pom.</description>
 
     <modules>
-        <module>patternfly</module>
+        <module>angular-patternfly</module>
+        <module>angular-jwt</module>
+        <module>angular-md5</module>
         <module>proctor-adminweb</module>
         <module>proctor-admin-service</module>
     </modules>

@@ -1,58 +1,38 @@
 <!-- BOF statistics.view.html -->
 <div class="container-fluid
             container-cards-pf">
-
-    <div class="row row-cards-pf">
-
-        <div class="col-xs-12">
-
-            <div class="card-pf card-pf-utilization">
-
-                <div class="card-pf-heading">
-
-                    <p class="card-pf-heading-details">Updated every 5 seconds</p>
-
-                    <h2 class="card-pf-title">Aggregated cluster wide statistics</h2>
-
-                </div>
-
-                <div class="card-pf-body">
-
-                    <div class="card-pf-row row">
-
-                        <div class="col-xs-12
-                                    col-sm-3
-                                    col-md-3">
-
-                            <div pf-utilization-trend-chart
-                                 config="statisticsController.handlerHitGraph.config"
-                                 chart-data="statisticsController.handlerHitGraph.data"
-                                 center-label="statisticsController.handlerHitGraph.centerLabel"
-                                 donut-config="statisticsController.handlerHitGraph.donutConfig">
-                            </div>
-
-                        </div>
-
-                        <div class="col-xs-12 col-sm-3 col-md-3">
-
-                            <div pf-utilization-trend-chart
-                                 config="statisticsController.requestReplyGraph.config"
-                                 chart-data="statisticsController.requestReplyGraph.data"
-                                 center-label="statisticsController.requestReplyGraph.centerLabel"
-                                 donut-config="statisticsController.requestReplyGraph.donutConfig">
-                            </div>
-
-                        </div>
-
+    <div id="cluster_wide_container">
+        <div class="row row-cards-pf">
+            <div class="col-md-12">
+                <div class="card-pf card-pf-utilization">
+                    <div class="card-pf-heading">
+                        <p class="card-pf-heading-details"></p>
+                        <h2 class="card-pf-title">
+                            <span class="fa fa-tachometer"></span>&nbsp;&nbsp;Proctor Statistics
+                        </h2>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
+    <div class="card-view-pf">
+        <div class="card col-xs-12 col-sm-3 col-md-3">
+            <div pf-utilization-trend-chart
+                 config="statisticsController.requestReplyGraph.config"
+                 chart-data="statisticsController.requestReplyGraph.data"
+                 center-label="statisticsController.requestReplyGraph.centerLabel"
+                 donut-config="statisticsController.requestReplyGraph.donutConfig">
+            </div>
+        </div>
+        <div class="card col-xs-12 col-sm-3 col-md-3">
+            <div pf-utilization-trend-chart
+                 config="statisticsController.handlerHitGraph.config"
+                 chart-data="statisticsController.handlerHitGraph.data"
+                 center-label="statisticsController.handlerHitGraph.centerLabel"
+                 donut-config="statisticsController.handlerHitGraph.donutConfig">
+            </div>
+        </div>
+    </div>
 </div>
 <!-- EOF statistics.view.html -->

@@ -31,6 +31,21 @@
         model.nodes = [];
         model.updateNodes = updateNodes;
 
+        model.nodeCardViewConfiguration = {
+            selectItems: false,
+            multiSelect: false,
+            dblClick: false,
+            selectionMatchProp: 'nodeID',
+            selectedItems: [],
+            checkDisabled: false,
+            showSelectBox: false,
+            onSelect: null,
+            onSelectionChange: null,
+            onCheckBoxChange: null,
+            onClick: null,
+            onDblClick: null
+        };
+
         initController();
 
         /**

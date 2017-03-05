@@ -22,6 +22,7 @@
                    ['ui.router',
                     'ngStorage',
                     'patternfly.charts',
+                    'patternfly.views',
                     'angular-jwt',
                     'angular-md5'])
            .config(config)

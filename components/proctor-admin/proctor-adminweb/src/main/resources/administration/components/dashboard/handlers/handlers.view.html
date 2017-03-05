@@ -12,79 +12,33 @@
                             <span class="pficon pficon-service"></span>&nbsp;&nbsp;Proctor Handlers
                         </h2>
                     </div>
-                    <div class="card-pf-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                    <span class="card-pf-utilization-card-details-line-1"></span>
-                                    <span class="card-pf-utilization-card-details-line-2"></span>
-                                </span>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                    <span class="card-pf-utilization-card-details-line-1"></span>
-                                    <span class="card-pf-utilization-card-details-line-2"></span>
-                                </span>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                    <span class="card-pf-utilization-card-details-line-1"></span>
-                                    <span class="card-pf-utilization-card-details-line-2"></span>
-                                </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="individual_handler_container">
-        <div ng-repeat="handlerConfiguration in handlersController.getHandlerConfigurations() track by $index">
-            <div ng-class="{'row-cards-pf row' : $index % 4 == 0}"
-                 class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card-pf card-pf-view">
-                    <div class="card-pf-body">
-                        <h2 class="card-pf-title text-center">
-                            <img ng-if="handlersController.isLoading(handlerConfiguration.configurationID)" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                            <span class="pficon pficon-route"></span> {{handlerConfiguration.configurationID}}
-                        </h2>
-                        <div class="card-pf-items text-center">
-                            <div class="card-pf-item">
-                                <span class="pficon pficon-screen"></span> Priority
-                                <span class="card-pf-item-text">{{handlerConfiguration.priority}}</span>
-                            </div>
-                            <div class="card-pf-item">
-                                <span class="fa fa-search"></span> Pattern
-                                <span class="card-pf-item-text">{{handlerConfiguration.pattern}}</span>
-                            </div>
-                            <div class="card-pf-item">
-                                <span class="fa fa-search"></span> Append path
-                                <span class="card-pf-item-text">{{handlerConfiguration.properties.appendpath}}</span>
-                            </div>
-                            <div class="card-pf-item">
-                                <span class="fa fa-search"></span> Default Url
-                                <span class="card-pf-item-text">{{handlerConfiguration.properties.defaulturl}}</span>
-                            </div>
-                            <div class="card-pf-item">
-                                <span class="fa fa-search"></span> Handler type
-                                <span class="card-pf-item-text">{{handlerConfiguration.handlerType}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div pf-card-view
+             config="handlersController.handlersCardViewConfiguration"
+             items="handlersController.handlerConfigurationsArray">
+            <div class="col-md-12">
+                <span>{{item.configurationID}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.handlerType}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.pattern}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.persistent}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.priority}}</span>
+            </div>
+            <div ng-repeat="(key, value) in item.properties"
+                 class="col-md-12">
+                <span>{{key}}: {{value}}</span>
             </div>
         </div>
     </div>

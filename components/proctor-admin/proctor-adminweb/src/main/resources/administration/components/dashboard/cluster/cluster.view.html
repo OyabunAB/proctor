@@ -9,69 +9,52 @@
                     <div class="card-pf-heading">
                         <p class="card-pf-heading-details"></p>
                         <h2 class="card-pf-title">
-                            <span class="fa fa-tachometer"></span>&nbsp;&nbsp;Proctor Cluster Composition
+                            <span class="pficon pficon-cluster"></span>&nbsp;&nbsp;Proctor Cluster Composition
                         </h2>
-                    </div>
-                    <div class="card-pf-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                        <span class="card-pf-utilization-card-details-line-1"></span>
-                                        <span class="card-pf-utilization-card-details-line-2"></span>
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                        <span class="card-pf-utilization-card-details-line-1"></span>
-                                        <span class="card-pf-utilization-card-details-line-2"></span>
-                                    </span>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <h3 class="card-pf-subtitle"></h3>
-                                <p class="card-pf-utilization-details">
-                                    <span class="card-pf-utilization-card-details-count"></span>
-                                    <span class="card-pf-utilization-card-details-description">
-                                        <span class="card-pf-utilization-card-details-line-1"></span>
-                                        <span class="card-pf-utilization-card-details-line-2"></span>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="individual_node_container"
-         ng-repeat="node in clusterController.nodes track by $index">
-        <div ng-if="$index % 4 == 0"
-             ng-class="{'row-cards-pf' : $index == 0}"
-             class="row">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-                <div class="card-pf card-pf-accented
-                            card-pf-aggregate-status
-                            card-pf-aggregate-status-mini">
-                    <h2 class="card-pf-title">
-                        <span class="pficon pficon-container-node"></span>
-                        <span class="card-pf-aggregate-status-count">{{node.proxyListenAddress}}</span>
-                        <p>{{node.context}}</p>
-                    </h2>
-                    <div class="card-pf-body">
-                        <p class="card-pf-aggregate-status-notifications">
-                            <span class="card-pf-aggregate-status-notification">
-                                <span class="pficon pficon-ok"></span>
-                            </span>
-                        </p>
-                    </div>
-                </div>
+    <div id="individual_node_container">
+        <div pf-card-view
+             config="clusterController.nodeCardViewConfiguration"
+             items="clusterController.nodes">
+            <div class="col-md-12">
+                <span>{{item.nodeID}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.configuredLocalPort}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.context}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.keystorePath}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.localAddress}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.localAddressAndPort}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.localContextUrl}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.localPort}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.protocol}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.proxyAddressAndPort}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.proxyListenAddress}}</span>
+            </div>
+            <div class="col-md-12">
+                <span>{{item.proxyListenPort}}</span>
             </div>
         </div>
     </div>

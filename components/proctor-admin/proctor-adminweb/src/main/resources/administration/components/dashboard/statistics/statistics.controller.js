@@ -101,7 +101,7 @@
 
                 if(updateNodesPromise) $interval.cancel(updateNodesPromise);
                 if(updateStatisticTypesPromise) $interval.cancel(updateStatisticTypesPromise);
-                if(updateCharts) $interval.cancel(updateCharts);
+                if(updateCharts) $interval.cancel(updateChartsPromise);
 
             });
 

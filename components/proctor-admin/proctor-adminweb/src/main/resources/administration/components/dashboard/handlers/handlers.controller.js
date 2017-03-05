@@ -32,12 +32,29 @@
         model.loading = [];
         model.handlerTypes = [];
         model.handlerConfigurationIDs = [];
-        model.handlerConfigurations = [];
+        model.handlerConfigurations = {};
+        model.handlerConfigurationsArray = [];
         model.isLoading = isLoading;
         model.updateHandlerTypes = updateHandlerTypes;
         model.updateHandlerConfigurationIDs = updateHandlerConfigurationIDs;
+        model.updateHandlerConfigurationsArray = updateHandlerConfigurationsArray;
         model.getHandlerConfiguration = getHandlerConfiguration;
-        model.getHandlerConfigurations = getHandlerConfigurations;
+
+
+        model.handlersCardViewConfiguration = {
+            selectItems: false,
+            multiSelect: false,
+            dblClick: false,
+            selectionMatchProp: 'configurationID',
+            selectedItems: [],
+            checkDisabled: false,
+            showSelectBox: false,
+            onSelect: null,
+            onSelectionChange: null,
+            onCheckBoxChange: null,
+            onClick: null,
+            onDblClick: null
+        };
 
         initController();
 
@@ -142,21 +159,21 @@
 
         }
 
-        function getHandlerConfigurations() {
+        function updateHandlerConfigurationsArray() {
 
-            var handlerConfigurationsArray = [];
+            var composedArray = [];
 
             for (var key in model.handlerConfigurations) {
 
               if (model.handlerConfigurations.hasOwnProperty(key)) {
 
-                handlerConfigurationsArray.push(model.handlerConfigurations[key]);
+                composedArray.push(model.handlerConfigurations[key]);
 
               }
 
             }
 
-            return handlerConfigurationsArray;
+            model.handlerConfigurationsArray = composedArray;
 
         }
 
@@ -182,7 +199,11 @@
 
                         model.loading[handlerConfigurationID] = false;
 
+
+
                     }
+
+                    model.updateHandlerConfigurationsArray();
 
                 };
 

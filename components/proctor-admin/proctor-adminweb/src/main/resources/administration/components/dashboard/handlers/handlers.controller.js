@@ -35,6 +35,10 @@
         model.handlerConfigurations = {};
         model.handlerConfigurationsArray = [];
         model.isLoading = isLoading;
+        model.isShowingAddDialog = false;
+
+        model.showAddDialog = showAddDialog;
+
         model.updateHandlerTypes = updateHandlerTypes;
         model.updateHandlerConfigurationIDs = updateHandlerConfigurationIDs;
         model.updateHandlerConfigurationsArray = updateHandlerConfigurationsArray;
@@ -89,6 +93,12 @@
                 if(handlerConfigurationIDsPromise) $interval.cancel(handlerConfigurationIDsPromise);
 
             });
+
+        }
+
+        function showAddDialog() {
+
+            model.isShowingAddDialog = true;
 
         }
 

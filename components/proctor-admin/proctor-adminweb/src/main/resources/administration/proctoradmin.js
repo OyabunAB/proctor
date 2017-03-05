@@ -19,10 +19,11 @@
     'use strict';
 
     angular.module('proctoradmin',
-                   ['ui.router',
-                    'ngStorage',
-                    'patternfly.charts',
+                   ['patternfly.charts',
                     'patternfly.views',
+                    'patternfly.modals',
+                    'ui.router',
+                    'ngStorage',
                     'angular-jwt',
                     'angular-md5'])
            .config(config)

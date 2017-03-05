@@ -67,7 +67,7 @@ public class ProctorNettyProxy
 
         if (logger.isDebugEnabled()) {
 
-            logger.debug("Starting Proctor Netty HTTP Server.");
+            logger.debug("Initializing Proctor Netty HTTP Server.");
 
         }
 

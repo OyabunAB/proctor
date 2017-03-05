@@ -87,7 +87,7 @@ public class ProctorStaticRouteHandler
             MalformedURLException {
 
         return new URL(configuration.getProperties()
-                                    .getOrDefault(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                    .getOrDefault(ProctorRouteConfiguration.ROOT_URL_PROPERTY,
                                                   "/"));
 
     }

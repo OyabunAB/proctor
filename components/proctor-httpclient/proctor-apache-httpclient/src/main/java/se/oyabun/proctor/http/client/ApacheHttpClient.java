@@ -15,6 +15,7 @@
  */
 package se.oyabun.proctor.http.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -68,6 +69,12 @@ public class ApacheHttpClient
         RequestBuilder requestBuilder = RequestBuilder.create(request.getMethod())
                                                       .setEntity(new ByteArrayEntity(request.getBody()))
                                                       .setUri(requestUrl);
+
+        request.getHeaders().forEach((header, values) ->
+            requestBuilder.addHeader(header, StringUtils.join(values, ",")));
+
+        request.getQueryParameters().forEach((param, values) ->
+            requestBuilder.addParameter(param, StringUtils.join(values, ",")));
 
         final HttpUriRequest httpRequest = requestBuilder.build();
 

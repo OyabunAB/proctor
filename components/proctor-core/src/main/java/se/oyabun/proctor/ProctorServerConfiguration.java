@@ -24,6 +24,11 @@ import java.net.URL;
 public class ProctorServerConfiguration
         implements Serializable {
 
+    public static final String PROTOCOL_SEPARATOR = "://";
+    public static final String PORT_SEPARATOR = ":";
+    public static final String HTTPS = "https";
+    public static final String HTTP = "http";
+
     private final String nodeID;
     private final String proxyListenAddress;
     private final String localAddress;
@@ -98,35 +103,34 @@ public class ProctorServerConfiguration
 
     public String getProxyAddressAndPort() {
 
-        return proxyListenAddress + ":" + proxyListenPort;
+        return proxyListenAddress + PORT_SEPARATOR + proxyListenPort;
 
     }
 
     public String getLocalAddressAndPort() {
 
-        return proxyListenAddress + ":" + configuredLocalPort;
+        return proxyListenAddress + PORT_SEPARATOR + configuredLocalPort;
 
     }
 
     public URL getProxyOriginURL()
             throws MalformedURLException {
 
-        return new URL(getProtocol() + "://" + getProxyAddressAndPort() + "/");
+        return new URL(getProtocol() + PROTOCOL_SEPARATOR + getProxyAddressAndPort() + "/");
 
     }
 
     public String getProtocol() {
 
-        return StringUtils.isNotBlank(keystorePath) ? "https" : "http";
+        return StringUtils.isNotBlank(keystorePath) ? HTTPS : HTTP;
 
     }
 
     public String getLocalContextUrl() {
 
-        return getProtocol() + "://" +
-               getProxyListenAddress() + ":" +
-               getConfiguredLocalPort() +
-               getContext();
+        return getProtocol() + PROTOCOL_SEPARATOR +
+               getProxyListenAddress() + PORT_SEPARATOR +
+               getConfiguredLocalPort() + getContext();
 
     }
 

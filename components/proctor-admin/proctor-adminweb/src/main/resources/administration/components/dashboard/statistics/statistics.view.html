@@ -21,47 +21,26 @@
                     <div class="card-pf-row row">
 
                         <div class="col-xs-12
-                                    col-sm-6
-                                    col-md-6">
+                                    col-sm-3
+                                    col-md-3">
 
-                            <h3 class="card-pf-subtitle">Proxy requests</h3>
-
-                            <p class="card-pf-utilization-details">
-
-                                <span class="card-pf-utilization-card-details-count">50</span>
-
-                                <span class="card-pf-utilization-card-details-description">
-
-                                    <span class="card-pf-utilization-card-details-line-1">Replied to</span>
-
-                                    <span class="card-pf-utilization-card-details-line-2">of 1000 requested</span>
-
-                                </span>
-
-                            </p>
+                            <div pf-utilization-trend-chart
+                                 config="statisticsController.handlerHitGraph.config"
+                                 chart-data="statisticsController.handlerHitGraph.data"
+                                 center-label="statisticsController.handlerHitGraph.centerLabel"
+                                 donut-config="statisticsController.handlerHitGraph.donutConfig">
+                            </div>
 
                         </div>
 
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-
-                            <h3 class="card-pf-subtitle">Request response ratio</h3>
-
-                            <p class="card-pf-utilization-details">
-                                <span class="card-pf-utilization-card-details-count">
-                                    {{statisticsController.getAggregateStatisticsReport('PROXY_REPLY_SENT').aggregatedCountValue}}
-                                </span>
-                                <span class="card-pf-utilization-card-details-description">
-                                    <span class="card-pf-utilization-card-details-line-1">Responses</span>
-                                    <span class="card-pf-utilization-card-details-line-2">
-                                        to {{statisticsController.getAggregateStatisticsReport('PROXY_REQUEST_RECEIVED').aggregatedCountValue}} requests</span>
-                                </span>
-                            </p>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
 
                             <div pf-utilization-trend-chart
                                  config="statisticsController.requestReplyGraph.config"
                                  chart-data="statisticsController.requestReplyGraph.data"
                                  center-label="statisticsController.requestReplyGraph.centerLabel"
-                                 donut-config="statisticsController.requestReplyGraph.donutConfig"></div>
+                                 donut-config="statisticsController.requestReplyGraph.donutConfig">
+                            </div>
 
                         </div>
 

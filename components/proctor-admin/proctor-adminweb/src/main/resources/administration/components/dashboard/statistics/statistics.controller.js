@@ -42,9 +42,9 @@
 
         model.requestReplyGraph =
             {
-                config: { title: 'Unreplied requests',
+                config: { title: 'Request reply ratio',
                           units: 'requests'},
-                donutConfig: { chartId: 'chartA',
+                donutConfig: { chartId: 'requestReplyRatioChart',
                                thresholds: {'warning':'5','error':'10'} },
                 data: { dataAvailable: false,
                         used: 0,
@@ -52,6 +52,19 @@
                 centerLabel: 'percent'
 
             };
+
+        model.handlerHitGraph =
+            {
+               config: { title: 'Handler match ratio',
+                         units: 'hits'},
+               donutConfig: { chartId: 'handlerHitChart',
+                              thresholds: {'warning':'5','error':'10'} },
+               data: { dataAvailable: false,
+                       used: 0,
+                       total: 0 },
+               centerLabel: 'percent'
+
+            }
 
 
 
@@ -80,7 +93,7 @@
                 $interval( function(){ model.updateStatisticTypes(); }, 5000);
 
             var updateChartsPromise =
-                $interval( function(){ model.updateCharts(); }, 5000);
+                $interval( function(){ model.updateCharts(); }, 1000);
             //
             // Register callbacks to cancel intervals on destroy
             //
@@ -98,6 +111,7 @@
 
             var aggregateProxyRequestReport = getAggregateStatisticsReport('PROXY_REQUEST_RECEIVED');
             var aggregateProxyReplyReport = getAggregateStatisticsReport('PROXY_REPLY_SENT');
+            var aggreagetProxyHandlerHitReport =
 
             model.requestReplyGraph.data.total = aggregateProxyReplyReport.aggregatedCountValue;
             model.requestReplyGraph.data.used = aggregateProxyRequestReport.aggregatedCountValue -

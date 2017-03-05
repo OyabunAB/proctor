@@ -67,6 +67,7 @@ public class NingHttpClient
                                                         .setHeaders(request.getHeaders())
                                                         .setMethod(request.getMethod())
                                                         .setBody(request.getBody())
+                                                        .setQueryParams(request.getQueryParameters())
                                                         .build();
 
         final ListenableFuture<Response> asyncResponse = asyncHttpClient.executeRequest(httpRequest);

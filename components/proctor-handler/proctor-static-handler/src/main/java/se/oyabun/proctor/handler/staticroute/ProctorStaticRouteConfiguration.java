@@ -47,7 +47,7 @@ public class ProctorStaticRouteConfiguration
                                               ProctorStaticRouteConfiguration.class.getName(),
                                               persistent,
                                               ImmutableMap.of(APPEND_PATH_PROPERTY, appendPath,
-                                                              DEFAULT_URL_PROPERTY, defaultUrl));
+                                                              ROOT_URL_PROPERTY, defaultUrl));
 
     }
 

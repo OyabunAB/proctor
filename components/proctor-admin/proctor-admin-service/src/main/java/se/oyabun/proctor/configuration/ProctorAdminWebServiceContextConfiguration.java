@@ -131,13 +131,15 @@ public class ProctorAdminWebServiceContextConfiguration {
         return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
                                              0,
                                              localConfig.getContext() +
-                                                "/api/v1/cluster/nodes/" + localConfig.getNodeID() + "/.*",
+                                                "/api/v1/cluster/nodes/" + localConfig.getNodeID() + "(?<requestPath>/.*)",
                                              "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
                                              false,
-                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                             ImmutableMap.of(ProctorRouteConfiguration.ROOT_URL_PROPERTY,
                                                              localConfig.getLocalContextUrl(),
                                                              ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
-                                                             "true"));
+                                                             "true",
+                                                             ProctorRouteConfiguration.APPEND_MATCHER_GROUP,
+                                                             "requestPath"));
 
     }
 
@@ -152,13 +154,15 @@ public class ProctorAdminWebServiceContextConfiguration {
 
         return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
                                              1,
-                                             localConfig.getContext()+".*",
+                                             "(?<requestPath>" + localConfig.getContext() + ".*)",
                                              "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
                                              false,
-                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                             ImmutableMap.of(ProctorRouteConfiguration.ROOT_URL_PROPERTY,
                                                              localConfig.getLocalContextUrl(),
                                                              ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
-                                                             "true"));
+                                                             "true",
+                                                             ProctorRouteConfiguration.APPEND_MATCHER_GROUP,
+                                                             "requestPath"));
 
     }
 
@@ -176,7 +180,7 @@ public class ProctorAdminWebServiceContextConfiguration {
                                              "/oyabun(?<requestPath>.*)",
                                              "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
                                              false,
-                                             ImmutableMap.of(ProctorRouteConfiguration.DEFAULT_URL_PROPERTY,
+                                             ImmutableMap.of(ProctorRouteConfiguration.ROOT_URL_PROPERTY,
                                                              "https://www.oyabun.se",
                                                              ProctorRouteConfiguration.APPEND_PATH_PROPERTY,
                                                              "true",
@@ -210,7 +214,7 @@ public class ProctorAdminWebServiceContextConfiguration {
                         .antMatchers("/api/**").authenticated()
                     .and()
                         .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
                     .and()
                         .anonymous()
                     .and()

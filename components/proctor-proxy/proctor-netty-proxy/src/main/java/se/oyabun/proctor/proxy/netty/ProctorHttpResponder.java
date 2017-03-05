@@ -57,6 +57,8 @@ import static io.netty.buffer.Unpooled.copiedBuffer;
 public class ProctorHttpResponder {
 
     private static final Logger log = LoggerFactory.getLogger(ProctorHttpResponder.class);
+    public static final String PORT_SEPARATOR = ":";
+    public static final String EMPTY_STRING = "";
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ProctorRouteHandlerManager proctorRouteHandlerManager;
@@ -243,34 +245,50 @@ public class ProctorHttpResponder {
                               final URL proxyUrl)
             throws MalformedURLException {
 
-        URL originURL = localServerConfiguration.getProxyOriginURL();
+        final URL originUrl = localServerConfiguration.getProxyOriginURL();
 
-        final Map<String, Collection<String>> responseHeaders = requestData.getHeaders();
+        if(log.isTraceEnabled()) {
 
-        for (final Map.Entry<String, Collection<String>> requestHeader : responseHeaders.entrySet()) {
-
-            requestData.getHeaders()
-                    .replace(requestHeader.getKey(),
-                             requestHeader.getValue()
-                                       .stream()
-                                       .map(value -> value.replaceAll(originURL.getHost(),
-                                                                      proxyUrl.getHost()))
-                                       .map(value -> {
-                                           if(originURL.getPort() != -1) {
-
-                                               return value.replaceAll(":"+originURL.getPort(),
-                                                                       proxyUrl.getPort() != -1 ?
-                                                                            ":"+proxyUrl.getPort() :
-                                                                            "");
-                                           } else {
-
-                                               return value;
-
-                                           }
-                                       })
-                                       .collect(Collectors.toList()));
+            log.trace("Pre header handling:  '{}'.", requestData);
 
         }
+
+        requestData.getHeaders()
+                   .replace(HttpHeaders.Names.HOST,
+                            replaceHostAndPort(requestData.getHeaders().get(HttpHeaders.Names.HOST),
+                                               originUrl,
+                                               proxyUrl));
+
+        if(log.isTraceEnabled()) {
+
+            log.trace("Post header handling: '{}'.", requestData);
+
+        }
+
+    }
+
+    Collection<String> replaceHostAndPort(final Collection<String> values,
+                                          final URL originalUrl,
+                                          final URL targetUrl) {
+
+        if(values == null) {
+
+            return null;
+
+        }
+
+        final boolean originalPortAvailiable = originalUrl.getPort() != -1;
+        final boolean targetPortAvailiable = targetUrl.getPort() != -1;
+
+        return values.stream()
+                .map(value -> value.replaceAll(originalUrl.getHost(),targetUrl.getHost()))
+                .map(value -> originalPortAvailiable ?
+                                  value.replaceAll(PORT_SEPARATOR + originalUrl.getPort(),
+                                                   targetPortAvailiable ?
+                                                       PORT_SEPARATOR + targetUrl.getPort() :
+                                                       EMPTY_STRING) :
+                                  value)
+                .collect(Collectors.toList());
 
     }
 
@@ -279,7 +297,7 @@ public class ProctorHttpResponder {
                                final URL proxyUrl)
             throws MalformedURLException {
 
-        URL originURL = localServerConfiguration.getProxyOriginURL();
+        URL originUrl = localServerConfiguration.getProxyOriginURL();
 
         response.setStatus(new HttpResponseStatus(responseData.getStatusCode(),
                                                   responseData.getStatusMessage()));
@@ -296,19 +314,13 @@ public class ProctorHttpResponder {
 
         }
 
-        final Map<String, Collection<String>> responseHeaders = responseData.getHeaders();
+        responseData.getHeaders()
+                   .replace(HttpHeaders.Names.LOCATION,
+                            replaceHostAndPort(responseData.getHeaders().get(HttpHeaders.Names.LOCATION),
+                                               proxyUrl,
+                                               originUrl));
 
-        for (final Map.Entry<String, Collection<String>> responseHeader : responseHeaders.entrySet()) {
 
-            response.headers()
-                    .set(responseHeader.getKey(),
-                         responseHeader.getValue()
-                                 .stream()
-                                 .map(value -> value.replaceAll(proxyUrl.toString(),
-                                                                originURL.toString()))
-                                 .collect(Collectors.toList()));
-
-        }
 
     }
 

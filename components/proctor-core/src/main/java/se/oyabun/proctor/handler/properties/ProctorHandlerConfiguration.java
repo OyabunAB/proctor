@@ -30,7 +30,7 @@ public interface ProctorHandlerConfiguration
 
     String APPEND_PATH_PROPERTY = "appendpath";
     String APPEND_MATCHER_GROUP = "appendmatchergroup";
-    String DEFAULT_URL_PROPERTY = "defaulturl";
+    String ROOT_URL_PROPERTY = "defaulturl";
 
     /**
      * Cluster/global unique handler identification string

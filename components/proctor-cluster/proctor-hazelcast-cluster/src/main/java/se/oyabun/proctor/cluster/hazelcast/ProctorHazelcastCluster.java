@@ -57,7 +57,7 @@ public class ProctorHazelcastCluster
 
         if(log.isDebugEnabled()) {
 
-            log.debug("Registering server '{}' in proctor cluster.", proctorServerConfiguration.getNodeID());
+            log.debug("Registering server '{}' in Proctor Cluster.", proctorServerConfiguration.getNodeID());
 
         }
 

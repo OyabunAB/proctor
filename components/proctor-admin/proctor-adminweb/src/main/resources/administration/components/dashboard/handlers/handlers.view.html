@@ -2,7 +2,7 @@
 <div class="container-fluid container-cards-pf
             container-pf-nav-pf-vertical
             container-pf-nav-pf-vertical-with-sub-menus">
-    
+
     <div id="cluster_wide_container">
         <div class="row row-cards-pf">
             <div class="col-md-12">
@@ -32,36 +32,74 @@
                     <h4 id="addDialogLabel" class="modal-title">Add Handler Configuration</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal">
+                    <form novalidate class="form-horizontal">
                         <div class="form-group">
                             <label for="add-handlerType" class="col-sm-3 control-label">Handler Type</label>
                             <div class="col-sm-9">
-                                <input type="text" id="add-handlerType" class="form-control">
+                                <select id="add-handlerType"
+                                        ng-model="handlersController.addHandlerConfig.handlerType">
+                                    <option ng-repeat="handlerType in handlersController.handlerTypes"
+                                            value="{{handlerType}}">{{handlerType}}</option>
+
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="add-pattern" class="col-sm-3 control-label">Pattern</label>
                             <div class="col-sm-9">
-                                <input type="text" id="add-pattern" class="form-control">
+                                <input type="text" id="add-pattern" class="form-control"
+                                       ng-model="handlersController.addHandlerConfig.pattern">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="add-persistent" class="col-sm-3 control-label" >Persistent</label>
                             <div class="col-sm-9">
-                                <input id="add-persistent" type="checkbox" class="form-control">
+                                <input id="add-persistent" type="checkbox" class="form-control"
+                                       ng-model="handlersController.addHandlerConfig.persistent">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="add-priority" class="col-sm-3 control-label">Priority</label>
                             <div class="col-sm-9">
-                                <input type="text" id="add-priority" class="form-control">
+                                <input type="text" id="add-priority" class="form-control"
+                                       ng-model="handlersController.addHandlerConfig.priority">
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label>Properties</label>
+                            </div>
+                            <div class="row" ng-repeat="(key, value) in handlersController.addHandlerConfig.properties">
+                                <label for="property-{{key}}" class="col-sm-3 control-label">{{key}}</label>
+                                <div class="col-sm-6">
+                                    <input id="property-{{key}}" type="text" class="form-control"
+                                           ng-model="handlersController.addHandlerConfig.properties[key]">
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href ng-click="handlersController.removeConfigPropertyEntry(key)"><span class="pficon pficon-remove"></span>qwe</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="text" class="form-control" ng-model="handlersController.newPropertyKey">
+                            <input type="text" class="form-control" ng-model="handlersController.newPropertyValue">
+                            <a href ng-click="handlersController.addConfigParameterEntry()"><span class="pficon pficon-add-circle-o"></span> Add property</a>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-default"
+                            ng-click="handlersController.resetAddConfigForm()" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="handlersController.submitAddConfigForm()">
+                        <img ng-if="handlersController.addConfigSubmitted" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        Add
+                    </button>
                 </div>
             </div>
         </div>
@@ -70,9 +108,15 @@
     <div id="individual_handler_container">
         <div pf-card-view
              config="handlersController.handlersCardViewConfiguration"
-             items="handlersController.handlerConfigurationsArray">
+             items="handlersController.handlerConfigurationsArray"
+             class="card-pf-view">
+            <div class="card-pf-top-element">
+                <span class="pficon pficon-route card-pf-icon-circle"></span>
+            </div>
             <div class="col-md-12">
-                <span>{{item.configurationID}}</span>
+                <h2 class="card-pf-title text-center">
+                    {{item.configurationID}}
+                </h2>
             </div>
             <div class="col-md-12">
                 <span>{{item.handlerType}}</span>

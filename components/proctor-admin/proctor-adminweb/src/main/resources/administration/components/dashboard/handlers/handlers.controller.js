@@ -37,13 +37,10 @@
         model.isLoading = isLoading;
         model.isShowingAddDialog = false;
 
-        model.showAddDialog = showAddDialog;
-
         model.updateHandlerTypes = updateHandlerTypes;
         model.updateHandlerConfigurationIDs = updateHandlerConfigurationIDs;
         model.updateHandlerConfigurationsArray = updateHandlerConfigurationsArray;
         model.getHandlerConfiguration = getHandlerConfiguration;
-
 
         model.handlersCardViewConfiguration = {
             selectItems: false,
@@ -60,7 +57,74 @@
             onDblClick: null
         };
 
+        model.addConfigSubmitted = false;
+        model.addConfigParameterEntry = addConfigParameterEntry
+        model.removeConfigPropertyEntry = removeConfigPropertyEntry;
+        model.resetAddConfigForm = resetAddConfigForm;
+        model.submitAddConfigForm = submitAddConfigForm;
+        model.addConfigDefault = {
+          configurationID: "",
+          handlerType: null,
+          pattern: null,
+          persistent: false,
+          priority: 0,
+          properties: {
+
+          }
+        };
+        model.newPropertyKey = "";
+        model.newPropertyValue = "";
+
+        model.addHandlerConfig = angular.copy(model.addConfigDefault);
+
         initController();
+
+        function removeConfigPropertyEntry(key) {
+
+            delete model.addHandlerConfig.properties[key];
+
+        }
+
+        function addConfigParameterEntry() {
+
+            model.addHandlerConfig.properties[model.newPropertyKey] =
+                model.newPropertyValue;
+            model.newPropertyKey = "";
+            model.newPropertyValue = "";
+
+        }
+
+        function resetAddConfigForm() {
+
+            model.addHandlerConfig = angular.copy(model.addConfigDefault);
+
+        }
+
+        function submitAddConfigForm() {
+
+            var addedConfigurationCallback =
+                function(result) {
+
+                    model.addConfigSubmitted = false;
+
+                    if(result) {
+
+                        model.resetAddConfigForm();
+
+                    } else {
+
+                        // Handle issues/mark fails on form
+
+                    }
+
+                };
+
+            model.addConfigSubmitted = true;
+
+            proctorHandler.addHandlerConfiguration(model.addHandlerConfig,
+                                                   addedConfigurationCallback);
+
+        }
 
         /**
          * Initialize the controller, setting up intervals and preparing
@@ -93,12 +157,6 @@
                 if(handlerConfigurationIDsPromise) $interval.cancel(handlerConfigurationIDsPromise);
 
             });
-
-        }
-
-        function showAddDialog() {
-
-            model.isShowingAddDialog = true;
 
         }
 

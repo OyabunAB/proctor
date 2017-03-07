@@ -42,7 +42,7 @@
 
         model.requestReplyGraph =
             {
-                config: { title: 'Request reply ratio',
+                config: { title: 'Aggregated Reply Ratio',
                           units: 'requests'},
                 donutConfig: { chartId: 'requestReplyRatioChart',
                                thresholds: {'warning':'5','error':'10'} },
@@ -55,7 +55,7 @@
 
         model.handlerHitGraph =
             {
-               config: { title: 'Handler match ratio',
+               config: { title: 'Aggregated Match Ratio',
                          units: 'hits'},
                donutConfig: { chartId: 'handlerHitChart',
                               thresholds: {'warning':'5','error':'10'} },
@@ -90,7 +90,7 @@
                 $interval( function(){ model.updateNodes(); }, 5000);
 
             var updateStatisticTypesPromise =
-                $interval( function(){ model.updateStatisticTypes(); }, 5000);
+                $interval( function(){ model.updateStatisticTypes(); }, 1000);
 
             var updateChartsPromise =
                 $interval( function(){ model.updateCharts(); }, 1000);

@@ -109,9 +109,17 @@ public class ProctorFilestoreRepository
     @Override
     public void persistConfiguration(final ProctorHandlerConfiguration properties) {
 
-        proctorFilestore.createFile(properties.getConfigurationID(),
-                                    properties,
-                                    handlersDirectory);
+        Optional<ProctorHandlerConfiguration> optionalProctorHandlerConfig =
+                Optional.ofNullable(properties);
+
+        if(optionalProctorHandlerConfig.isPresent()) {
+
+
+            proctorFilestore.createFile(properties.getConfigurationID(),
+                                        properties,
+                                        handlersDirectory);
+
+        }
 
     }
 

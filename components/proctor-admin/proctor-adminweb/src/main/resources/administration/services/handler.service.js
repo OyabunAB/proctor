@@ -26,13 +26,74 @@
 
     function proctorHandler($http,
                             proctorLogger,
-                            proctorSecurity) {
+                            proctorSecurity,
+                            proctorUUID) {
 
         var service = {};
         service.getHandlerTypes = getHandlerTypes;
         service.getHandlerConfigurationIDs = getHandlerConfigurationIDs;
         service.getHandlerConfiguration = getHandlerConfiguration;
+        service.addHandlerConfiguration = addHandlerConfiguration;
         return service;
+
+        function addHandlerConfiguration(handlerConfiguration,
+                                         callback) {
+
+            var UUID = proctorUUID.generateUUID();
+
+            handlerConfiguration.configurationID = UUID
+
+            proctorLogger.debug('Adding handler configuration '+UUID+'.');
+
+            var successfulHandlerConfigurationAdditionRequest =
+                function(result) {
+
+                    proctorLogger.debug('Added handler configuration.');
+
+                    callback(true);
+
+                };
+
+            var failedHandlerConfigurationAdditionRequest =
+                function(result) {
+
+                    proctorLogger.debug('Failed to add handler configuration.');
+
+                    if(response.status === 401) {
+
+                        proctorSecurity.renewAccessToken(function(result) {
+                            if(result) {
+
+                                addHandlerConfiguration(handlerConfiguration,
+                                                        callback);
+
+                            } else {
+
+                                $state.go('login');
+
+                            }
+
+                        });
+
+                    }
+
+                    callback(false);
+
+                };
+
+            $http({
+                url: handlerConfigurationsUrl,
+                method: 'POST',
+                data: handlerConfiguration,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(successfulHandlerConfigurationAdditionRequest,
+                  failedHandlerConfigurationAdditionRequest);
+
+        }
 
         /**
          * Requests handler configuration IDs from API and returns them in callback

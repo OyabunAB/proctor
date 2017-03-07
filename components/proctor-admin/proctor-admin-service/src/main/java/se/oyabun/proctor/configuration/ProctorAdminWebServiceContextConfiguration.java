@@ -15,6 +15,12 @@
  */
 package se.oyabun.proctor.configuration;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
@@ -34,10 +40,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import se.oyabun.proctor.ProctorServerConfiguration;
+import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 import se.oyabun.proctor.handler.properties.ProctorRouteConfiguration;
 import se.oyabun.proctor.security.CustomTokenAuthenticationFilter;
 import se.oyabun.proctor.security.PassthroughAuthenticationManager;
@@ -48,7 +56,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -113,9 +124,12 @@ public class ProctorAdminWebServiceContextConfiguration {
     }
 
     @Autowired
-    public void configeJackson(Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
+    public void configeJackson(final Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder,
+                               final ProctorHandlerConfigrationDeserializer proctorHandlerConfigrationDeserializer) {
 
         jackson2ObjectMapperBuilder.dateFormat(new ISO8601DateFormat());
+        jackson2ObjectMapperBuilder.deserializerByType(ProctorHandlerConfiguration.class,
+                                                       proctorHandlerConfigrationDeserializer);
 
     }
 
@@ -130,8 +144,8 @@ public class ProctorAdminWebServiceContextConfiguration {
 
         return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
                                              0,
-                                             localConfig.getContext() +
-                                                "/api/v1/cluster/nodes/" + localConfig.getNodeID() + "(?<requestPath>/.*)",
+                                             "(?<requestPath>" + localConfig.getContext() +
+                                                     "/api/v1/cluster/nodes/" + localConfig.getNodeID() + "/.*)",
                                              "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
                                              false,
                                              ImmutableMap.of(ProctorRouteConfiguration.ROOT_URL_PROPERTY,
@@ -176,7 +190,7 @@ public class ProctorAdminWebServiceContextConfiguration {
     public ProctorRouteConfiguration oyabunTestRoute() {
 
         return new ProctorRouteConfiguration(UUID.randomUUID().toString(),
-                                             1,
+                                             0,
                                              "/oyabun(?<requestPath>.*)",
                                              "se.oyabun.proctor.handler.staticroute.ProctorStaticRouteHandler",
                                              false,
@@ -259,6 +273,43 @@ public class ProctorAdminWebServiceContextConfiguration {
         public PassthroughAuthenticationManager passthroughAuthenticationManager() {
 
             return new PassthroughAuthenticationManager();
+
+        }
+
+    }
+
+
+    @Component
+    class ProctorHandlerConfigrationDeserializer
+            extends JsonDeserializer<ProctorHandlerConfiguration> {
+
+
+        @Override
+        public ProctorHandlerConfiguration deserialize(JsonParser jsonParser,
+                                                       DeserializationContext deserializationContext)
+                throws IOException,
+                       JsonProcessingException {
+
+            ObjectCodec objectCodec = jsonParser.getCodec();
+            JsonNode configuration = objectCodec.readTree(jsonParser);
+
+            final String configurationID = configuration.get("configurationID").asText();
+            final Integer priority = configuration.get("priority").asInt();
+            final String pattern = configuration.get("pattern").asText();
+            final String routeType = configuration.get("handlerType").asText();
+            final Boolean persistent = configuration.get("persistent").asBoolean();
+            JsonNode properties = configuration.get("properties");
+            final Map<String,String> propertiesMap = new HashMap<>();
+            properties.fieldNames().forEachRemaining(propertyName -> {
+                propertiesMap.put(propertyName,properties.get(propertyName).asText());
+            });
+
+            return new ProctorRouteConfiguration(configurationID,
+                                                 priority,
+                                                 pattern,
+                                                 routeType,
+                                                 persistent,
+                                                 propertiesMap);
 
         }
 

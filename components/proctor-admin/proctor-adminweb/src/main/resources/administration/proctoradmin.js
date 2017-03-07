@@ -36,7 +36,7 @@
                     jwtOptionsProvider) {
 
         proctorLoglevelProvider.config({
-            level: 'debug'
+            level: 'none' // 'debug' enables debug logging
         });
 
         //

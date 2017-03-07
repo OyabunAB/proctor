@@ -42,7 +42,7 @@
 
         function debug(message) {
 
-            if(isDebugEnabled) {
+            if(isDebugEnabled()) {
 
                 console.debug(message);
 

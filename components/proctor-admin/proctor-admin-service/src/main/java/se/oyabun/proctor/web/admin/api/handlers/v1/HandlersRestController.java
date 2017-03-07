@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import se.oyabun.proctor.handler.manager.ProctorRouteHandlerManager;
 import se.oyabun.proctor.handler.properties.ProctorHandlerConfiguration;
 
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -157,10 +156,12 @@ public class HandlersRestController {
                     method = RequestMethod.POST,
                     consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void createConfiguration(@RequestBody
-                                    final ProctorHandlerConfiguration handlerConfiguration) {
+    public ResponseEntity<Void> createConfiguration(@RequestBody
+                                                    final ProctorHandlerConfiguration handlerConfiguration) {
 
         proctorRouteHandlerManager.registerRouteProperties(handlerConfiguration);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
 
     }
 
@@ -173,10 +174,12 @@ public class HandlersRestController {
                             "/{" + HandlersRestController.CONFIGURATIONID_PROPERTY + "}/",
                     method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteConfiguration(@PathVariable(CONFIGURATIONID_PROPERTY)
-                                    final String configurationID) {
+    public ResponseEntity<Void> deleteConfiguration(@PathVariable(CONFIGURATIONID_PROPERTY)
+                                                    final String configurationID) {
 
         proctorRouteHandlerManager.unregisterRouteProperties(configurationID);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
     }
 

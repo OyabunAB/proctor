@@ -314,11 +314,16 @@ public class ProctorHttpResponder {
 
         }
 
-        responseData.getHeaders()
-                   .replace(HttpHeaders.Names.LOCATION,
-                            replaceHostAndPort(responseData.getHeaders().get(HttpHeaders.Names.LOCATION),
-                                               proxyUrl,
-                                               originUrl));
+        if(responseData.getHeaders().keySet().contains(HttpHeaders.Names.LOCATION)) {
+
+            responseData.getHeaders()
+                        .replace(HttpHeaders.Names.LOCATION,
+                                 replaceHostAndPort(responseData.getHeaders().get(HttpHeaders.Names.LOCATION),
+                                                    proxyUrl,
+                                                    originUrl));
+
+        }
+
 
 
 

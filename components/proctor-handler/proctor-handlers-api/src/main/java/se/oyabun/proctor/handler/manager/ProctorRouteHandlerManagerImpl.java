@@ -30,6 +30,7 @@ import javax.annotation.PreDestroy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -80,9 +81,9 @@ public class ProctorRouteHandlerManagerImpl
 
             }
 
-            localConfigurations.put(properties.getConfigurationID(), properties);
-
             proctorRepository.persistConfiguration(properties);
+
+            localConfigurations.put(properties.getConfigurationID(), properties);
 
         } else {
 
@@ -139,10 +140,9 @@ public class ProctorRouteHandlerManagerImpl
     public Optional<ProctorHandlerConfiguration> getMatchingPropertiesFor(final String input) {
 
         return proctorRepository.getConfigurations()
-                                .filter(properties -> Pattern.compile(properties.getPattern())
-                                                             .matcher(input)
-                                                             .matches())
-                                .findFirst();
+                                .filter(properties->Pattern.compile(properties.getPattern()).matcher(input).matches())
+                                .sorted(Comparator.comparingInt(ProctorHandlerConfiguration::getPriority))
+                                .collect(Collectors.toList()).stream().findFirst();
 
     }
 

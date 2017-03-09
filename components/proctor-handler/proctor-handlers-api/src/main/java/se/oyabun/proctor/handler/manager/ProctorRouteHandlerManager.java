@@ -30,7 +30,6 @@ public interface ProctorRouteHandlerManager {
      * Register a route handler with a manager
      *
      * @param properties to register
-     * @return optional configuration ID given to route (empty if failed)
      */
     void registerRouteProperties(final ProctorHandlerConfiguration properties);
 

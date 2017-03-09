@@ -105,11 +105,37 @@
         </div>
     </div>
 
+    <div id="removeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="removeDialogLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <span class="pficon pficon-close"></span>
+                    </button>
+                    <h4 id="removeDialogLabel" class="modal-title">Delete Handler Configuration?</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            ng-click="handlersController.resetAddConfigForm()" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="handlersController.submitAddConfigForm()">
+                        <img ng-if="handlersController.addConfigSubmitted" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="individual_handler_container">
         <div pf-card-view
              config="handlersController.handlersCardViewConfiguration"
              items="handlersController.handlerConfigurationsArray"
-             class="card-pf-view">
+             class="card-pf-view card-pf-view-select card-pf-view-multi-select">
             <div class="card-pf-top-element">
                 <span class="pficon pficon-route card-pf-icon-circle"></span>
             </div>
@@ -134,6 +160,9 @@
                  class="col-md-12">
                 <span>{{key}}: {{value}}</span>
             </div>
+        </div>
+        <div class="card-pf-view-checkbox">
+            <input type="checkbox">
         </div>
     </div>
 </div>

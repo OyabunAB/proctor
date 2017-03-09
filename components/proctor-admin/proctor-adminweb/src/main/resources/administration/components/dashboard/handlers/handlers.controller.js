@@ -43,12 +43,12 @@
         model.getHandlerConfiguration = getHandlerConfiguration;
 
         model.handlersCardViewConfiguration = {
-            selectItems: false,
+            selectItems: true,
             multiSelect: false,
             dblClick: false,
             selectionMatchProp: 'configurationID',
             selectedItems: [],
-            checkDisabled: false,
+            checkDisabled: null,
             showSelectBox: false,
             onSelect: null,
             onSelectionChange: null,

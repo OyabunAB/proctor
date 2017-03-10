@@ -14,11 +14,7 @@ pipeline {
 
             steps {
 
-                step {
-
-                    sh 'mvn clean verify'
-
-                }
+                sh 'mvn clean verify'
 
             }
 

@@ -9,7 +9,7 @@
      88          88         "8a,   ,a8" "8a,   ,aa   88,  "8a,   ,a8" 88
      88          88          `"YbbdP"'   `"Ybbd8"'   "Y888 `"YbbdP"'  88
     =============================================================================
-# Proctor Open Proxy Framework [![Build Status](http://jenkins.oyabun.se/buildStatus/icon?job=Proctor development)](http://jenkins.oyabun.se/job/Proctor development)
+# Proctor Open Proxy Framework [![Build Status](https://jenkins.oyabun.se/buildStatus/icon?job=OyabunAB/proctor/development)](https://jenkins.oyabun.se/job/OyabunAB/proctor/development)
 Is slowly filling  up with that awsome-sause.
 
 

@@ -1,10 +1,26 @@
 pipeline {
 
+    agent any
+
+    tools {
+
+        maven 'mvn'
+
+    }
+
     stages {
 
-        stage ('Build') {
+        stage('Build') {
 
-           withMaven(maven: 'mvn') { sh "mvn clean verify" }
+            steps {
+
+                step {
+
+                    sh 'mvn clean verify'
+
+                }
+
+            }
 
         }
 

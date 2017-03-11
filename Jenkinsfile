@@ -18,16 +18,6 @@ pipeline {
     agent any
 
     /*
-     * Define tools usage
-     */
-    tools {
-
-        maven 'mvn'
-        docker 'docker'
-
-    }
-
-    /*
      * Define build stages
      */
     stages {
@@ -37,7 +27,9 @@ pipeline {
          */
         stage("Build Proctor"){
 
-            step("Compile") {
+            steps {
+
+                step 'Compile'
 
                 sh 'mvn clean verify'
 
@@ -52,7 +44,9 @@ pipeline {
          */
         stage("Create Docker Image") {
 
-            step("Build Image") {
+            steps {
+
+                step 'Build Image'
 
                 def proctor = docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
 
@@ -67,24 +61,6 @@ pipeline {
             }
 
         }
-
-    }
-
-    post {
-
-        always {
-
-            deleteDir()
-
-        }
-
-        //success {}
-
-        //unstable {}
-
-        //failure {}
-
-        //changed {}
 
     }
 

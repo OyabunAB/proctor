@@ -1,4 +1,3 @@
-#!groovy​
 #=================================================================================================
 # 88888888ba   88888888ba     ,ad8888ba,      ,ad8888ba,  888888888888  ,ad8888ba,    88888888ba
 # 88      "8b  88      "8b   d8"'    `"8b    d8"'    `"8b      88      d8"'    `"8b   88      "8b
@@ -9,69 +8,48 @@
 # 88           88     `8b    Y8a.    .a8P    Y8a.    .a8P      88      Y8a.    .a8P   88     `8b
 # 88           88      `8b    `"Y8888Y"'      `"Y8888Y"'       88       `"Y8888Y"'    88      `8b
 #=================================================================================================
-# Proctor Jenkins CI/CD configuration
+# Proctor Docker image configuration
 #=================================================================================================
-pipeline {
+FROM openjdk:8-jdk
+LABEL maintainer "daniel.sundberg@oyabun.se"
 
-    agent any
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
-    ##
-    # Define tools usage
-    ##
-    tools {
+ENV PROCTOR_HOME /usr/local/proctor
 
-        maven 'mvn'
-        docker 'docker'
+ARG user=proctor
+ARG group=proctor
+ARG uid=1000
+ARG gid=1000
 
-    }
+##
+# Proctor is run with user `proctor`, uid = 1000
+##
+RUN groupadd -g ${gid} ${group} && \
+    useradd -d "$PROCTOR_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
-    ##
-    # Define build stages
-    ##
-    stages {
+##
+# Make proctor home directory a volume, so configuration and build history
+# can be persisted and survive image upgrades
+##
+VOLUME /usr/local/proctor
 
-        ##
-        # Build project with maven
-        ##
-        stage 'Build Proctor' {
+##
+# Expose HTTP/S ports on container
+##
+EXPOSE 80
+EXPOSE 443
 
-            sh 'mvn clean verify'
+USER ${user}
 
-        }
+##
+# Set up application/properties to configure
+##
+ARG properties=applications/proctor-application/defaults/proctor_default.properties
+ARG application=applications/proctor-application/target/proctor-application.jar
+ARG version=
 
-        ##
-        # Compile test node images
-        ##
-        stage 'Compile Docker Images' {
+COPY $application $PROCTOR_HOME/proctor-application.jar
+COPY $properties $PROCTOR_HOME/proctor.properties
 
-            def proctor = docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
-
-            proctor.inside {
-
-                sh 'ls /usr/local/proctor'
-
-            }
-
-        }
-
-    }
-
-    post {
-
-        always {
-
-            deleteDir()
-
-        }
-
-        success {}
-
-        unstable {}
-
-        failure {}
-
-        changed {}
-
-    }
-
-}
+ENTRYPOINT ["/usr/local/proctor/proctor-application.jar"]

@@ -1,4 +1,4 @@
-#!groovy​
+#!/usr/bin/env groovy
 /*
  * =================================================================================================
  * 88888888ba   88888888ba     ,ad8888ba,      ,ad8888ba,  888888888888  ,ad8888ba,    88888888ba
@@ -52,9 +52,9 @@ pipeline {
 
             steps {
 
-                pom = readMavenPom file: 'pom.xml'
+                echo '${POM_VERSION}'
 
-                sh 'docker build -f ./ -t oyabun/proctor:${pom.version} --build-arg version=${pom.version}'
+                sh 'docker build -f ./ -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'
 
             }
 

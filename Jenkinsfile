@@ -17,6 +17,12 @@ pipeline {
 
     agent any
 
+    tools {
+        maven "mvn"
+        jdk "jdk8"
+        docker "docker"
+    }
+
     /*
      * Define build stages
      */
@@ -31,8 +37,6 @@ pipeline {
 
                 sh 'mvn clean verify'
 
-                junit '*/target/surefire-reports/*.xml'
-
             }
 
         }
@@ -44,7 +48,7 @@ pipeline {
 
             steps {
 
-                docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
+                sh 'docker build ./Dockerfile'
 
             }
 

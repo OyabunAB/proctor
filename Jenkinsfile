@@ -33,16 +33,6 @@ pipeline {
 
             }
 
-            post {
-
-                always {
-
-                    junit '**/target/*.xml'
-
-                }
-
-            }
-
         }
 
         /*

@@ -33,6 +33,16 @@ pipeline {
 
             }
 
+            post {
+
+                always {
+
+                    junit '**/target/*.xml'
+
+                }
+
+            }
+
         }
 
         /*
@@ -42,9 +52,12 @@ pipeline {
 
             steps {
 
-                sh 'docker build ./Dockerfile'
+                pom = readMavenPom file: 'pom.xml'
+
+                sh 'docker build -f ./ -t oyabun/proctor:${pom.version} --build-arg version=${pom.version}'
 
             }
+
 
         }
 

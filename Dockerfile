@@ -8,9 +8,10 @@
 # 88           88     `8b    Y8a.    .a8P    Y8a.    .a8P      88      Y8a.    .a8P   88     `8b
 # 88           88      `8b    `"Y8888Y"'      `"Y8888Y"'       88       `"Y8888Y"'    88      `8b
 #=================================================================================================
-# Proctor Docker image configuration
+# Proctor Docker container image
 #=================================================================================================
-FROM openjdk:8-jdk
+FROM anapsix/apline-java:8_server-jre_unlimited
+
 LABEL maintainer "daniel.sundberg@oyabun.se"
 
 RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
@@ -49,7 +50,7 @@ ARG properties=applications/proctor-application/defaults/proctor_default.propert
 ARG application=applications/proctor-application/target/proctor-application.jar
 ARG version=
 
-COPY $application $PROCTOR_HOME/proctor-application.jar
+COPY $application $PROCTOR_HOME/proctor-application-$version.jar
 COPY $properties $PROCTOR_HOME/proctor.properties
 
-ENTRYPOINT ["/usr/local/proctor/proctor-application.jar"]
+ENTRYPOINT ["/usr/local/proctor/proctor-application-$version.jar"]

@@ -29,8 +29,6 @@ pipeline {
 
             steps {
 
-                step 'Compile'
-
                 sh 'mvn clean verify'
 
                 junit '*/target/surefire-reports/*.xml'
@@ -46,17 +44,7 @@ pipeline {
 
             steps {
 
-                step 'Build Image'
-
-                def proctor = docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
-
-                proctor.inside {
-
-                    sh 'ls /usr/local/proctor'
-
-                }
-
-                //proctor.push
+                docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
 
             }
 

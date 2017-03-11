@@ -17,12 +17,6 @@ pipeline {
 
     agent any
 
-    tools {
-        maven "mvn"
-        jdk "jdk8"
-        docker "docker"
-    }
-
     /*
      * Define build stages
      */

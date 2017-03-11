@@ -35,7 +35,7 @@ pipeline {
         /*
          * Build project with maven
          */
-        stage 'Build Proctor' {
+        stage("Build Proctor"){
 
             sh 'mvn clean verify'
 
@@ -44,7 +44,7 @@ pipeline {
         /*
          * Compile test node images
          */
-        stage 'Compile Docker Images' {
+        stage("Compile Docker Images"){
 
             def proctor = docker.build "oyabun/proctor_test:${env.BUILD_NUMBER}";
 
@@ -66,13 +66,13 @@ pipeline {
 
         }
 
-        success {}
+        //success {}
 
-        unstable {}
+        //unstable {}
 
-        failure {}
+        //failure {}
 
-        changed {}
+        //changed {}
 
     }
 

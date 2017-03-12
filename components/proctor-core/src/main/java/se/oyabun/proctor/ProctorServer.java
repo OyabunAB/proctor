@@ -25,8 +25,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,7 +42,7 @@ public class ProctorServer {
 
     public static final String PROCTOR_PROPERTY_FILE_PROPERTY = "proctor.properties";
 
-    public static final String PROCTOR_PROPERTIES_ENVIRONMENT_VARIABLE = "PROCTOR_PROPERTIES";
+    public static final String PROCTOR_PROPERTIES_ENVIRONMENT_VARIABLE = "PROCTOR_CONFIG";
 
     /**
      * Set up external properties file, checking for system properties override, then default.
@@ -68,8 +68,12 @@ public class ProctorServer {
 
         PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
 
-        Collection<Resource> properties = Arrays.asList(new ClassPathResource(APPLICATION_PROPERTY_FILE));
+        List<Resource> properties = new ArrayList<>();
+        properties.add(new ClassPathResource(APPLICATION_PROPERTY_FILE));
 
+        //
+        // Add properties in order, override - environment - default
+        //
         if (StringUtils.isNotBlank(propertiesFileOverride)) {
 
             properties.add(new FileSystemResource(propertiesFileOverride));

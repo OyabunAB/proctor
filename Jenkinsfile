@@ -14,35 +14,44 @@
  *=================================================================================================
  */
 pipeline {
-  agent any
-  stages {
-    stage('Prepare environment') {
-      steps {
-        milestone(ordinal: 1, label: 'Prepare pipeline environment')
-      }
+    agent any
+    stages {
+        stage('Prepare environment') {
+            steps {
+                milestone(ordinal: 1, label: 'Prepare pipeline environment')
+            }
+        }
+        stage('Build Proctor') {
+            steps {
+                milestone(ordinal: 2, label: 'Build and test code')
+                sh 'mvn verify'
+            }
+        }
+        stage('Compose Image') {
+            steps {
+                milestone(ordinal: 3, label: 'Prepare docker image')
+                sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT ./'
+            }
+        }
+        stage('Test Proctor') {
+            steps {
+                milestone(ordinal: 4, label: 'Test functionality')
+                echo 'Here will be tests.'
+            }
+        }
+        stage('Deploy Proctor') {
+            steps {
+                milestone(ordinal: 5, label: 'Deploy code and images')
+                echo 'Here will be deploys to artifactory/dockerhub.'
+            }
+        }
     }
-    stage('Build Proctor') {
-      steps {
-        milestone(ordinal: 2, label: 'Build and test code')
-        sh 'mvn verify'
-      }
+    post {
+        always {
+            deleteDir()
+        }
+        failure {
+            sh 'docker rmi oyabunab/proctor:0.0.1-SNAPSHOT -f'
+        }
     }
-    stage('Compose Image') {
-      steps {
-        milestone(ordinal: 3, label: 'Prepare docker image')
-        sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'
-      }
-    }
-    stage('Test Proctor') {
-      steps {
-        milestone(ordinal: 4, label: 'Test functionality')
-        echo 'Here will be tests.'
-      }
-    }
-  }
-  post {
-    failure {
-      echo 'Horrible failure placeholder.'
-    }
-  }
 }

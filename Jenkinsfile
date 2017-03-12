@@ -26,15 +26,11 @@ pipeline {
 
             steps {
 
-                milestone(ordinal: '1', label: 'Perparation')
+                milestone(ordinal: '1', label: 'Prepare pipeline environment')
 
-                readMavenPom(file: 'pom.xml')
+                def pom = readMavenPom file: 'pom.xml'
 
-
-                        echo 'test1'
-
-
-
+                echo 'Pom version: ${pom.version}'
             }
 
         }
@@ -46,15 +42,17 @@ pipeline {
 
             steps {
 
-                milestone(ordinal: '1', label: 'Perparation')
+                milestone(ordinal: '2', label: 'Build and prepare image')
 
+                echo 'Pom version: ${pom.version}'
 
-                "Build proctor ${POM_VERSION} docker image" {
+                sh 'mvn verify'
 
-                }
+                sh 'docker build -f ./Dockerfile \
+                                 -t oyabunab/proctor:0.0.1-SNAPSHOT \
+                                 --build-arg version=0.0.1-SNAPSHOT'
 
             }
-
 
         }
 
@@ -65,12 +63,9 @@ pipeline {
 
             steps {
 
-                echo '${POM_VERSION}'
-
-
+                echo 'Pom version: ${pom.version}'
 
             }
-
 
         }
 
@@ -83,7 +78,7 @@ pipeline {
 
         failure {
 
-            mail to: daniel.sundberg@oyabun.se, subject: 'Proctor pipeline failed'
+
 
         }
 

@@ -18,24 +18,24 @@ pipeline {
   stages {
     stage('Prepare environment') {
       steps {
-        milestone(ordinal: '1', label: 'Prepare pipeline environment')
+        milestone(ordinal: 1, label: 'Prepare pipeline environment')
       }
     }
     stage('Build Proctor') {
       steps {
-        milestone(ordinal: '2', label: 'Build and test code')
+        milestone(ordinal: 2, label: 'Build and test code')
         sh 'mvn verify'
       }
     }
     stage('') {
       steps {
-        milestone(ordinal: '3', label: 'Prepare docker image')
+        milestone(ordinal: 3, label: 'Prepare docker image')
         sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'
       }
     }
     stage('Test Proctor') {
       steps {
-        milestone(ordinal: '4', label: 'Test functionality')
+        milestone(ordinal: 4, label: 'Test functionality')
         echo 'Here will be tests.'
       }
     }

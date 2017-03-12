@@ -14,74 +14,35 @@
  *=================================================================================================
  */
 pipeline {
-
-    agent any
-
-    /*
-     * Define build stages
-     */
-    stages {
-
-        stage("Prepare environment") {
-
-            steps {
-
-                milestone(ordinal: '1', label: 'Prepare pipeline environment')
-
-                def pom = readMavenPom file: 'pom.xml'
-
-                echo 'Pom version: ${pom.version}'
-            }
-
-        }
-
-        /*
-         * Build project with maven
-         */
-        stage("Build Proctor"){
-
-            steps {
-
-                milestone(ordinal: '2', label: 'Build and prepare image')
-
-                echo 'Pom version: ${pom.version}'
-
-                sh 'mvn verify'
-
-                sh 'docker build -f ./Dockerfile \
-                                 -t oyabunab/proctor:0.0.1-SNAPSHOT \
-                                 --build-arg version=0.0.1-SNAPSHOT'
-
-            }
-
-        }
-
-        /*
-         * Test
-         */
-        stage("Test Proctor ${POM_VERSION}") {
-
-            steps {
-
-                echo 'Pom version: ${pom.version}'
-
-            }
-
-        }
-
+  agent any
+  stages {
+    stage('Prepare environment') {
+      steps {
+        milestone(ordinal: '1', label: 'Prepare pipeline environment')
+      }
     }
-
-    /*
-     * Set handling of pipeline conditions
-     */
-    post {
-
-        failure {
-
-
-
-        }
-
+    stage('Build Proctor') {
+      steps {
+        milestone(ordinal: '2', label: 'Build and test code')
+        sh 'mvn verify'
+      }
     }
-
+    stage('') {
+      steps {
+        milestone(ordinal: '3', label: 'Prepare docker image')
+        sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'
+      }
+    }
+    stage('Test Proctor') {
+      steps {
+        milestone(ordinal: '4', label: 'Test functionality')
+        echo 'Here will be tests.'
+      }
+    }
+  }
+  post {
+    failure {
+      echo 'Horrible failure placeholder.'
+    }
+  }
 }

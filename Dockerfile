@@ -10,38 +10,7 @@
 #=================================================================================================
 # Proctor Docker container image
 #=================================================================================================
-FROM anapsix/apline-java:8_server-jre_unlimited
-
-LABEL maintainer "daniel.sundberg@oyabun.se"
-
-RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
-
-ENV PROCTOR_HOME /usr/local/proctor
-
-ARG user=proctor
-ARG group=proctor
-ARG uid=1000
-ARG gid=1000
-
-##
-# Proctor is run with user `proctor`, uid = 1000
-##
-RUN groupadd -g ${gid} ${group} && \
-    useradd -d "$PROCTOR_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
-
-##
-# Make proctor home directory a volume, so configuration and build history
-# can be persisted and survive image upgrades
-##
-VOLUME /usr/local/proctor
-
-##
-# Expose HTTP/S ports on container
-##
-EXPOSE 80
-EXPOSE 443
-
-USER ${user}
+FROM anapsix/alpine-java:8_server-jre_unlimited
 
 ##
 # Set up application/properties to configure
@@ -50,7 +19,37 @@ ARG properties=applications/proctor-application/defaults/proctor_default.propert
 ARG application=applications/proctor-application/target/proctor-application.jar
 ARG version=
 
-COPY $application $PROCTOR_HOME/proctor-application-$version.jar
-COPY $properties $PROCTOR_HOME/proctor.properties
+##
+# Document metadata
+##
+LABEL maintainer "daniel.sundberg@oyabun.se"
+LABEL version "${version}"
+LABEL description="Proctor Open Proxy Framework ${version}"
+##
+# Define proctor environment
+##
+ENV PROCTOR_CONFIG /etc/proctor/proctor.properties
+ENV PROCTOR_HOME /usr/local/proctor
+ENV PROCTOR_DATA /usr/local/proctor/data
 
-ENTRYPOINT ["/usr/local/proctor/proctor-application-$version.jar"]
+##
+# Set proctor configuration directory as volume
+##
+VOLUME /etc/proctor
+VOLUME /usr/local/proctor/data
+
+##
+# Expose HTTP/S ports on container
+##
+EXPOSE 80
+EXPOSE 443
+
+##
+# Install proctor
+##
+COPY $application $PROCTOR_HOME/proctor-application-$version.jar
+COPY $properties $PROCTOR_CONFIG
+
+RUN /bin/bash -c 'ln -s $PROCTOR_HOME/proctor-application-$version.jar /etc/init.d/proctor'
+
+ENTRYPOINT ["/bin/bash"]

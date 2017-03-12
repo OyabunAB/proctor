@@ -22,6 +22,23 @@ pipeline {
      */
     stages {
 
+        stage("Prepare environment") {
+
+            steps {
+
+                milestone(ordinal: '1', label: 'Perparation')
+
+                readMavenPom(file: 'pom.xml')
+
+
+                        echo 'test1'
+
+
+
+            }
+
+        }
+
         /*
          * Build project with maven
          */
@@ -29,25 +46,44 @@ pipeline {
 
             steps {
 
-                sh 'mvn clean verify'
+                milestone(ordinal: '1', label: 'Perparation')
+
+
+                "Build proctor ${POM_VERSION} docker image" {
+
+                }
 
             }
+
 
         }
 
         /*
-         * Compile test node images
+         * Test
          */
-        stage("Create Docker Image") {
+        stage("Test Proctor ${POM_VERSION}") {
 
             steps {
 
                 echo '${POM_VERSION}'
 
-                sh 'docker build -f ./ -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'
+
 
             }
 
+
+        }
+
+    }
+
+    /*
+     * Set handling of pipeline conditions
+     */
+    post {
+
+        failure {
+
+            mail to: daniel.sundberg@oyabun.se, subject: 'Proctor pipeline failed'
 
         }
 

@@ -27,7 +27,7 @@ pipeline {
         sh 'mvn verify'
       }
     }
-    stage('') {
+    stage('Compose Image') {
       steps {
         milestone(ordinal: 3, label: 'Prepare docker image')
         sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT'

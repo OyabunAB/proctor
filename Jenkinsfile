@@ -15,6 +15,9 @@
  */
 pipeline {
     agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr:'10'))
+    }
     stages {
         stage('Prepare environment') {
             steps {
@@ -24,25 +27,25 @@ pipeline {
         stage('Build Proctor') {
             steps {
                 milestone(ordinal: 2, label: 'Build and test code')
-                sh 'mvn verify'
+                sh('mvn verify')
             }
         }
         stage('Compose Image') {
             steps {
                 milestone(ordinal: 3, label: 'Prepare docker image')
-                sh 'docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT ./'
+                sh('docker build -t oyabunab/proctor:0.0.1-SNAPSHOT --build-arg version=0.0.1-SNAPSHOT ./')
             }
         }
         stage('Test Proctor') {
             steps {
                 milestone(ordinal: 4, label: 'Test functionality')
-                echo 'Here will be tests.'
+                echo('Here will be functional tests.')
             }
         }
         stage('Deploy Proctor') {
             steps {
                 milestone(ordinal: 5, label: 'Deploy code and images')
-                echo 'Here will be deploys to artifactory/dockerhub.'
+                echo('Here will be deploys to code repo/docker repo.')
             }
         }
     }
@@ -50,8 +53,12 @@ pipeline {
         always {
             deleteDir()
         }
+        success {
+            mail(to:"daniel.sundberg@oyabun.se", subject:"Jenkins build ${currentBuild.fullDisplayName} succeeded.", body: "Yay, we passed.")
+        }
         failure {
-            sh 'docker rmi oyabunab/proctor:0.0.1-SNAPSHOT -f'
+            sh('docker rmi oyabunab/proctor:0.0.1-SNAPSHOT -f')
+            mail(to:"daniel.sundberg@oyabun.se", subject:"Jenkins build ${currentBuild.fullDisplayName} failed.", body: "Boo, we failed.")
         }
     }
 }

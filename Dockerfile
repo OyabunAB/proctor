@@ -33,16 +33,10 @@ ENV PROCTOR_HOME /usr/local/proctor
 ENV PROCTOR_DATA /usr/local/proctor/data
 
 ##
-# Set proctor configuration directory as volume
+# Set proctor configuration/data directory as volume
 ##
 VOLUME /etc/proctor
 VOLUME /usr/local/proctor/data
-
-##
-# Expose HTTP/S ports on container
-##
-EXPOSE 80
-EXPOSE 443
 
 ##
 # Install proctor
